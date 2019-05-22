@@ -48,6 +48,17 @@ namespace MMRando
             public int MM_seq { get; set; } = -1;
             public List<int> Type { get; set; } = new List<int>();
             public int Instrument { get; set; }
+            public override string ToString()
+            {
+                return Name;
+
+            }
+            public bool CanReplace(SequenceInfo target)
+            {
+                return (Type.Intersect(target.Type).Count() > 0) || ((Type[0] & 8) == (target.Type[0] & 8)
+                                && (Type.Contains(10) == target.Type.Contains(10))
+                                && (!Type.Contains(16)));
+            }
         }
 
         public class Gossip
@@ -391,50 +402,29 @@ namespace MMRando
 
         private void BGMShuffle()
         {
-            while (TargetSequences.Count > 0)
+            // shuffle the music in place so we don't have to randomise later
+            int n = SequenceList.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = RNG.Next(n + 1);
+                SequenceInfo value = SequenceList[k];
+                SequenceList[k] = SequenceList[n];
+                SequenceList[n] = value;
+            }
+
+            foreach (SequenceInfo target in TargetSequences)
             {
                 List<SequenceInfo> Unassigned = SequenceList.FindAll(u => u.Replaces == -1);
-
-                int targetIndex = RNG.Next(TargetSequences.Count);
-                while (true)
+                foreach (SequenceInfo source in Unassigned)
                 {
-                    int unassignedIndex = RNG.Next(Unassigned.Count);
-
-                    if (Unassigned[unassignedIndex].Name.StartsWith("mm")
-                        & (RNG.Next(100) < 50))
+                    if (source.CanReplace(target))
                     {
-                        continue;
-                    };
-
-                    for (int i = 0; i < Unassigned[unassignedIndex].Type.Count; i++)
-                    {
-                        if (TargetSequences[targetIndex].Type.Contains(Unassigned[unassignedIndex].Type[i]))
-                        {
-                            Unassigned[unassignedIndex].Replaces = TargetSequences[targetIndex].Replaces;
-                            Debug.WriteLine(Unassigned[unassignedIndex].Name + " -> " + TargetSequences[targetIndex].Name);
-                            TargetSequences.RemoveAt(targetIndex);
-                            break;
-                        }
-                        else if (i + 1 == Unassigned[unassignedIndex].Type.Count)
-                        {
-                            if ((RNG.Next(30) == 0)
-                                && ((Unassigned[unassignedIndex].Type[0] & 8) == (TargetSequences[targetIndex].Type[0] & 8))
-                                && (Unassigned[unassignedIndex].Type.Contains(10) == TargetSequences[targetIndex].Type.Contains(10))
-                                && (!Unassigned[unassignedIndex].Type.Contains(16)))
-                            {
-                                Unassigned[unassignedIndex].Replaces = TargetSequences[targetIndex].Replaces;
-                                Debug.WriteLine(Unassigned[unassignedIndex].Name + " -> " + TargetSequences[targetIndex].Name);
-                                TargetSequences.RemoveAt(targetIndex);
-                                break;
-                            };
-                        };
-                    };
-
-                    if (Unassigned[unassignedIndex].Replaces != -1)
-                    {
+                        source.Replaces = target.Replaces;
+                        Debug.WriteLine(source.Name + " -> " + target.Name);
                         break;
-                    };
-                };
+                    }
+                }
             };
 
             SequenceList.RemoveAll(u => u.Replaces == -1);
