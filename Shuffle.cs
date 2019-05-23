@@ -289,7 +289,7 @@ namespace MMRando
             GetVanillaTerminaMap();
             ConstructTerminaLogic();
             ShuffleEntrances();
-            //TestEntrances();
+            TestEntrances();
             FinalizeEntrances();
         }
 
@@ -591,11 +591,12 @@ namespace MMRando
                     ChosenSet.Add(new Dictionary<string, bool>());
                 }
             }
-            string[] poolScenes = new string[]{ "South Clock Town", "Ikana Canyon", "Termina Field" };
+            string[] poolScenes = new string[] { "South Clock Town", "Ikana Canyon", "Termina Field" };
             int chosenPool = 0;
             foreach (Spawn S in GetSpawns())
             {
-                if (!S.Name.Contains("Temple") ) {
+                if (!S.Name.Contains("Temple"))
+                {
                     if (S.Exit != null)
                     {
                         if (S.Type == "Overworld" || S.Type == "Water")
@@ -611,7 +612,7 @@ namespace MMRando
                         }
                         else
                         {
-                            if( !ShuffleInteriors)
+                            if (!ShuffleInteriors)
                             {
                                 continue;
                             }
@@ -623,7 +624,7 @@ namespace MMRando
                     }
                     else
                     {
-                        if( !ShuffleOneWay)
+                        if (!ShuffleOneWay)
                         {
                             continue;
                         }
@@ -649,8 +650,8 @@ namespace MMRando
             CollectionState Inventory = new CollectionState();
             int pool = 0;
             Predicate<Spawn> CanAdd = S => S != null && SpawnSet[pool].ContainsKey(S.Name) && SpawnSet[pool][S.Name];
-            Predicate<Spawn> CanChoose = S => 
-                S != null && ChosenSet[pool].ContainsKey(S.Name) && ChosenSet[pool][S.Name] && 
+            Predicate<Spawn> CanChoose = S =>
+                S != null && ChosenSet[pool].ContainsKey(S.Name) && ChosenSet[pool][S.Name] &&
                 (S.Exit == null || S.Exit != null && SpawnSet[pool].ContainsKey(S.Exit.Name) && SpawnSet[pool][S.Exit.Name]);
             Spawn To, From;
             string TempExit;
@@ -666,14 +667,21 @@ namespace MMRando
                         SpawnSet[pool][From.Name] = false;
                         ChosenSet[pool][To.Name] = false;
                         FillWorld.RemoveAll(S => S == FillWorld[0]);
-                        ConnectEntrances(From.Name, To.Name, true);
-                        if (To.Exit != null && SpawnSet[pool].ContainsKey(To.Exit.Name))
+                        if (From.Name == "South Clock Town: Clock Tower")
                         {
-                            SpawnSet[pool][To.Exit.Name] = false;
-                            ChosenSet[pool][From.Exit.Name] = false;
-                            if (FillWorld.Contains(To.Exit.Name))
+                            ConnectEntrances(From.Name, To.Name, false);
+                        }
+                        else
+                        {
+                            ConnectEntrances(From.Name, To.Name, true);
+                            if (To.Exit != null && SpawnSet[pool].ContainsKey(To.Exit.Name))
                             {
-                                FillWorld.RemoveAll(S => S == To.Exit.Name);
+                                SpawnSet[pool][To.Exit.Name] = false;
+                                ChosenSet[pool][From.Exit.Name] = false;
+                                if (FillWorld.Contains(To.Exit.Name))
+                                {
+                                    FillWorld.RemoveAll(S => S == To.Exit.Name);
+                                }
                             }
                         }
                         if (TerminaMap.ContainsKey(To.Scene) && CheckEntranceLogic(To.Scene, Inventory))
@@ -741,29 +749,19 @@ namespace MMRando
             bool AllowTelescopes = Settings.RandomizeSpecialEntrances;
             if (Departure.Name.Equals("South Clock Town: Clock Tower"))
             {
-                // choose from the hub areas first
-                foreach (string s in new string[] { "South Clock Town", "North Clock Town", "Termina Field", "Ikana Canyon", "Zora Hall" })
+                foreach (string s in TerminaMap.Keys)
                 {
-                    if (TerminaMap.ContainsKey(s))
+                    if( Settings.MixEntrances && TerminaMap[s].Count > 2 || (!Settings.MixEntrances && new string[] {
+                        "South Clock Town", "North Clock Town","East Clock Town","West Clock Town", "Termina Field", "Mountain Village", "Ikana Canyon" }.Contains(s)))
                     {
                         foreach (Spawn S in TerminaMap[s])
                         {
                             if (CanAdd.Invoke(S))
                             {
-                                if (Departure.Type == S.Type)
+                                // need to keep this up to date with the section below
+                                if (Settings.MixEntrances || Departure.Type == S.Type)
                                 {
                                     candidates.Add(S.Name);
-                                }
-                                if (AllowTelescopes)
-                                {
-                                    if (Departure.Type == "Interior" && S.Type == "Telescope")
-                                    {
-                                        candidates.Add(S.Name);
-                                    }
-                                    if (Departure.Type == "Telescope" && S.Type == "Interior")
-                                    {
-                                        candidates.Add(S.Name);
-                                    }
                                 }
                             }
                         }
@@ -779,9 +777,21 @@ namespace MMRando
                         Spawn S = GetSpawn(SpawnName);
                         if (CanAdd.Invoke(S))
                         {
-                            if (Departure.Type == S.Type)
+                            // need to keep this up to date with the section above
+                            if (Settings.MixEntrances || Departure.Type == S.Type)
                             {
                                 candidates.Add(S.Name);
+                            }
+                            if (AllowTelescopes)
+                            {
+                                if (Departure.Type == "Interior" && S.Type == "Telescope")
+                                {
+                                    candidates.Add(S.Name);
+                                }
+                                if (Departure.Type == "Telescope" && S.Type == "Interior")
+                                {
+                                    candidates.Add(S.Name);
+                                }
                             }
                         }
                     }
