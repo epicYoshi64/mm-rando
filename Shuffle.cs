@@ -557,7 +557,9 @@ namespace MMRando
 
         private void TestEntrances()
         {
-
+            ConnectEntrances("Town Shooting Gallery", "Curiosity Shop Backroom: Telescope", true);
+            ConnectEntrances("Treasure Chest Game", "Pirate's Fortress: Telescope", true);
+            ConnectEntrances("Honey & Darling", "Termina Field: Telescope", true);
         }
 
         private void ShuffleEntrances()
@@ -568,14 +570,14 @@ namespace MMRando
             bool ShuffleOverworld = Settings.RandomizeOverworldEntrances;
             bool ShuffleOneWay = Settings.RandomizeSpecialEntrances || Settings.RandomizeOwlWarps;
             bool MixEntrances = Settings.MixEntrances;
-            if( MixEntrances)
+            if (MixEntrances)
             {
                 SpawnSet.Add(new Dictionary<string, bool>());
                 ChosenSet.Add(new Dictionary<string, bool>());
             }
             else
             {
-                if( ShuffleOverworld)
+                if (ShuffleOverworld)
                 {
                     SpawnSet.Add(new Dictionary<string, bool>());
                     ChosenSet.Add(new Dictionary<string, bool>());
@@ -737,6 +739,38 @@ namespace MMRando
             }
         }
 
+        private void CheckEntrances()
+        {
+            List<string> FillWorld = new List<string>();
+            List<string> Inaccessible = new List<string>();
+            CollectionState Inventory = new CollectionState();
+            Spawn Next;
+            string TempExit;
+            FillWorld.Add("South Clock Town: Clock Tower");
+            while (FillWorld.Count > 0)
+            {
+                Next = GetShuffledSpawn(FillWorld[0]);
+                if( Next != null && CheckEntranceLogic(Next.Name, Inventory))
+                {
+                    foreach (Spawn SceneSpawn in TerminaMap[Next.Scene])
+                    {
+                        if (SceneSpawn.Exit != null)
+                        {
+                            TempExit = SceneSpawn.Exit.Name;
+                            if (CheckEntranceLogic(TempExit, Inventory))
+                            {
+                                FillWorld.Add(TempExit);
+                            }
+                            else if (!Inaccessible.Contains(TempExit))
+                            {
+                                Inaccessible.Add(TempExit);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private bool CheckEntranceLogic(string Name, CollectionState Inventory)
         {
             Predicate<CollectionState> IsAccessible = TerminaLogic[Name];
@@ -863,6 +897,21 @@ namespace MMRando
             t.Exit = f;
             f.Type = type;
             t.Type = type;
+        }
+
+        private Spawn GetShuffledSpawn(string Spawn)
+        {
+            Spawn S = GetSpawn(Spawn);
+            int i;
+            foreach (string SceneSpawns in TerminaMap.Keys)
+            {
+                if (TerminaMap[SceneSpawns].Contains(S))
+                {
+                    i = TerminaMap[SceneSpawns].FindIndex(T => T==S);
+                    return ShuffledMap[SceneSpawns][i];
+                }
+            }
+            return null;
         }
 
         private void SetShuffledSpawn(Spawn f, Spawn t)
