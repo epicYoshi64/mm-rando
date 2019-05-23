@@ -495,6 +495,7 @@ namespace MMRando
         {
             GetSpawn(Telescope).Exit = GetSpawn(SpawnPoint);
             GetSpawn(Telescope).Type = "Telescope";
+            GetSpawn(SpawnPoint).Type = "Telescope Spawn";
         }
 
         private void PairPirateEntrance(string OutdoorEntrance, string IndoorEntrance)
@@ -597,7 +598,7 @@ namespace MMRando
             int chosenPool = 0;
             foreach (Spawn S in GetSpawns())
             {
-                if (!S.Name.Contains("Temple"))
+                if (!S.Name.Contains(": Temple"))
                 {
                     if (S.Exit != null)
                     {
@@ -607,10 +608,15 @@ namespace MMRando
                             {
                                 continue;
                             }
-                            else
+                            chosenPool = 0;
+                        }
+                        else if(S.Type== "Telescope" || S.Type == "Telescope Spawn")
+                        {
+                            if( !Settings.RandomizeSpecialEntrances)
                             {
-                                chosenPool = 0;
+                                continue;
                             }
+                            chosenPool = ShuffleOverworld ? 1 : 0;
                         }
                         else
                         {
@@ -647,95 +653,52 @@ namespace MMRando
                 SpawnSet[chosenPool].Add(S.Name, true);
                 ChosenSet[chosenPool].Add(S.Name, true);
             }
-            List<string> TempInaccessible = new List<string>();
-            List<string> FillWorld = new List<string>();
-            CollectionState Inventory = new CollectionState();
             int pool = 0;
+            List<string> FillWorld = new List<string>();
             Predicate<Spawn> CanAdd = S => S != null && SpawnSet[pool].ContainsKey(S.Name) && SpawnSet[pool][S.Name];
             Predicate<Spawn> CanChoose = S =>
                 S != null && ChosenSet[pool].ContainsKey(S.Name) && ChosenSet[pool][S.Name] &&
                 (S.Exit == null || S.Exit != null && SpawnSet[pool].ContainsKey(S.Exit.Name) && SpawnSet[pool][S.Exit.Name]);
             Spawn To, From;
-            string TempExit;
-            FillWorld.Add("South Clock Town: Clock Tower");
-            while (FillWorld.Count > 0)
+            while (pool < SpawnSet.Count)
             {
-                From = GetSpawn(FillWorld[0]);
-                if (CanAdd.Invoke(From))
+                FillWorld.AddRange(SpawnSet[pool].Keys);
+                while (FillWorld.Count > 0)
                 {
-                    To = ChooseNextEntrance(SpawnSet[pool], From, CanChoose);
-                    if (To != null)
+                    From = GetSpawn(FillWorld[0]);
+                    if (CanAdd.Invoke(From))
                     {
-                        SpawnSet[pool][From.Name] = false;
-                        ChosenSet[pool][To.Name] = false;
-                        FillWorld.RemoveAll(S => S == FillWorld[0]);
-                        if (From.Name == "South Clock Town: Clock Tower")
+                        To = ChooseNextEntrance(ChosenSet[pool], From, CanChoose);
+                        if (To != null)
                         {
-                            ConnectEntrances(From.Name, To.Name, false);
+                            SpawnSet[pool][From.Name] = false;
+                            ChosenSet[pool][To.Name] = false;
+                            FillWorld.RemoveAll(S => S == FillWorld[0]);
+                            if (From.Name == "South Clock Town: Clock Tower")
+                            {
+                                ConnectEntrances(From.Name, To.Name, false);
+                            }
+                            else
+                            {
+                                ConnectEntrances(From.Name, To.Name, true);
+                                if (To.Exit != null && SpawnSet[pool].ContainsKey(To.Exit.Name))
+                                {
+                                    SpawnSet[pool][To.Exit.Name] = false;
+                                    ChosenSet[pool][From.Exit.Name] = false;
+                                    if (FillWorld.Contains(To.Exit.Name))
+                                    {
+                                        FillWorld.RemoveAll(S => S == To.Exit.Name);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
-                            ConnectEntrances(From.Name, To.Name, true);
-                            if (To.Exit != null && SpawnSet[pool].ContainsKey(To.Exit.Name))
-                            {
-                                SpawnSet[pool][To.Exit.Name] = false;
-                                ChosenSet[pool][From.Exit.Name] = false;
-                                if (FillWorld.Contains(To.Exit.Name))
-                                {
-                                    FillWorld.RemoveAll(S => S == To.Exit.Name);
-                                }
-                            }
-                        }
-                        if (TerminaMap.ContainsKey(To.Scene) && CheckEntranceLogic(To.Scene, Inventory))
-                        {
-                            foreach (Spawn SceneSpawn in TerminaMap[To.Scene])
-                            {
-                                if (SceneSpawn.Exit != null)
-                                {
-                                    TempExit = SceneSpawn.Exit.Name;
-                                    if (SpawnSet[pool].ContainsKey(TempExit) && SpawnSet[pool][TempExit] && CheckEntranceLogic(TempExit, Inventory))
-                                    {
-                                        FillWorld.Add(TempExit);
-                                    }
-                                    else if (!TempInaccessible.Contains(TempExit))
-                                    {
-                                        TempInaccessible.Add(TempExit);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // there was no available entrance to connect to
-                        SpawnSet[pool][From.Name] = false;
-                        Console.WriteLine("Could Not Place: {0}", From.Name);
-                        FillWorld.RemoveAt(0);
-                    }
-                }
-                else
-                {
-                    // somehow the entrance being placed is no longer allowed to be placed
-                    // not sure what code execution path let's that happen tho?
-                    FillWorld.RemoveAt(0);
-                }
-                // if we've run out of connected places to put things, and still have more entrances to place
-                // start adding entrances from a new starting point
-                // eventually want to tie this in to the owl statues to pick out an accessible owl statue
-                if (FillWorld.Count == 0)
-                {
-                    for (int i = 0; i < SpawnSet.Count; i++)
-                    {
-                        pool = (pool + 1) % SpawnSet.Count;
-                        List<KeyValuePair<string, bool>> Available = SpawnSet[pool].Where(S => S.Value).ToList();
-                        if (Available.Count > 0)
-                        {
-                            int n = RNG.Next(Available.Count);
-                            FillWorld.Add(Available[n].Key);
-                            break;
+
                         }
                     }
                 }
+                pool++;
             }
         }
 
@@ -780,7 +743,6 @@ namespace MMRando
         private Spawn ChooseNextEntrance(Dictionary<string, bool> SpawnSet, Spawn Departure, Predicate<Spawn> CanAdd)
         {
             List<string> candidates = new List<string>();
-            bool AllowTelescopes = Settings.RandomizeSpecialEntrances;
             if (Departure.Name.Equals("South Clock Town: Clock Tower"))
             {
                 foreach (string s in TerminaMap.Keys)
@@ -816,7 +778,7 @@ namespace MMRando
                             {
                                 candidates.Add(S.Name);
                             }
-                            if (AllowTelescopes)
+                            if (Settings.RandomizeSpecialEntrances)
                             {
                                 if (Departure.Type == "Interior" && S.Type == "Telescope")
                                 {
@@ -832,10 +794,9 @@ namespace MMRando
                 }
             }
             int n = RNG.Next(candidates.Count);
-            if (candidates.Count > 1)
+            if (candidates.Count > 0)
             {
                 return GetSpawn(candidates[n]);
-                //return GetSpawn(candidates[0]);
             }
             return null;
         }
