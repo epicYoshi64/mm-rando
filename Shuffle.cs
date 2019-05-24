@@ -303,64 +303,75 @@ namespace MMRando
 
         private void GetVanillaTerminaMap()
         {
+            AddSpawn("Clock Tower: South Clock Town", 0xC010, "Clock Tower");
             AddSceneSpawns(new string[] {
                 "Clock Tower", "Termina Field", "East Clock Town",
                 "West Clock Town", "North Clock Town", "South West Connection",
-                "Laundry Pool", "South East Connection", "", "Owl Warp" },
-                    0xD8, "South Clock Town");
+                "Laundry Pool", "South East Connection", "", "Owl Warp"
+            }, 0xD8, "South Clock Town");
             AddSceneSpawns(new string[] {
-                "Termina Field", "East Clock Town", "South Clock Town", "Clock Town Fairy", "Deku Playground" },
-                    0xD6, "North Clock Town");
+                "Termina Field", "East Clock Town", "South Clock Town", "Clock Town Fairy", "Deku Playground"
+            }, 0xD6, "North Clock Town");
             AddSceneSpawns(new string[] {
                 "Termina Field", "South West Connection", "South Clock Town",
                 "Swordsman's School", "Curiosity Shop", "Trading Post", "Bomb Shop",
-                "Post Office", "Lottery Shop"},
-                    0xD4, "West Clock Town");
+                "Post Office", "Lottery Shop"
+            }, 0xD4, "West Clock Town");
             AddSceneSpawns(new string[] {
                 "Termina Field", "South East Connection", "Observatory", "South Clock Town",
                 "Treasure Chest Game", "North Clock Town", "Honey & Darling", "Mayor's Residence",
-                "Town Shooting Gallery", "Stock Pot Inn", "Stock Pot Roof", "Milk Bar"},
-                    0xD2, "East Clock Town");
-            PairSpawns("South Clock Town: South West Connection", "West Clock Town: South West Connection", "Overworld");
-            PairSpawns("South Clock Town: South East Connection", "East Clock Town: South East Connection", "Overworld");
+                "Town Shooting Gallery", "Stock Pot Inn", "Stock Pot Roof", "Milk Bar"
+            }, 0xD2, "East Clock Town");
+            AddSceneSpawns(new string[] {
+                "South Clock Town"
+            }, 0xDA, "Laundry Pool");
+            PairSpawns(
+                "South Clock Town: South West Connection", 
+                "West Clock Town: South West Connection", 
+                "Overworld");
+            PairSpawns(
+                "South Clock Town: South East Connection", 
+                "East Clock Town: South East Connection", 
+                "Overworld");
 
             ConnectInteriors(
                 new string[] {
                     "Bomb Shop", "Trading Post", "Swordsman's School", "Curiosity Shop",
                     "Post Office", "Lottery Shop", "Treasure Chest Game", "Honey & Darling",
-                    "Mayor's Residence", "Town Shooting Gallery", "Stock Pot Inn", "Stock Pot Roof",
-                    "Milk Bar", "Deku Playground" },
+                    "Mayor's Residence", "Town Shooting Gallery", "Stock Pot Inn", "Milk Bar", "Deku Playground" },
                 new ushort[] {
                     0xCA00, 0x6200, 0xA200, 0x0E00,
                     0x5600, 0x6C00, 0x2800, 0x0800,
-                    0x0000, 0x3A00, 0xBC00, 0xBC10,
-                    0x2400, 0x3600 });
-            GetSpawn("Stock Pot Roof").Scene = "Stock Pot Inn";
+                    0x0000, 0x3A00, 0xBC00, 0x2400, 0x3600 });
+            AddSpawn("Stock Pot Roof", 0xBC10, "Stock Pot Inn");
+            PairInteriorEntrance("East Clock Town: Stock Pot Roof", "Stock Pot Roof");
 
-            AddSceneSpawns(new string[] { "South Clock Town", "Curiosity Shop Backroom" }, 0xDA, "Laundry Pool");
-            ConnectInteriors(new string[] { "Curiosity Shop Backroom" }, new ushort[] { 0x0E10 });
+            ConnectSingleInterior("Curiosity Shop Backroom", "Laundry Pool", 0x0E10, 0xDA10);
             AddSpawn("Curiosity Shop: Telescope", 0x0E20, "Curiosity Shop Backroom");
-            AddSpawn("Telescope: Curiosity Shop Backroom", 0x0E30, "Curiosity Shop Backroom");
-            AddSceneSpawns(new string[] { "East Clock Town", "Termina Field", "Telescope" }, 0x4C, "Observatory");
+            AddSpawn("Curiosity Shop Backroom: Telescope", 0x0E30, "Curiosity Shop Backroom");
+
+            AddSceneSpawns(new string[] {
+                "East Clock Town", "Termina Field", "Telescope"
+            }, 0x4C, "Observatory");
 
             AddSceneSpawns(new string[] {
                 "West Clock Town", "Swamp Path", "Great Bay Coast",
                 "Mountain Path", "Ikana Path", "Milk Road", "South Clock Town",
-                "East Clock Town", "North Clock Town", "Observatory", "Telescope" },
-                    0x54, "Termina Field");
+                "East Clock Town", "North Clock Town", "Observatory", "Telescope"
+            }, 0x54, "Termina Field");
 
             AddSceneSpawns(new string[] { "Termina Field", "Southern Swamp", "Swamp Shooting Gallery" }, 0x7A, "Swamp Path");
-            string[] duplicateSceneSpawns = new string[] {
+            ConnectDuplicateSceneSpawns(new string[] {
                 "Swamp Path", "Tourist Center", "Woodfall", "Deku Palace",
                 "Deku Shortcut", "Potion Shop", "", "Woods of Mystery",
-                "Swamp Spider House", "Ikana Canyon", "Owl Warp"};
-            AddSceneSpawns(duplicateSceneSpawns, 0x84, "Southern Swamp");
-            AddSceneSpawns(duplicateSceneSpawns, 0x0C, "Southern Swamp Healed");
+                "Swamp Spider House", "Ikana Canyon", "Owl Warp"
+            }, "Southern Swamp", 0x84, "Healed", 0x0C);
 
             AddSceneSpawns(new string[] {
                 "Southern Swamp", "Caught", "Deku King Chamber", "Sonata Monkey",
                 "Deku Shortcut", "", "", "", "Bean Seller", ""
             }, 0x50, "Deku Palace");
+
             ConnectInteriors(
                 new string[] {
                     "Potion Shop", "Swamp Shooting Gallery", "Swamp Spider House",
@@ -368,65 +379,84 @@ namespace MMRando
                 new ushort[] {
                     0x0400, 0x4200, 0x4800,
                     0xC200, 0xA800, 0x7600, 0x7610 });
-            AddSceneSpawns(new string[] { "Southern Swamp", "Temple", "Woodfall Fairy",
-                "Deku Princess", "Owl Warp" }, 0x86, "Woodfall");
-            PairSpawns("Southern Swamp: Deku Shortcut", "Deku Palace: Deku Shortcut", "Overworld");
-            PairSpawns("Southern Swamp Healed: Deku Shortcut", "Deku Palace: Deku Shortcut", "Overworld");
+            PairSpawns(
+                "Southern Swamp: Deku Shortcut", 
+                "Deku Palace: Deku Shortcut", 
+                "Overworld");
+            PairSpawns(
+                "Southern Swamp Healed: Deku Shortcut", 
+                "Deku Palace: Deku Shortcut", 
+                "Overworld");
+
+            AddSceneSpawns(new string[] {
+                "Southern Swamp", "Temple", "Woodfall Fairy", "Deku Princess", "Owl Warp"
+            }, 0x86, "Woodfall");
 
             AddSceneSpawns(new string[] { "Termina Field", "Mountain Village" }, 0x32, "Mountain Path");
-            duplicateSceneSpawns = new string[] {
+            ConnectDuplicateSceneSpawns(new string[] {
                 "", "Smithy", "Twin Islands", "Goron Grave",
-                "Snowhead Path", "", "Mountain Path", "", "Owl Warp" };
-            AddSceneSpawns(duplicateSceneSpawns, 0x9A, "Mountain Village");
-            AddSceneSpawns(duplicateSceneSpawns, 0x9A, "Mountain Village Spring");
-
-            duplicateSceneSpawns = new string[] {
-                "Mountain Village", "Goron Village", "Goron Racetrack" };
-            AddSceneSpawns(duplicateSceneSpawns, 0xB4, "Twin Islands");
-            AddSceneSpawns(duplicateSceneSpawns, 0xB4, "Twin Islands Spring");
-
-            duplicateSceneSpawns = new string[] {
-                "Twin Islands", "", "Goron Shrine", "Lens Grotto" };
-            AddSceneSpawns(duplicateSceneSpawns, 0x94, "Goron Village");
-            duplicateSceneSpawns = new string[] {
-                "Twin Islands", "", "Goron Shrine" };
-            AddSceneSpawns(duplicateSceneSpawns, 0x94, "Goron Village Spring");
+                "Snowhead Path", "", "Mountain Path", "", "Owl Warp"
+            }, "Mountain Village", 0x9A, "Spring", 0xAE);
+            ConnectDuplicateSceneSpawns(new string[] {
+                "Mountain Village", "Goron Village", "Goron Racetrack"
+            }, "Twin Islands", 0xB4, "Spring", 0xB6);
+            ConnectDuplicateSceneSpawns(new string[] {
+                "Twin Islands", "", "Goron Shrine"
+            }, "Goron Village", 0x94, "Spring", 0x8A);
 
             ConnectInteriors(
-                new string[] { "Goron Grave", "Smithy", "Goron Racetrack", "Lens Grotto", "Goron Shrine" },
-                new ushort[] { 0x9600, 0x5200, 0xD000, 0x1500, 0x5E00 });
-            AddSpawn("Goron Shrine: Goron Shop", 0x5E10, "Goron Shrine");
-            AddSpawn("Goron Racetrack: Race", 0xD010, "Goron: Racetrack");
-            AddSpawn("Goron Racetrack: Race Over", 0xD020, "Goron: Racetrack");
-            PairSpawns("Goron Racetrack: Race", "Goron Racetrack: Race Over", "Interior");
-            GetSpawn("Goron Racetrack: Race Over").Type = "Interior Exit";
-            ConnectInteriors(new string[] { "Goron Shop" }, new ushort[] { 0x7400 });
+                new string[] {
+                    "Goron Grave", "Smithy", "Goron Racetrack", "Goron Shrine" },
+                new ushort[] {
+                    0x9600, 0x5200, 0xD000, 0x5E00 });
+            ConnectSingleInterior("Lens Grotto", "Goron Village", 0x1500, 0x9430);
+            ConnectSingleInterior("Goron Shop", "Goron Shrine", 0x7400, 0x5E10);
 
-            AddSceneSpawns(new string[] { "Mountain Village", "Snowhead" }, 0xB0, "Snowhead Path");
-            AddSceneSpawns(new string[] { "Snowhead Path", "Temple", "Snowhead Fairy", "Owl Warp" }, 0xB2, "Snowhead");
+            AddSpawn("Goron Racetrack: Race", 0xD010, "Goron Racetrack");
+            AddSpawn("Goron Racetrack: Race Over", 0xD020, "Goron Racetrack");
+            PairInteriorEntrance("Goron Racetrack: Race", "Goron Racetrack: Race Over");
 
-            AddSceneSpawns(new string[] { "Termina Field", "Romani Ranch", "", "Gorman Track", "Owl Warp" }, 0x3E, "Milk Road");
+            AddSceneSpawns(new string[] {
+                "Mountain Village", "Snowhead"
+            }, 0xB0, "Snowhead Path");
+            AddSceneSpawns(new string[] {
+                "Snowhead Path", "Temple", "Snowhead Fairy", "Owl Warp"
+            }, 0xB2, "Snowhead");
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Romani Ranch", "", "Gorman Track", "Owl Warp"
+            }, 0x3E, "Milk Road");
             AddSceneSpawns(new string[] {
                 "Milk Road", "", "Stable", "Ranch House", "Cucco Shack", "Doggy Racetrack",
-                "", "", "", "", "", ""}, 0x64, "Romani Ranch");
+                "", "", "", "", "", ""
+            }, 0x64, "Romani Ranch");
             ConnectInteriors(
-                new string[] { "Stable", "Ranch House", "Cucco Shack", "Doggy Racetrack", "Gorman Track" },
-                new ushort[] {  0x0600, 0x0610, 0x7E00, 0x7C00, 0xCE00 });
+                new string[] {
+                    "Stable", "Ranch House", "Cucco Shack", "Doggy Racetrack", "Gorman Track" },
+                new ushort[] {
+                    0x0600, 0x0610, 0x7E00, 0x7C00, 0xCE00 });
 
             AddSceneSpawns(new string[] {
                 "Termina Field", "Zora Cape", "", "Pinnacle Rock", "Fisherman's Hut",
-                "Pirate's Fortress", "", "Marine Lab", "Ocean Spider House", "", "", "Owl Warp", "Caught" }, 0x68, "Great Bay Coast");
+                "Pirate's Fortress", "", "Marine Lab", "Ocean Spider House", "", "", "Owl Warp", "Caught"
+            }, 0x68, "Great Bay Coast");
             ConnectInteriors(
-                new string[] { "Pinnacle Rock", "Fisherman's Hut", "Marine Lab", "Ocean Spider House" },
-                new ushort[] { 0x4400, 0x7200, 0x5800, 0x4A00 });
+                new string[] {
+                    "Pinnacle Rock", "Fisherman's Hut", "Marine Lab", "Ocean Spider House" },
+                new ushort[] {
+                    0x4400, 0x7200, 0x5800, 0x4A00 });
 
             AddSceneSpawns(new string[] {
                 "Great Bay Coast", "Pirate's Fortress", "Pirate Tunnel", "Water Jet Exit",
-                "Caught", "Pirate Platform", "Telescope Room" }, 0x70, "Outside PF" );
+                "Caught", "Pirate Platform", "Telescope Room"
+            }, 0x70, "Outside PF" );
             AddSceneSpawns(new string[] {
                 "Outside PF", "Hookshot Room", "Hookshot Room Upper", "Well Guarded Room", "Well Guarded Exit",
                 "Barrel Room", "Barrel Room Exit", "Twin Barrel Room", "Twin Barrel Room Exit",
-                "", "Telescope", "", "Pirate Platform"}, 0x22, "Pirate's Fortress");
+                "", "Telescope", "", "Pirate Platform"
+            }, 0x22, "Pirate's Fortress");
+            PairSpawns("Outside PF: Great Bay Coast", "Great Bay Coast: Pirate's Fortress", "Water");
+
             AddSpawns("Hookshot Room",
                 new string[] { "Main", "Upper" },
                 new ushort[] { 0x4000, 0x4010 });
@@ -442,24 +472,25 @@ namespace MMRando
             AddSpawns("Pirate Tunnel",
                 new string[] { "Telescope", "Entrance", "Exit" },
                 new ushort[] { 0x4080, 0x4090, 0x40A0 });
-            PairSpawns("Outside PF: Great Bay Coast", "Great Bay Coast: Pirate's Fortress", "Water");
-            PairPirateEntrance("Pirate's Fortress: Hookshot Room", "Hookshot Room: Main");
-            PairPirateEntrance("Pirate's Fortress: Hookshot Room Upper", "Hookshot Room: Upper");
-            PairPirateEntrance("Pirate's Fortress: Well Guarded Room", "Well Guarded Room: Entrance");
-            PairPirateEntrance("Pirate's Fortress: Well Guarded Exit", "Well Guarded Room: Exit");
-            PairPirateEntrance("Pirate's Fortress: Barrel Room", "Barrel Room: Entrance");
-            PairPirateEntrance("Pirate's Fortress: Barrel Room Exit", "Barrel Room: Exit");
-            PairPirateEntrance("Pirate's Fortress: Twin Barrel Room", "Twin Barrel Room: Entrance");
-            PairPirateEntrance("Pirate's Fortress: Twin Barrel Room Exit", "Twin Barrel Room: Exit");
-            PairPirateEntrance("Outside PF: Pirate Tunnel", "Pirate Tunnel: Entrance");
-            PairPirateEntrance("Outside PF: Telescope Room", "Pirate Tunnel: Exit");
+            PairInteriorEntrance("Pirate's Fortress: Hookshot Room", "Hookshot Room: Main");
+            PairInteriorEntrance("Pirate's Fortress: Hookshot Room Upper", "Hookshot Room: Upper");
+            PairInteriorEntrance("Pirate's Fortress: Well Guarded Room", "Well Guarded Room: Entrance");
+            PairInteriorEntrance("Pirate's Fortress: Well Guarded Exit", "Well Guarded Room: Exit");
+            PairInteriorEntrance("Pirate's Fortress: Barrel Room", "Barrel Room: Entrance");
+            PairInteriorEntrance("Pirate's Fortress: Barrel Room Exit", "Barrel Room: Exit");
+            PairInteriorEntrance("Pirate's Fortress: Twin Barrel Room", "Twin Barrel Room: Entrance");
+            PairInteriorEntrance("Pirate's Fortress: Twin Barrel Room Exit", "Twin Barrel Room: Exit");
+            PairInteriorEntrance("Outside PF: Pirate Tunnel", "Pirate Tunnel: Entrance");
+            PairInteriorEntrance("Outside PF: Telescope Room", "Pirate Tunnel: Exit");
 
             AddSceneSpawns(new string[] {
                 "Great Bay Coast", "Zora Hall Water", "Zora Hall",
-                "", "Waterfall Rapids", "Great Bay Fairy", "Owl Warp"}, 0x6A, "Zora Cape");
+                "", "Waterfall Rapids", "Great Bay Fairy", "Owl Warp"
+            }, 0x6A, "Zora Cape");
             AddSceneSpawns(new string[] {
                 "Water", "Zora Cape", "Zora Shop", "Lulu's Room",
-                "Evan's Room", "Japas's Room", "Mikau's Room" }, 0x60, "Zora Hall");
+                "Evan's Room", "Japas's Room", "Mikau's Room"
+            }, 0x60, "Zora Hall");
             ConnectInteriors(
                 new string[] {
                     "Waterfall Rapids", "Zora Shop", "Lulu's Room",
@@ -468,21 +499,35 @@ namespace MMRando
                     0x8E00, 0x9250, 0x9220,
                     0x9230, 0x9210, 0x9200});
 
-            AddSceneSpawns(new string[] { "Termina Field", "Ikana Canyon", "Ikana Graveyard" }, 0xA0, "Ikana Path");
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Ikana Canyon", "Ikana Graveyard"
+            }, 0xA0, "Ikana Path");
             AddSceneSpawns(new string[] {
                 "Ikana Path", "Night 3 Grave", "Night 2 Grave",
-                "Night 1 Grave", "Dampe's House", "Defeat Skull Keeta" }, 0x80, "Ikana Graveyard");
+                "Night 1 Grave", "Dampe's House", "Defeat Skull Keeta"
+            }, 0x80, "Ikana Graveyard");
             ConnectInteriors(
-                new string[] { "Night 2 Grave", "Night 1 Grave", "Night 3 Grave", "Dampe's House" },
-                new ushort[] { 0x0A00, 0x0A10, 0x5A00, 0x5A10 });
+                new string[] {
+                    "Night 2 Grave", "Night 1 Grave", "Night 3 Grave", "Dampe's House" },
+                new ushort[] {
+                    0x0A00, 0x0A10, 0x5A00, 0x5A10 });
 
             AddSceneSpawns(new string[] {
                 "Ikana Path", "Poe Hut", "Music Box", "Stone Tower", "Owl Warp", "Well",
-                "Sakon's Hideout", "", "Ikana Castle", "", "", "Stone Tower Fairy", "Secret Shrine" }, 0x20, "Ikana Canyon");
-            AddSceneSpawns(new string[] { "Well", "Ikana Canyon", "", "", "", "", "Igos" }, 0x34, "Ikana Castle");
-            AddSceneSpawns(new string[] { "Ikana Canyon", "Ikana Castle" }, 0x90, "Well");
-            AddSceneSpawns(new string[] { "Ikana Canyon", "Inverted Stone Tower", "Stone Tower Temple", "Owl Warp" }, 0xAA, "Stone Tower");
-            AddSceneSpawns(new string[] { "Stone Tower", "Temple" }, 0xAC, "Inverted Stone Tower");
+                "Sakon's Hideout", "", "Ikana Castle", "", "", "Stone Tower Fairy", "Secret Shrine"
+            }, 0x20, "Ikana Canyon");
+            AddSceneSpawns(new string[] {
+                "Well", "Ikana Canyon", "", "", "", "", "Igos"
+            }, 0x34, "Ikana Castle");
+            AddSceneSpawns(new string[] {
+                "Ikana Canyon", "Ikana Castle"
+            }, 0x90, "Well");
+            AddSceneSpawns(new string[] {
+                "Ikana Canyon", "Inverted Stone Tower", "Stone Tower Temple", "Owl Warp"
+            }, 0xAA, "Stone Tower");
+            AddSceneSpawns(new string[] {
+                "Stone Tower", "Temple"
+            }, 0xAC, "Inverted Stone Tower");
             ConnectInteriors(
                 new string[] {
                     "Music Box", "Igos", "Secret Shrine", "Poe Hut",
@@ -492,21 +537,35 @@ namespace MMRando
                     0x2600, 0x9800 });
 
             ConnectInteriors(
-                new string[] { "Clock Town Fairy", "Woodfall Fairy", "Snowhead Fairy", "Great Bay Fairy", "Stone Tower Fairy" },
-                new ushort[] { 0x4600, 0x4610, 0x4620, 0x4630, 0x4640 });
+                new string[] {
+                    "Clock Town Fairy", "Woodfall Fairy", "Snowhead Fairy",
+                    "Great Bay Fairy", "Stone Tower Fairy" },
+                new ushort[] {
+                    0x4600, 0x4610, 0x4620,
+                    0x4630, 0x4640 });
 
             AddSpawn("Moon", 0xC800, "Moon");
-            AddSpawn("Clock Tower: South Clock Town", 0xC010, "Clock Tower");
             AddSpawns("Moon",
                 new string[] { "Woodfall Trial", "Snowhead Trial", "Great Bay Trial", "Stone Tower Trial" },
                 new UInt16[] { 0x4E00, 0x7800, 0x8800, 0xC600 }
             );
             AddSpawn("Majora Fight", 0x0200, "Moon");
             ConnectSpawnPoints();
-            ConnectTelescope("Telescope: Curiosity Shop Backroom", "Curiosity Shop: Telescope");
+            ConnectTelescope("Curiosity Shop Backroom: Telescope", "Curiosity Shop: Telescope");
             ConnectTelescope("Observatory: Telescope", "Termina Field: Telescope");
             ConnectTelescope("Pirate Tunnel: Telescope", "Pirate's Fortress: Telescope");
+        }
 
+        private void ConnectDuplicateSceneSpawns(string[] SceneSpawns, string SceneName, ushort AddressPrefix, string SceneSuffix, ushort DuplicateAddressPrefix)
+        {
+            AddSceneSpawns(SceneSpawns, AddressPrefix, SceneName);
+            AddSceneSpawns(SceneSpawns, DuplicateAddressPrefix, SceneName + " " + SceneSuffix);
+        }
+
+        private void ConnectSingleInterior(string InteriorScene, string OuterScene, ushort InteriorAddress, ushort OuterAddress)
+        {
+            AddSpawn(OuterScene + ": " + InteriorScene, OuterAddress, OuterScene);
+            ConnectInteriors(new string[] { InteriorScene }, new ushort[] { InteriorAddress });
         }
 
         private void ConnectTelescope(string SpawnPoint, string Telescope)
@@ -516,7 +575,7 @@ namespace MMRando
             GetSpawn(SpawnPoint).Type = "Telescope Spawn";
         }
 
-        private void PairPirateEntrance(string OutdoorEntrance, string IndoorEntrance)
+        private void PairInteriorEntrance(string OutdoorEntrance, string IndoorEntrance)
         {
             PairSpawns(OutdoorEntrance, IndoorEntrance, "Interior");
             GetSpawn(OutdoorEntrance).Type = "Interior Exit";
@@ -628,6 +687,7 @@ namespace MMRando
                         {
                             if (!ShuffleOverworld)
                             {
+                                ConnectEntrances(S.Name, S.Name, false);
                                 continue;
                             }
                             chosenPool = 0;
@@ -636,6 +696,7 @@ namespace MMRando
                         {
                             if( !Settings.RandomizeSpecialEntrances || !ShuffleInteriors)
                             {
+                                ConnectEntrances(S.Name, S.Name, false);
                                 continue;
                             }
                             chosenPool = ShuffleOverworld ? 1 : 0;
@@ -644,6 +705,7 @@ namespace MMRando
                         {
                             if (!ShuffleInteriors)
                             {
+                                ConnectEntrances(S.Name, S.Name, false);
                                 continue;
                             }
                             else
@@ -658,18 +720,21 @@ namespace MMRando
                         {
                             if (!Settings.RandomizeSpecialEntrances || !ShuffleInteriors)
                             {
+                                ConnectEntrances(S.Name, S.Name, false);
                                 continue;
                             }
                             chosenPool = ShuffleOverworld ? 1 : 0;
                         }
                         if (!ShuffleOneWay)
                         {
+                            ConnectEntrances(S.Name, S.Name, false);
                             continue;
                         }
                         else
                         {
                             if (!Settings.RandomizeSpecialEntrances && !S.Name.Contains("Owl Warp"))
                             {
+                                ConnectEntrances(S.Name, S.Name, false);
                                 continue;
                             }
                             chosenPool = ShuffleOverworld && ShuffleInteriors ? 2 : ShuffleOverworld || ShuffleInteriors ? 1 : 0;
@@ -888,7 +953,7 @@ namespace MMRando
             Spawn newSpawn = new Spawn(Name, Address, Scene);
             sceneSpawns.Add(newSpawn);
             sceneSpawns = ShuffledMap[Scene];
-            sceneSpawns.Add(newSpawn);
+            sceneSpawns.Add(null);
             TerminaLogic[Name] = s => true;
             TerminaLogic[Scene] = s => true;
         }
@@ -934,11 +999,7 @@ namespace MMRando
 
         private void SetShuffledSpawn(Spawn f, Spawn t)
         {
-            if (f == t)
-            {
-                return;
-            }
-            int shuffleIndex = -1, replaceIndex = -1;
+            int shuffleIndex = -1;
             List<Spawn> temp = TerminaMap[f.Scene];
             if( temp != null && temp.Contains(f) )
             {
@@ -958,27 +1019,8 @@ namespace MMRando
                     }
                 }
             }
-            List<Spawn> temp2 = ShuffledMap[t.Scene];
-            if (temp != null && temp.Contains(t))
+            if( temp != null && shuffleIndex != -1)
             {
-                replaceIndex = temp2.FindIndex(S => S == t);
-            }
-            else
-            {
-                temp2 = null;
-                foreach (List<Spawn> SceneSpawns in ShuffledMap.Values)
-                {
-                    if (SceneSpawns.Contains(t))
-                    {
-                        temp2 = SceneSpawns;
-                        replaceIndex = temp2.FindIndex(S => S == t);
-                        break;
-                    }
-                }
-            }
-            if( temp != null && shuffleIndex != -1 && temp2 != null && replaceIndex != -1)
-            {
-                temp2[replaceIndex] = temp[shuffleIndex];
                 temp[shuffleIndex] = t;
             }
         }
@@ -1064,6 +1106,7 @@ namespace MMRando
             _EntranceSpoilers = new List<string>();
             Entrances = new List<Spawn>();
             int i = 0;
+            int unique = 0;
             Spawn Spawn, ShuffledSpawn;
             foreach (string Scene in TerminaMap.Keys)
             {
@@ -1074,8 +1117,16 @@ namespace MMRando
                     Spawn = OriginalScene[s];
                     ShuffledSpawn = ShuffledScene[s];
                     _OriginalEntrances[i] = Spawn.SpawnAddress;
-                    _ShuffledEntrances[i] = ShuffledSpawn.SpawnAddress;
-                    _EntranceSpoilers.Add(Spawn.Name + " -> " + ShuffledSpawn.Name);
+                    _ShuffledEntrances[i] = ShuffledSpawn == null ? Spawn.SpawnAddress : ShuffledSpawn.SpawnAddress;
+                    _EntranceSpoilers.Add(Spawn.Name + " -> " + (ShuffledSpawn == null ? "Not Placed" : ShuffledSpawn.Name) );
+                    if(!Entrances.Contains(ShuffledSpawn))
+                    {
+                        Entrances.Add(ShuffledSpawn);
+                        unique++;
+                    }
+                    else
+                    {
+                    }
                     i++;
                 }
             }
