@@ -544,6 +544,19 @@ namespace MMRando
                     0x4600, 0x4610, 0x4620,
                     0x4630, 0x4640 });
 
+            AddSpawn("Boss Chamber: Odolwa", 0x3800, "Odolwa");
+            AddSpawn("Boss Chamber: Goht", 0x8200, "Goht");
+            AddSpawn("Boss Chamber: Gyorg", 0xB800, "Gyorg");
+            AddSpawn("Boss Chamber: Twinmold", 0x6600, "Twinmold");
+            AddSpawn("Dungeon Clear: Odolwa", 0x3010, "Odolwa");
+            AddSpawn("Dungeon Clear: Goht", 0xAE00, "Goht");
+            AddSpawn("Dungeon Clear: Gyorg", 0x6A90, "Gyorg");
+            AddSpawn("Dungeon Clear: Twinmold", 0x2070, "Twinmold");
+            foreach (string s in new string[]{ "Odolwa", "Goht", "Gyorg", "Twinmold" })
+            {
+                PairInteriorEntrance("Boss Chamber: "+s, "Dungeon Clear: "+s);
+            }
+
             AddSpawn("Moon", 0xC800, "Moon");
             AddSpawns("Moon",
                 new string[] { "Woodfall Trial", "Snowhead Trial", "Great Bay Trial", "Stone Tower Trial" },
