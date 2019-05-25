@@ -351,6 +351,9 @@ namespace MMRando
             string[] lines = Properties.Resources.SEQS
                 .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
+            FileInfo[] MusicFiles = new DirectoryInfo(MainRandomizerForm.MusicDirectory).GetFiles();
+            bool sequenceAvailable;
+
             int i = 0;
             while (i < lines.Length)
             {
@@ -376,6 +379,8 @@ namespace MMRando
                     Instrument = targetInstrument
                 };
 
+                sequenceAvailable = sourceSequence.Name.StartsWith("mm-") || MusicFiles.ToList().Find(F => F.Name == lines[i]) != null;
+
                 if (sourceSequence.Name.StartsWith("mm-"))
                 {
                     targetSequence.Replaces = Convert.ToInt32(lines[i + 3], 16);
@@ -393,7 +398,7 @@ namespace MMRando
                     i += 3;
                 };
 
-                if (sourceSequence.MM_seq != 0x18)
+                if (sourceSequence.MM_seq != 0x18 && sequenceAvailable)
                 {
                     SequenceList.Add(sourceSequence);
                 };
