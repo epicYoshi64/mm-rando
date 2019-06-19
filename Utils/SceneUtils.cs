@@ -1,4 +1,5 @@
 ﻿using MMRando.Models.Rom;
+using System;
 using System.Collections.Generic;
 
 namespace MMRando.Utils
@@ -28,7 +29,7 @@ namespace MMRando.Utils
             }
 
             int bit = 1 << (num & 7);
-            int f =RomUtils. GetFileIndexForWriting(SCENE_FLAG_MASKS);
+            int f = RomUtils.GetFileIndexForWriting(SCENE_FLAG_MASKS);
             int addr = SCENE_FLAG_MASKS - RomData.MMFileList[f].Addr + offset;
             RomData.MMFileList[f].Data[addr] |= (byte)bit;
         }
@@ -247,6 +248,67 @@ namespace MMRando.Utils
                         k += 8;
                     }
                 }
+            }
+        }
+
+        public static void UpdateSceneByNumber(int SceneNumber)
+        {
+            for (int i = Math.Min(RomData.SceneList.Count, SceneNumber); i >= 0; i--)
+            {
+                if (RomData.SceneList[i].Number == SceneNumber)
+                {
+                    UpdateScene(RomData.SceneList[i]);
+                }
+            }
+        }
+
+        public static void WriteShuffledDungeonChests(int[][] ChestShuffle)
+        {
+            SceneUtils.ReadSceneTable();
+            SceneUtils.GetMaps();
+            SceneUtils.GetMapHeaders();
+            SceneUtils.GetActors();
+            // WF, SH, GB, ST, IST
+            int[] DungeonScene = new int[] { 0x1B, 0x21, 0x49, 0x16, 0x18 };
+            // WF
+            // spinning flower fairy, first room fairy, Compass, Small Key, Map, Bow, BK, dark room fairy
+            // SH
+            // Compass Fairy, Compass, Freezard Bridge Key, Push block fairy, push block key
+            // Lava Fairy, BK, Deku Flower Fairy, Freezard Stalagmite Fairy, Fire Arrows
+            // Ice Stalactite Fairy, Ice Stalactite Key, Invisible Stair Platform Fairy, Map
+            // GB
+            // Map, Bio Baba Fairy, BK, Key, Compass, Ice Arrows, Water Wheel Fairy, Hidden Torch Fairy, 
+            // Seesaw Fairy, Yellow/Green Reservoir Fairy, First Room Fairy
+            // ST ... oh god ... I'll suffix inverted temple fairy chests with (i)
+            // Remains Platform (i), Lower First Room, Upper First Room, Eyegore, Eyegore Sunblock,
+            // Giant, Eyegore Key, Elegy Key, Wind Elevator (i), Frozen Eye Switch (i), Underwater Sun Switch [have to fact check if this is the one tied to the sun switch]
+            // Beetle Guarded Key, Compass, Wizzrobe (i), Wizzrobe Key, Wizzrobe, Map [assuming that's the one in the back]
+            // Mirror Shield Sun Switch, Sunblock Room, Post Light Arrows Room, Fire Ring, Rupee Nook, Light Arrows
+            int DungeonSceneNumber;
+            for (int d = 0; d < DungeonScene.Length; d++)
+            {
+                DungeonSceneNumber = DungeonScene[d];
+                List<Actor> TempleChests = ActorUtils.GetSceneActorsByNumber(DungeonSceneNumber, 0x0006);
+                List<short> ChestContents = new List<short>();
+                ushort GetItemMask = 0xFF0, ChestFlagMask = 0xF;
+                int ChestFlagBits = 4;
+                int ChestTypeBits = 12;
+                byte ChestType = 0;
+                foreach (Actor OldChest in TempleChests)
+                {
+                    short GetItem = (short)((OldChest.v & GetItemMask) >> ChestFlagBits);
+                    ChestContents.Add(GetItem);
+                }
+
+                // this let's us apply the same shuffling to IST that ST received
+                int s = Math.Min(d, ChestShuffle.Length - 1);
+
+                for (int i = 0; i < ChestShuffle[s].Length; i++)
+                {
+                    int ShuffledChest = ChestShuffle[s][i];
+                    TempleChests[i].v = (ChestType << ChestTypeBits) + (ChestContents[ShuffledChest] << ChestFlagBits) + (TempleChests[i].v & (0xF000 | ChestFlagMask));
+                }
+                SceneUtils.UpdateSceneByNumber(DungeonScene[d]);
             }
         }
 

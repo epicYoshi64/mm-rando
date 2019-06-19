@@ -449,6 +449,8 @@ namespace MMRando
                 }
             }
 
+            SceneUtils.WriteShuffledDungeonChests(new int[][] { ActorUtils.Permutation(8), ActorUtils.Permutation(14), ActorUtils.Permutation(11), ActorUtils.Permutation(24) });
+
             if (_settings.AddShopItems)
             {
                 ResourceUtils.ApplyHack(Values.ModsDirectory + "fix-shop-checks");
@@ -627,7 +629,6 @@ namespace MMRando
             worker.ReportProgress(100, "Done!");
 
         }
-
     }
 
 }
