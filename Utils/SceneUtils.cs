@@ -1,6 +1,8 @@
-﻿using MMRando.Models.Rom;
+﻿using MMRando.Models;
+using MMRando.Models.Rom;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MMRando.Utils
 {
@@ -251,27 +253,39 @@ namespace MMRando.Utils
             }
         }
 
-        public static void UpdateSceneByNumber(int SceneNumber)
+        public static List<Actor> GetSceneActorsByNumber(int sceneNumber, int actorNumber)
         {
-            for (int i = Math.Min(RomData.SceneList.Count, SceneNumber); i >= 0; i--)
+            List<Actor> searchActors = new List<Actor>();
+            Scene searchScene = RomData.SceneList.Single(s => s.Number == sceneNumber);
+            foreach (Map map in searchScene.Maps)
             {
-                if (RomData.SceneList[i].Number == SceneNumber)
-                {
-                    UpdateScene(RomData.SceneList[i]);
-                }
+                searchActors.AddRange(map.Actors.Where(a => a.n == actorNumber));
             }
+            return searchActors;
         }
 
-        public static void WriteShuffledDungeonChests(int[][] ChestShuffle)
+        public static void UpdateSceneByNumber(int sceneNumber)
         {
-            SceneUtils.ReadSceneTable();
-            SceneUtils.GetMaps();
-            SceneUtils.GetMapHeaders();
-            SceneUtils.GetActors();
+            Scene sceneToUpdate = RomData.SceneList.Single(s => s.Number == sceneNumber);
+            UpdateScene(sceneToUpdate);
+        }
+
+        public static void WriteDungeonFairiesToChests(List<ItemObject> itemList)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
             // WF, SH, GB, ST, IST
-            int[] DungeonScene = new int[] { 0x1B, 0x21, 0x49, 0x16, 0x18 };
+            int[] dungeonScenes = new int[] { 0x1B, 0x21, 0x49, 0x16, 0x18 };
             // WF
             // spinning flower fairy, first room fairy, Compass, Small Key, Map, Bow, BK, dark room fairy
+            List<List<int>> dungeonItemIndices = new List<List<int>>() {
+                new List<int>(){
+                    Items.FairyWoodfallFlower, Items.FairyWoodfallLobby, Items.ItemWoodfallCompass, Items.ItemWoodfallKey1,
+                    Items.ItemWoodfallMap, Items.ItemBow, Items.ItemWoodfallBossKey, Items.FairyWoodfallBoe
+                }
+            };
             // SH
             // Compass Fairy, Compass, Freezard Bridge Key, Push block fairy, push block key
             // Lava Fairy, BK, Deku Flower Fairy, Freezard Stalagmite Fairy, Fire Arrows
@@ -284,31 +298,39 @@ namespace MMRando.Utils
             // Giant, Eyegore Key, Elegy Key, Wind Elevator (i), Frozen Eye Switch (i), Underwater Sun Switch [have to fact check if this is the one tied to the sun switch]
             // Beetle Guarded Key, Compass, Wizzrobe (i), Wizzrobe Key, Wizzrobe, Map [assuming that's the one in the back]
             // Mirror Shield Sun Switch, Sunblock Room, Post Light Arrows Room, Fire Ring, Rupee Nook, Light Arrows
-            int DungeonSceneNumber;
-            for (int d = 0; d < DungeonScene.Length; d++)
+            dungeonScenes = new int[] { 0x1B };
+            int d = 0, i, j;
+            List<ItemObject> fairyChests;
+            ItemObject displacedItem;
+            short itemValue = 0x00, fairyValue = 0x00;
+            ushort getItemMask = 0xFE0, chestFlagMask = 0x1F;
+            int chestFlagBits = 5;
+            foreach (int dungeonSceneNumber in dungeonScenes)
             {
-                DungeonSceneNumber = DungeonScene[d];
-                List<Actor> TempleChests = ActorUtils.GetSceneActorsByNumber(DungeonSceneNumber, 0x0006);
-                List<short> ChestContents = new List<short>();
-                ushort GetItemMask = 0xFF0, ChestFlagMask = 0xF;
-                int ChestFlagBits = 4;
-                int ChestTypeBits = 12;
-                byte ChestType = 0;
-                foreach (Actor OldChest in TempleChests)
+                List<Actor> templeChests = GetSceneActorsByNumber(dungeonSceneNumber, 0x0006);
+                fairyChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ID) && !ItemUtils.IsStrayFairy(item.ReplacesItemId)).ToList();
+                foreach (ItemObject fairy in fairyChests)
                 {
-                    short GetItem = (short)((OldChest.v & GetItemMask) >> ChestFlagBits);
-                    ChestContents.Add(GetItem);
-                }
+                    displacedItem = itemList.Find(item => item.ReplacesItemId == fairy.ID);
 
-                // this let's us apply the same shuffling to IST that ST received
-                int s = Math.Min(d, ChestShuffle.Length - 1);
+                    if (displacedItem != null)
+                    {
+                        ItemSwapUtils.WriteNewItem(fairy.ReplacesItemId, displacedItem.ID);
+                        i = dungeonItemIndices[d].FindIndex(c => c == fairy.ReplacesItemId);
+                        j = dungeonItemIndices[d].FindIndex(c => c == displacedItem.ReplacesItemId);
 
-                for (int i = 0; i < ChestShuffle[s].Length; i++)
-                {
-                    int ShuffledChest = ChestShuffle[s][i];
-                    TempleChests[i].v = (ChestType << ChestTypeBits) + (ChestContents[ShuffledChest] << ChestFlagBits) + (TempleChests[i].v & (0xF000 | ChestFlagMask));
+                        if (i != -1 && j != -1)
+                        {
+                            fairyValue = (short)((templeChests[i].v & getItemMask) >> chestFlagBits);
+                            itemValue = (short)((templeChests[j].v & getItemMask) >> chestFlagBits);
+
+                            templeChests[i].v = (itemValue << chestFlagBits) + (templeChests[i].v & (0xF000 | chestFlagMask));
+                            templeChests[j].v = (fairyValue << chestFlagBits) + (templeChests[j].v & (0xF000 | chestFlagMask));
+                        }
+                    }
                 }
-                SceneUtils.UpdateSceneByNumber(DungeonScene[d]);
+                UpdateSceneByNumber(dungeonScenes[d]);
+                d++;
             }
         }
 

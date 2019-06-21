@@ -1334,3 +1334,18 @@
 
 0
 0
+- Woodfall Fairy Lobby
+
+0,10
+0
+0
+- Woodfall Fairy Spinning Flower
+
+0,10
+0
+0
+- Woodfall Fairy Boe Gauntlet
+
+0,10
+0
+0

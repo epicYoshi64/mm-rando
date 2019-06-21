@@ -156,6 +156,10 @@ namespace MMRando.Utils
 
         public static void WriteNewItem(int location, int item)
         {
+            if (location > Items.MaskFierceDeity || item > Items.MaskFierceDeity)
+            {
+                return;
+            }
             System.Diagnostics.Debug.WriteLine($"Writing {Items.ITEM_NAMES[item]} --> {Items.ITEM_NAMES[location]}");
 
             bool isRepeatable = Items.REPEATABLE.Contains(item);

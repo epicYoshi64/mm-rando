@@ -1,38 +1,13 @@
 ﻿using MMRando.Models.Rom;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 
 namespace MMRando.Utils
 {
     public class ActorUtils
     {
-        public static List<Actor> GetSceneActorsByNumber(int SceneNumber, int ActorNumber)
-        {
-            List<Actor> SearchActor = new List<Actor>();
-            List<Actor> SceneActors;
-            // search the scene list starting from the requested scene looking backwards
-            // SceneList follows the internal entrance list but skips some
-            // so the desired scene should be found at or before the requested index
-            for (int i = Math.Min(RomData.SceneList.Count, SceneNumber); i >= 0; i--)
-            {
-                if (RomData.SceneList[i].Number == SceneNumber)
-                {
-                    for (int MapNumber = 0; MapNumber < RomData.SceneList[i].Maps.Count;MapNumber++)
-                    {
-                        SceneActors = RomData.SceneList[i].Maps[MapNumber].Actors;
-                        for (int a = 0; a < SceneActors.Count; a++)
-                        {
-                            if (SceneActors[a].n == ActorNumber)
-                            {
-                                SearchActor.Add(SceneActors[a]);
-                            }
-                        }
-                    }
-                }
-            }
-            return SearchActor;
-        }
+        // TODO: Move this over to SceneUtil
         public static int[] Permutation(int n)
         {
             Random RNG = new Random();

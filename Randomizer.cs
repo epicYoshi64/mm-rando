@@ -111,6 +111,18 @@ namespace MMRando
 
         private readonly Dictionary<int, List<int>> ForbiddenPlacedAt = new Dictionary<int, List<int>>
         {
+            {
+                Items.FairyWoodfallLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
+            {
+                Items.FairyWoodfallFlower,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
+            {
+                Items.FairyWoodfallBoe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
         };
 
         #endregion
@@ -1092,6 +1104,10 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<int> itemPool)
         {
+            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyWoodfallBoe; i++)
+            {
+                PlaceItem(i, itemPool);
+            }
             for (int i = Items.ItemWoodfallMap; i <= Items.ItemStoneTowerKey4; i++)
             {
                 PlaceItem(i, itemPool);

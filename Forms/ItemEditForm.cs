@@ -45,7 +45,8 @@ namespace MMRando.Forms
         "Pirates' Fortress HP", "Zora Hall Scrub HP", "Path to Snowhead HP", "Great Bay Coast HP", "Ikana Scrub HP", "Ikana Castle HP", 
         "Odolwa Heart Container", "Goht Heart Container", "Gyorg Heart Container", "Twinmold Heart Container", "Map: Clock Town", "Map: Woodfall",
         "Map: Snowhead", "Map: Romani Ranch", "Map: Great Bay", "Map: Stone Tower", "Goron Racetrack Grotto", "Ikana Scrub 200r", "Deku Trial HP",
-        "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask" };
+        "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask", "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy",
+        "Woodfall Black Boe Gauntlet Stray Fairy" };
 
         bool updating = false;
         private readonly SettingsObject _settings;

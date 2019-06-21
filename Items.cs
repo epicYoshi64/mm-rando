@@ -313,6 +313,9 @@ namespace MMRando
         public const int HeartPieceZoraTrial = 264;
         public const int HeartPieceLinkTrial = 265;
         public const int MaskFierceDeity = 266;
+        public const int FairyWoodfallLobby = 267;
+        public const int FairyWoodfallFlower = 268;
+        public const int FairyWoodfallBoe = 269;
 
         public static readonly ReadOnlyCollection<int> REPEATABLE
             = new ReadOnlyCollection<int>(new int[] {
@@ -926,6 +929,9 @@ namespace MMRando
                 "Heart Piece",
                 "Heart Piece",
                 "Fierce Deity's Mask",
+                "Woodfall Fairy",
+                "Woodfall Fairy",
+                "Woodfall Fairy",
         });
 
         public static readonly ReadOnlyCollection<string> LOCATION_NAMES
@@ -1197,9 +1203,12 @@ namespace MMRando
                 "Zora Trial Heart Piece",
                 "Link Trial Heart Piece",
                 "Majora Child",
+                "Woodfall Lobby Stray Fairy",
+                "Woodfall Spinning Flower Stray Fairy",
+                "Woodfall Black Boe Gauntlet Stray Fairy",
         });
 
-        internal static readonly int TotalNumberOfItems = 267;
+        internal static readonly int TotalNumberOfItems = 270;
 
     }
 }

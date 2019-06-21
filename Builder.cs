@@ -443,13 +443,13 @@ namespace MMRando
                 {
                     ItemSwapUtils.WriteNewBottle(item.ReplacesItemId, item.ID);
                 }
-                else
+                else if (!ItemUtils.IsStrayFairy(item.ID))
                 {
                     ItemSwapUtils.WriteNewItem(item.ReplacesItemId, item.ID);
                 }
             }
 
-            SceneUtils.WriteShuffledDungeonChests(new int[][] { ActorUtils.Permutation(8), ActorUtils.Permutation(14), ActorUtils.Permutation(11), ActorUtils.Permutation(24) });
+            SceneUtils.WriteDungeonFairiesToChests( _randomized.ItemList );
 
             if (_settings.AddShopItems)
             {

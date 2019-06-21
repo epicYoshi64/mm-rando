@@ -277,6 +277,9 @@ namespace MMRando
             "Zora Trial HP",
             "Link Trial HP",
             "Fierce Deity's Mask",
+            "Woodfall Lobby Stray Fairy",
+            "Woodfall Spinning Flower Stray Fairy",
+            "Woodfall Black Boe Gauntlet Stray Fairy"
         };
 
         private static string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();
