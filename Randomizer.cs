@@ -123,6 +123,34 @@ namespace MMRando
                 Items.FairyWoodfallBoe,
                 Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
             },
+            {
+                Items.FairySnowheadWhiteRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadYellowRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadBottom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadDeku,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadGreenRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadIceStalactite,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadInvisibleStaircase,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
         };
 
         #endregion
@@ -1104,7 +1132,7 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<int> itemPool)
         {
-            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyWoodfallBoe; i++)
+            for( int i = Items.FairyWoodfallLobby; i <= Items.FairySnowheadInvisibleStaircase; i++)
             {
                 PlaceItem(i, itemPool);
             }

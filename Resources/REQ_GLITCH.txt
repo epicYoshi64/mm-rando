@@ -1334,3 +1334,53 @@
 
 0
 0
+- Woodfall Fairy Lobby
+
+0,10
+0
+0
+- Woodfall Fairy Spinning Flower
+
+0,10
+0
+0
+- Woodfall Fairy Boe Gauntlet
+
+0,10
+0
+0
+- Snowhead Fairy White Room
+
+1
+0
+0
+- Snowhead Fairy Yellow Room
+
+1
+0
+0
+- Snowhead Fairy Bottom Pillar
+
+88
+0
+0
+- Snowhead Fairy Deku Flower
+
+1
+0
+0
+- Snowhead Fairy Green Room
+
+1
+0
+0
+- Snowhead Fairy Ice Stalactite
+
+1
+0
+0
+- Snowhead Fairy Invisible Staircase
+
+1
+0
+0

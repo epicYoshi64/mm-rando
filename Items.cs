@@ -316,6 +316,14 @@ namespace MMRando
         public const int FairyWoodfallLobby = 267;
         public const int FairyWoodfallFlower = 268;
         public const int FairyWoodfallBoe = 269;
+        public const int FairySnowheadWhiteRoom = 270;
+        public const int FairySnowheadYellowRoom = 271;
+        public const int FairySnowheadBottom = 272;
+        public const int FairySnowheadDeku = 273;
+        public const int FairySnowheadGreenRoom = 274;
+        public const int FairySnowheadIceStalactite = 275;
+        public const int FairySnowheadInvisibleStaircase = 276;
+
 
         public static readonly ReadOnlyCollection<int> REPEATABLE
             = new ReadOnlyCollection<int>(new int[] {
@@ -932,6 +940,13 @@ namespace MMRando
                 "Woodfall Fairy",
                 "Woodfall Fairy",
                 "Woodfall Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
         });
 
         public static readonly ReadOnlyCollection<string> LOCATION_NAMES
@@ -1206,9 +1221,16 @@ namespace MMRando
                 "Woodfall Lobby Stray Fairy",
                 "Woodfall Spinning Flower Stray Fairy",
                 "Woodfall Black Boe Gauntlet Stray Fairy",
+                "Snowhead White Room Stray Fairy",
+                "Snowhead Yellow Room Stray Fairy",
+                "Snowhead Bottom Pillar Stray Fairy",
+                "Snowhead Deku Flower Stray Fairy",
+                "Snowhead Green Room Stray Fairy",
+                "Snowhead Ice Stalactite Room Stray Fairy",
+                "Snowhead Invisible Staircase Stray Fairy",
         });
 
-        internal static readonly int TotalNumberOfItems = 270;
+        internal static readonly int TotalNumberOfItems = 277;
 
     }
 }

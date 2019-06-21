@@ -279,7 +279,14 @@ namespace MMRando
             "Fierce Deity's Mask",
             "Woodfall Lobby Stray Fairy",
             "Woodfall Spinning Flower Stray Fairy",
-            "Woodfall Black Boe Gauntlet Stray Fairy"
+            "Woodfall Black Boe Gauntlet Stray Fairy",
+            "Snowhead White Room Stray Fairy",
+            "Snowhead Yellow Room Stray Fairy",
+            "Snowhead Bottom Pillar Stray Fairy",
+            "Snowhead Deku Flower Stray Fairy",
+            "Snowhead Green Room Stray Fairy",
+            "Snowhead Ice Stalactite Room Stray Fairy",
+            "Snowhead Invisible Staircase Stray Fairy",
         };
 
         private static string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();

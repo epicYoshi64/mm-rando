@@ -55,7 +55,9 @@ namespace MMRando
         "Odolwa Heart Container", "Goht Heart Container", "Gyorg Heart Container", "Twinmold Heart Container", "Map: Clock Town", "Map: Woodfall",
         "Map: Snowhead", "Map: Romani Ranch", "Map: Great Bay", "Map: Stone Tower", "Goron Racetrack Grotto", "Ikana Scrub 200r", "One Mask", "Two Masks",
         "Three Masks", "Four Masks", "Moon Access", "Deku Trial HP", "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask",
-        "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy", "Woodfall Black Boe Gauntlet Stray Fairy" };
+        "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy", "Woodfall Black Boe Gauntlet Stray Fairy", "Snowhead White Room Stray Fairy",
+        "Snowhead Yellow Room Stray Fairy", "Snowhead Bottom Pillar Stray Fairy", "Snowhead Deku Flower Stray Fairy", "Snowhead Green Room Stray Fairy",
+        "Snowhead Ice Stalactite Room Stray Fairy", "Snowhead Invisible Staircase Stray Fairy" };
 
         string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();
 
