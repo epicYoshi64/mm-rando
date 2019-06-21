@@ -47,7 +47,9 @@ namespace MMRando.Forms
         "Map: Snowhead", "Map: Romani Ranch", "Map: Great Bay", "Map: Stone Tower", "Goron Racetrack Grotto", "Ikana Scrub 200r", "Deku Trial HP",
         "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask", "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy",
         "Woodfall Black Boe Gauntlet Stray Fairy", "Snowhead White Room Stray Fairy", "Snowhead Yellow Room Stray Fairy", "Snowhead Bottom Pillar Stray Fairy",
-        "Snowhead Deku Flower Stray Fairy", "Snowhead Green Room Stray Fairy", "Snowhead Ice Stalactite Room Stray Fairy", "Snowhead Invisible Staircase Stray Fairy"
+        "Snowhead Deku Flower Stray Fairy", "Snowhead Green Room Stray Fairy", "Snowhead Ice Stalactite Room Stray Fairy", "Snowhead Invisible Staircase Stray Fairy",
+        "Great Bay Bio Baba Stray Fairy", "Great Bay Stray Fairy Above Water Wheel", "Great Bay Torch Alcove Stray Fairy", "Great Bay Seesaw Room Stray Fairy",
+        "Great Bay Stray Fairy Above Reservoirs", "Great Bay Lobby Torches Stray Fairy"
         };
 
         bool updating = false;

@@ -287,6 +287,12 @@ namespace MMRando
             "Snowhead Green Room Stray Fairy",
             "Snowhead Ice Stalactite Room Stray Fairy",
             "Snowhead Invisible Staircase Stray Fairy",
+            "Great Bay Bio Baba Stray Fairy",
+            "Great Bay Stray Fairy Above Water Wheel",
+            "Great Bay Torch Alcove Stray Fairy",
+            "Great Bay Seesaw Room Stray Fairy",
+            "Great Bay Stray Fairy Above Reservoirs",
+            "Great Bay Lobby Torches Stray Fairy"
         };
 
         private static string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();

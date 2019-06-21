@@ -323,7 +323,12 @@ namespace MMRando
         public const int FairySnowheadGreenRoom = 274;
         public const int FairySnowheadIceStalactite = 275;
         public const int FairySnowheadInvisibleStaircase = 276;
-
+        public const int FairyGreatBayBioBaba = 277;
+        public const int FairyGreatBayWaterWheel = 278;
+        public const int FairyGreatBayAlcove = 279;
+        public const int FairyGreatBaySeesaw = 280;
+        public const int FairyGreatBayReservoirs = 281;
+        public const int FairyGreatBayLobby = 282;
 
         public static readonly ReadOnlyCollection<int> REPEATABLE
             = new ReadOnlyCollection<int>(new int[] {
@@ -947,6 +952,12 @@ namespace MMRando
                 "Snowhead Fairy",
                 "Snowhead Fairy",
                 "Snowhead Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
         });
 
         public static readonly ReadOnlyCollection<string> LOCATION_NAMES
@@ -1228,9 +1239,15 @@ namespace MMRando
                 "Snowhead Green Room Stray Fairy",
                 "Snowhead Ice Stalactite Room Stray Fairy",
                 "Snowhead Invisible Staircase Stray Fairy",
+                "Great Bay Bio Baba Stray Fairy",
+                "Great Bay Stray Fairy Above Water Wheel",
+                "Great Bay Torch Alcove Stray Fairy",
+                "Great Bay Seesaw Room Stray Fairy",
+                "Great Bay Stray Fairy Above Reservoirs",
+                "Great Bay Lobby Torches Stray Fairy"
         });
 
-        internal static readonly int TotalNumberOfItems = 277;
+        internal static readonly int TotalNumberOfItems = 283;
 
     }
 }

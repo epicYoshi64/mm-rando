@@ -151,6 +151,30 @@ namespace MMRando
                 Items.FairySnowheadInvisibleStaircase,
                 Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
             },
+            {
+                Items.FairyGreatBayBioBaba,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayWaterWheel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayAlcove,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBaySeesaw,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayReservoirs,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
         };
 
         #endregion
@@ -1132,7 +1156,7 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<int> itemPool)
         {
-            for( int i = Items.FairyWoodfallLobby; i <= Items.FairySnowheadInvisibleStaircase; i++)
+            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyGreatBayLobby; i++)
             {
                 PlaceItem(i, itemPool);
             }

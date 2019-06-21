@@ -1384,3 +1384,33 @@
 1
 0
 0
+- Great Bay Fairy Bio Baba
+
+89
+0
+0
+- Great Bay Fairy Water Wheel
+
+89
+0
+0
+- Great Bay Fairy Alcove
+
+89
+0
+0
+- Great Bay Fairy Seesaw
+
+89
+0
+0
+- Great Bay Fairy Reservoir
+
+89
+0
+0
+- Great Bay Fairy Lobby
+
+89
+0
+0
