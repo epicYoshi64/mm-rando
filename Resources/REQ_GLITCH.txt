@@ -1414,3 +1414,78 @@
 89
 0
 0
+- ISTT Fairy Lobby
+
+4
+0
+0
+- STT Fairy Lower Lobby
+
+4
+0
+0
+- STT Fairy Upper Lobby
+
+4
+0
+0
+- STT Eyegore Lobby
+
+4
+0
+0
+- STT Fairy Water Sunblock
+
+4
+0
+0
+- ISTT Fairy Wind Funnel
+
+4
+0
+0
+- ISTT Fairy Frozen Eye Switch
+
+4
+0
+0
+- STT Fairy Underwater Sun Switch
+
+4
+0
+0
+- ISTT Fairy Wizzrobe
+
+4
+0
+0
+- STT Fairy Wizzrobe
+
+4
+0
+0
+- STT Fairy Mirror Room Sun Switch
+
+4
+0
+0
+- STT Fairy Mirror Room
+
+4
+0
+0
+- STT Fairy Spike Roller
+
+4
+0
+0
+- STT Fairy Fire Ring
+
+4
+0
+0
+- STT Fairy Wind Funnel
+
+4
+0
+0

@@ -292,7 +292,22 @@ namespace MMRando
             "Great Bay Torch Alcove Stray Fairy",
             "Great Bay Seesaw Room Stray Fairy",
             "Great Bay Stray Fairy Above Reservoirs",
-            "Great Bay Lobby Torches Stray Fairy"
+            "Great Bay Lobby Torches Stray Fairy",
+            "Inverted Stone Tower Lobby Stray Fairy",
+            "Stone Tower Lower Lobby Stray Fairy",
+            "Stone Tower Upper Lobby Stray Fairy",
+            "Stone Tower Eyegore Stray Fairy",
+            "Stone Tower Water Sunblock Stray Fairy",
+            "Inverted Stone Tower Wind Funnel Stray Fairy",
+            "Inverted Stone Tower Frozen Eye Switch Stray Fairy",
+            "Stone Tower Underwater Sun Switch Stray Fairy",
+            "Inverted Stone Tower Wizzrobe Stray Fairy",
+            "Stone Tower Wizzrobe Stray Fairy",
+            "Stone Tower Mirror Room Sun Switch Stray Fairy",
+            "Stone Tower Mirror Room Stray Fairy",
+            "Stone Tower Spike Roller Stray Fairy",
+            "Stone Tower Fire Ring Stray Fairy",
+            "Stone Tower Wind Funnel Stray Fairy"
         };
 
         private static string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();

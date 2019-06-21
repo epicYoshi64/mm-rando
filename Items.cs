@@ -329,6 +329,21 @@ namespace MMRando
         public const int FairyGreatBaySeesaw = 280;
         public const int FairyGreatBayReservoirs = 281;
         public const int FairyGreatBayLobby = 282;
+        public const int FairyInvertedTowerLobby = 283;
+        public const int FairyStoneTowerLowerLobby = 284;
+        public const int FairyStoneTowerUpperLobby = 285;
+        public const int FairyStoneTowerEyegore = 286;
+        public const int FairyStoneTowerWaterSunblock = 287;
+        public const int FairyInvertedTowerWindFunnel = 288;
+        public const int FairyInvertedTowerFrozenEyeSwitch = 289;
+        public const int FairyStoneTowerUnderwaterSunSwitch = 290;
+        public const int FairyInvertedTowerWizzrobe = 291;
+        public const int FairyStoneTowerWizzrobe = 292;
+        public const int FairyStoneTowerMirrorSunSwitch = 293;
+        public const int FairyStoneTowerMirrorRoom = 294;
+        public const int FairyStoneTowerSpikeRollers = 295;
+        public const int FairyStoneTowerTimedFireRing = 296;
+        public const int FairyStoneTowerWindFunnel = 297;
 
         public static readonly ReadOnlyCollection<int> REPEATABLE
             = new ReadOnlyCollection<int>(new int[] {
@@ -958,6 +973,21 @@ namespace MMRando
                 "Great Bay Fairy",
                 "Great Bay Fairy",
                 "Great Bay Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
         });
 
         public static readonly ReadOnlyCollection<string> LOCATION_NAMES
@@ -1244,10 +1274,25 @@ namespace MMRando
                 "Great Bay Torch Alcove Stray Fairy",
                 "Great Bay Seesaw Room Stray Fairy",
                 "Great Bay Stray Fairy Above Reservoirs",
-                "Great Bay Lobby Torches Stray Fairy"
+                "Great Bay Lobby Torches Stray Fairy",
+                "Inverted Stone Tower Lobby Stray Fairy",
+                "Stone Tower Lower Lobby Stray Fairy",
+                "Stone Tower Upper Lobby Stray Fairy",
+                "Stone Tower Eyegore Stray Fairy",
+                "Stone Tower Water Sunblock Stray Fairy",
+                "Inverted Stone Tower Wind Funnel Stray Fairy",
+                "Inverted Stone Tower Frozen Eye Switch Stray Fairy",
+                "Stone Tower Underwater Sun Switch Stray Fairy",
+                "Inverted Stone Tower Wizzrobe Stray Fairy",
+                "Stone Tower Wizzrobe Stray Fairy",
+                "Stone Tower Mirror Room Sun Switch Stray Fairy",
+                "Stone Tower Mirror Room Stray Fairy",
+                "Stone Tower Spike Roller Stray Fairy",
+                "Stone Tower Fire Ring Stray Fairy",
+                "Stone Tower Wind Funnel Stray Fairy"
         });
 
-        internal static readonly int TotalNumberOfItems = 283;
+        internal static readonly int TotalNumberOfItems = 298;
 
     }
 }

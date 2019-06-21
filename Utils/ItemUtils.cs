@@ -12,7 +12,7 @@ namespace MMRando.Utils
 
         public static bool IsOutOfRange(int itemId)
         {
-            return itemId > Items.FairyGreatBayLobby;
+            return itemId > Items.FairyStoneTowerWindFunnel;
         }
 
         public static bool IsShopItem(int itemIndex)
@@ -102,6 +102,12 @@ namespace MMRando.Utils
                     || itemIndex >= Items.ItemGreatBayMap && itemIndex <= Items.ItemGreatBayKey1
                     || itemIndex == Items.ItemIceArrow;
             }
+            if (dungeonIndex == 3)
+            {
+                return itemIndex >= Items.FairyInvertedTowerLobby && itemIndex <= Items.FairyStoneTowerWindFunnel
+                    || itemIndex >= Items.ItemStoneTowerMap && itemIndex <= Items.ItemStoneTowerKey4
+                    || itemIndex == Items.ItemLightArrow || itemIndex == Items.MaskGiant;
+            }
             return itemIndex >= Items.ItemWoodfallMap
                     && itemIndex <= Items.ItemStoneTowerKey4;
         }
@@ -131,7 +137,7 @@ namespace MMRando.Utils
         internal static bool IsStrayFairy(int item)
         {
             return item >= Items.FairyWoodfallLobby
-                    && item <= Items.FairyGreatBayLobby;
+                    && item <= Items.FairyStoneTowerWindFunnel;
         }
 
         public static bool IsHeartPiece(int itemIndex)

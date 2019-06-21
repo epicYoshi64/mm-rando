@@ -58,7 +58,11 @@ namespace MMRando
         "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy", "Woodfall Black Boe Gauntlet Stray Fairy", "Snowhead White Room Stray Fairy",
         "Snowhead Yellow Room Stray Fairy", "Snowhead Bottom Pillar Stray Fairy", "Snowhead Deku Flower Stray Fairy", "Snowhead Green Room Stray Fairy",
         "Snowhead Ice Stalactite Room Stray Fairy", "Snowhead Invisible Staircase Stray Fairy", "Great Bay Bio Baba Stray Fairy", "Great Bay Stray Fairy Above Water Wheel",
-        "Great Bay Torch Alcove Stray Fairy", "Great Bay Seesaw Room Stray Fairy", "Great Bay Stray Fairy Above Reservoirs", "Great Bay Lobby Torches Stray Fairy" };
+        "Great Bay Torch Alcove Stray Fairy", "Great Bay Seesaw Room Stray Fairy", "Great Bay Stray Fairy Above Reservoirs", "Great Bay Lobby Torches Stray Fairy",
+        "Inverted Stone Tower Lobby Stray Fairy", "Stone Tower Lower Lobby Stray Fairy", "Stone Tower Upper Lobby Stray Fairy", "Stone Tower Eyegore Stray Fairy",
+        "Stone Tower Water Sunblock Stray Fairy", "Inverted Stone Tower Wind Funnel Stray Fairy", "Inverted Stone Tower Frozen Eye Switch Stray Fairy",
+        "Stone Tower Underwater Sun Switch Stray Fairy", "Inverted Stone Tower Wizzrobe Stray Fairy", "Stone Tower Wizzrobe Stray Fairy", "Stone Tower Mirror Room Sun Switch Stray Fairy",
+        "Stone Tower Mirror Room Stray Fairy", "Stone Tower Spike Roller Stray Fairy", "Stone Tower Fire Ring Stray Fairy", "Stone Tower Wind Funnel Stray Fairy" };
 
         string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();
 

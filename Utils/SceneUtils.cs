@@ -299,14 +299,19 @@ namespace MMRando.Utils
                     Items.ItemGreatBayKey1, Items.ItemGreatBayCompass, Items.ItemIceArrow,
                     Items.FairyGreatBayWaterWheel, Items.FairyGreatBayAlcove, Items.FairyGreatBaySeesaw,
                     Items.FairyGreatBayReservoirs, Items.FairyGreatBayLobby
+                },
+                new List<int>()
+                {
+                    Items.FairyInvertedTowerLobby, Items.FairyStoneTowerLowerLobby, Items.FairyStoneTowerUpperLobby,
+                    Items.FairyStoneTowerEyegore, Items.MaskGiant, Items.ItemStoneTowerKey2, Items.ItemStoneTowerKey4,
+                    Items.FairyStoneTowerWaterSunblock, Items.FairyInvertedTowerWindFunnel, Items.FairyInvertedTowerFrozenEyeSwitch,
+                    Items.FairyStoneTowerUnderwaterSunSwitch, Items.ItemStoneTowerKey3, Items.ItemStoneTowerCompass,
+                    Items.FairyInvertedTowerWizzrobe, Items.ItemStoneTowerKey1, Items.FairyStoneTowerWizzrobe,
+                    Items.ItemStoneTowerMap, Items.FairyStoneTowerMirrorSunSwitch, Items.FairyStoneTowerMirrorRoom,
+                    Items.FairyStoneTowerSpikeRollers, Items.FairyStoneTowerTimedFireRing, Items.FairyStoneTowerWindFunnel,
+                    Items.ItemLightArrow, Items.ItemStoneTowerBossKey
                 }
             };
-            // ST ... oh god ... I'll suffix inverted temple fairy chests with (i)
-            // Remains Platform (i), Lower First Room, Upper First Room, Eyegore, Eyegore Sunblock,
-            // Giant, Eyegore Key, Elegy Key, Wind Elevator (i), Frozen Eye Switch (i), Underwater Sun Switch [have to fact check if this is the one tied to the sun switch]
-            // Beetle Guarded Key, Compass, Wizzrobe (i), Wizzrobe Key, Wizzrobe, Map [assuming that's the one in the back]
-            // Mirror Shield Sun Switch, Sunblock Room, Post Light Arrows Room, Fire Ring, Rupee Nook, Light Arrows
-            dungeonScenes = new int[] { 0x1B, 0x21, 0x49 };
             int d = 0, i, j;
             List<ItemObject> fairyChests;
             ItemObject displacedItem;

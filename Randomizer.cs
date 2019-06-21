@@ -175,6 +175,66 @@ namespace MMRando
                 Items.FairyGreatBayLobby,
                 Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
             },
+            {
+                Items.FairyInvertedTowerLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerLowerLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerUpperLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerEyegore,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWaterSunblock,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerWindFunnel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerFrozenEyeSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerUnderwaterSunSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerWizzrobe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWizzrobe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerMirrorSunSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerMirrorRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerSpikeRollers,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerTimedFireRing,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWindFunnel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
         };
 
         #endregion
@@ -1156,7 +1216,7 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<int> itemPool)
         {
-            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyGreatBayLobby; i++)
+            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyStoneTowerWindFunnel; i++)
             {
                 PlaceItem(i, itemPool);
             }
