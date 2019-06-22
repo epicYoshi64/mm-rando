@@ -93,7 +93,7 @@ namespace MMRando.Utils
             if (dungeonIndex == 1)
             {
                 return itemIndex >= Items.FairySnowheadWhiteRoom && itemIndex <= Items.FairySnowheadInvisibleStaircase
-                    || itemIndex >= Items.ItemWoodfallMap && itemIndex <= Items.ItemSnowheadKey3
+                    || itemIndex >= Items.ItemSnowheadMap && itemIndex <= Items.ItemSnowheadKey3
                     || itemIndex == Items.ItemFireArrow;
             }
             if (dungeonIndex == 2)

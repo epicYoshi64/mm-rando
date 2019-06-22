@@ -277,7 +277,7 @@ namespace MMRando.Utils
             GetMapHeaders();
             GetActors();
             // WF, SH, GB, ST, IST
-            int[] dungeonScenes = new int[] { 0x1B, 0x21, 0x49, 0x16, 0x18 };
+            int[] dungeonScenes = new int[] { 0x1B, 0x21, 0x49, 0x16 };
             // WF
             // spinning flower fairy, first room fairy, Compass, Small Key, Map, Bow, BK, dark room fairy
             List<List<int>> dungeonItemIndices = new List<List<int>>() {
@@ -313,6 +313,7 @@ namespace MMRando.Utils
                 }
             };
             int d = 0, i, j;
+            List<Actor> invertedStoneTowerChests = GetSceneActorsByNumber(0x18, 0x006);
             List<ItemObject> fairyChests;
             ItemObject displacedItem;
             short itemValue = 0x00, fairyValue = 0x00;
@@ -339,6 +340,14 @@ namespace MMRando.Utils
 
                             templeChests[i].v = (itemValue << chestFlagBits) + (templeChests[i].v & (0xF000 | chestFlagMask));
                             templeChests[j].v = (fairyValue << chestFlagBits) + (templeChests[j].v & (0xF000 | chestFlagMask));
+                            if( d == 3)
+                            {
+                                fairyValue = (short)((invertedStoneTowerChests[i].v & getItemMask) >> chestFlagBits);
+                                itemValue = (short)((invertedStoneTowerChests[j].v & getItemMask) >> chestFlagBits);
+
+                                invertedStoneTowerChests[i].v = (itemValue << chestFlagBits) + (invertedStoneTowerChests[i].v & (0xF000 | chestFlagMask));
+                                invertedStoneTowerChests[j].v = (fairyValue << chestFlagBits) + (invertedStoneTowerChests[j].v & (0xF000 | chestFlagMask));
+                            }
                         }
                     }
                 }
@@ -346,7 +355,6 @@ namespace MMRando.Utils
                 d++;
             }
         }
-
     }
 
 }
