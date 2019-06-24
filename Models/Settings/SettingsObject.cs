@@ -151,6 +151,8 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool RandomizeEnemies { get; set; }
 
+        public int StartingRemains { get; set; }
+
         /// <summary>
         /// Randomize background music (includes bgm from other video games)
         /// </summary>

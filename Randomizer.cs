@@ -1182,6 +1182,30 @@ namespace MMRando
                 ItemList[freeItem].ReplacesItemId = Items.SongHealing;
                 itemPool.Remove(Items.SongHealing);
             }
+            if (_settings.StartingRemains > 0)
+            {
+                List<string> remains = new List<string>() { "Odolwa", "Goht", "Gyorg", "Twinmold" };
+                bool[] given = new bool[4];
+                int startingRemains = 0;
+                for( int i = 0; i < _settings.StartingRemains; i++)
+                {
+                    int j;
+                    do{
+                        j = _random.Next(4);
+                    } while (given[j]);
+                    given[j] = true;
+                }
+                for(int i = 0;i < given.Length; i++)
+                {
+                    if( given[i])
+                    {
+                        Debug.WriteLine($"Given {remains[i]} Remains");
+                        startingRemains |= 1 << i;
+                    }
+                }
+                _randomized.StartingRemains = (byte) startingRemains;
+            }
+
         }
 
         /// <summary>
