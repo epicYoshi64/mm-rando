@@ -1,4 +1,4 @@
-﻿using MMRando.Models;
+using MMRando.Models;
 using MMRando.Models.Rom;
 using System;
 using System.Collections.Generic;
@@ -314,22 +314,25 @@ namespace MMRando.Utils
             };
             int d = 0, i, j;
             List<Actor> invertedStoneTowerChests = GetSceneActorsByNumber(0x18, 0x006);
-            List<ItemObject> fairyChests;
+            List<ItemObject> fairyChests, itemChests;
             ItemObject displacedItem;
+            Dictionary<int, int> itemUpdates = new Dictionary<int, int>();
             short itemValue = 0x00, fairyValue = 0x00;
             ushort getItemMask = 0xFE0, chestFlagMask = 0x1F;
             int chestFlagBits = 5;
             foreach (int dungeonSceneNumber in dungeonScenes)
             {
                 List<Actor> templeChests = GetSceneActorsByNumber(dungeonSceneNumber, 0x0006);
-                fairyChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ID) && ItemUtils.IsDungeonItem(item.ID,d) && !ItemUtils.IsStrayFairy(item.ReplacesItemId)).ToList();
+                // these chests are set to have an item in them
+                itemChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ID) && ItemUtils.IsDungeonItem(item.ReplacesItemId,d) && !ItemUtils.IsStrayFairy(item.ReplacesItemId)).ToList();
+                // these chests are set to have fairies in them
+                fairyChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ReplacesItemId) && ItemUtils.IsDungeonItem(item.ReplacesItemId, d) && !ItemUtils.IsStrayFairy(item.ID)).ToList();
                 foreach (ItemObject fairy in fairyChests)
                 {
-                    displacedItem = itemList.Find(item => item.ReplacesItemId == fairy.ID);
-
-                    if (displacedItem != null)
+                    if (itemChests.Count > 0)
                     {
-                        ItemSwapUtils.WriteNewItem(fairy.ReplacesItemId, displacedItem.ID);
+                        displacedItem = itemChests[0];
+                        itemChests.RemoveAt(0);
                         i = dungeonItemIndices[d].FindIndex(c => c == fairy.ReplacesItemId);
                         j = dungeonItemIndices[d].FindIndex(c => c == displacedItem.ReplacesItemId);
 
@@ -340,7 +343,7 @@ namespace MMRando.Utils
 
                             templeChests[i].v = (itemValue << chestFlagBits) + (templeChests[i].v & (0xF000 | chestFlagMask));
                             templeChests[j].v = (fairyValue << chestFlagBits) + (templeChests[j].v & (0xF000 | chestFlagMask));
-                            if( d == 3)
+                            if (d == 3)
                             {
                                 fairyValue = (short)((invertedStoneTowerChests[i].v & getItemMask) >> chestFlagBits);
                                 itemValue = (short)((invertedStoneTowerChests[j].v & getItemMask) >> chestFlagBits);
@@ -355,6 +358,73 @@ namespace MMRando.Utils
                 d++;
             }
         }
-    }
 
+        public static void ShuffleSceneActorsInPlace(ushort[] sceneNumbers, int[] actorTypes, ushort[] actorMasks)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
+            List<Actor> actorPool = new List<Actor>();
+            Dictionary<int, List<ushort>> actorContents;
+            ushort contents;
+            int type;
+            foreach (ushort scene in sceneNumbers)
+            {
+                type = 0;
+                actorContents = new Dictionary<int, List<ushort>>();
+                foreach (int actorType in actorTypes)
+                {
+                    foreach (Actor actor in GetSceneActorsByNumber(scene, actorType))
+                    {
+                        actorPool.Add(actor);
+                        contents = (ushort)(actor.v & actorMasks[type]);
+                        if (!actorContents.ContainsKey(actorType))
+                        {
+                            actorContents.Add(actorType, new List<ushort>());
+                        }
+                        actorContents[actorType].Add(contents);
+                        System.Diagnostics.Debug.WriteLine(actor.v.ToString("X4"));
+                    }
+                    type++;
+                }
+                System.Diagnostics.Debug.WriteLine("");
+
+                if (actorContents.Count > 0)
+                {
+                    Random RNG = new Random();
+                    int i, m;
+                    foreach (Actor actor in actorPool)
+                    {
+                        m = actorTypes.ToList().FindIndex(a => a == actor.n);
+                        if (actorContents.ContainsKey(actor.n) && actorContents[actor.n].Count > 0 && m != -1 && m >= 0 && m < actorMasks.Length)
+                        {
+                            i = RNG.Next(actorContents[actor.n].Count);
+                            actor.v = (actor.v & ~actorMasks[m]) + actorContents[actor.n][i];
+                            actor.v = 0x0011;
+                            actorContents[actor.n].RemoveAt(i);
+                            System.Diagnostics.Debug.WriteLine(actor.v.ToString("X4"));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Couldn't place");
+                        }
+                    }
+                    UpdateSceneByNumber(scene);
+                }
+            }
+        }
+
+        public static void UpdateSingleActor(ushort scene, int room, int i, int actor, int variable, int mask)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
+            Actor a = RomData.SceneList.Find(s => scene == s.Number).Maps[room].Actors[i];
+            a.n = actor;
+            a.v = (~mask & a.v) + (variable & mask);
+            UpdateSceneByNumber(scene);
+        }
+    }
 }
