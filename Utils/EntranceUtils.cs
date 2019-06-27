@@ -1,4 +1,9 @@
-﻿namespace MMRando.Utils
+﻿using MMRando.Models.Rom;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MMRando.Utils
 {
 
     public static class EntranceUtils
@@ -35,6 +40,23 @@
             }
         }
 
+        public static void WriteSceneExits(int sceneNumber, ushort[] originalExits, ushort[] shuffledExits, int[] shuffledIndexes)
+        {
+            SceneUtils.ReadSceneTable();
+            SceneUtils.GetMaps();
+            SceneUtils.GetMapHeaders();
+            Scene scene = RomData.SceneList.Single(u => u.Number == sceneNumber);
+            int f = scene.File;
+            RomUtils.CheckCompressed(f);
+            int exitAddress;
+            ushort tempExit;
+            exitAddress = scene.ExitAddr;
+            for (int i = 0; i < shuffledExits.Length; i++)
+            {
+                tempExit = ReadWriteUtils.Arr_ReadU16(RomData.MMFileList[f].Data, (int)exitAddress + shuffledIndexes[i] * 2);
+                ReadWriteUtils.Arr_WriteU16(RomData.MMFileList[f].Data, (int)exitAddress + shuffledIndexes[i] * 2, shuffledExits[i]);
+                System.Diagnostics.Debug.WriteLine($"\"{originalExits[i].ToString("X4")}\" @ {shuffledIndexes[i]}: {tempExit.ToString("X4")} -> {shuffledExits[i].ToString("X4")}");
+            }
+        }
     }
-
 }

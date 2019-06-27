@@ -5,6 +5,7 @@ using MMRando.Models;
 using MMRando.Models.Rom;
 using MMRando.Models.Settings;
 using MMRando.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -258,13 +259,12 @@ namespace MMRando
 
         private void MakeGossipQuotes()
         {
-            _randomized.GossipQuotes = MessageUtils.MakeGossipQuotes
-                (_randomized);
+            _randomized.GossipQuotes = MessageUtils.MakeGossipQuotes(_randomized);
         }
 
         #endregion
 
-        private void EntranceShuffle()
+        private void DungeonShuffle()
         {
             var newDCFlags = new int[] { -1, -1, -1, -1 };
             var newDCMasks = new int[] { -1, -1, -1, -1 };
@@ -340,6 +340,1185 @@ namespace MMRando
             _randomized.NewDCFlags = newDCFlags;
             _randomized.NewDCMasks = newDCMasks;
         }
+
+        private void OwlShuffle(bool hidden)
+        {
+            int size = 12;
+            int poolSize = size;
+            _randomized.OwlStatueList = new int[size];
+            for (int i = 0; i < _randomized.OwlStatueList.Length; i++)
+            {
+                _randomized.OwlStatueList[i] = -1;
+            }
+            if (!hidden)
+            {
+                _randomized.OwlStatueList[0] = 0;
+                _randomized.OwlStatueList[8] = 8;
+                _randomized.OwlStatueList[10] = 10;
+            }
+            int owl = 0;
+            while (owl < _randomized.OwlStatueList.Length)
+            {
+                if (_randomized.OwlStatueList[owl] == -1)
+                {
+                    int n;
+                    do
+                    {
+                        n = _random.Next(_randomized.OwlStatueList.Length);
+                    } while (_randomized.OwlStatueList.Contains(n));
+
+                    _randomized.OwlStatueList[owl] = n;
+                    _randomized.OwlStatueList[n] = owl;
+                }
+                owl++;
+            }
+        }
+        
+        #region Entrance Rando
+        Dictionary<string, List<Exit>> TerminaMap { get; set; }
+        Dictionary<string, List<Exit>> ShuffledMap { get; set; }
+        Dictionary<ushort, List<string>> SceneNamesByIndex { get; set; }
+        private void EntranceShuffle()
+        {
+            TerminaMap = new Dictionary<string, List<Exit>>();
+            ShuffledMap = new Dictionary<string, List<Exit>>();
+            SceneNamesByIndex = new Dictionary<ushort, List<string>>();
+            ReadTerminaMap();
+            ShuffleEntrances();
+            //CheckEntrances();
+            FinalizeEntrances();
+            //WriteMapData();
+        }
+
+        private void ConnectPairedEntrances()
+        {
+            List<Exit> allSpawns = GetSpawns();
+            foreach (List<Exit> spawns in TerminaMap.Values)
+            {
+                foreach (Exit spawn in spawns)
+                {
+                    if (spawn.ExitId > 0 && spawn.ExitId < allSpawns.Count)
+                    {
+                        Exit match = allSpawns.Find(s => s.ID == spawn.ExitId);
+                        spawn.ExitSpawn = match;
+                    }
+                }
+            }
+        }
+
+        private void WriteMapData()
+        {
+            List<Exit> spawns = new List<Exit>();
+            Dictionary<string, bool> added = new Dictionary<string, bool>();
+            int spawnIndex = 1;
+            foreach (ushort sceneIndex in SceneNamesByIndex.Keys)
+            {
+                foreach (string sceneName in SceneNamesByIndex[sceneIndex])
+                {
+                    if (TerminaMap.ContainsKey(sceneName))
+                    {
+                        foreach (Exit s in TerminaMap[sceneName].Select(spawn => new Exit()
+                        {
+                            //ID = spawn.ID,
+                            //SceneName = spawn.SceneName,
+                            //SceneId = sceneIndex,
+                            //SpawnName = spawn.SpawnName,
+                            //SpawnAddress = spawn.SpawnAddress,
+                            //SpawnAddressString = spawn.SpawnAddress.ToString("X4"),
+                            //SpawnType = spawn.SpawnType,
+                            //ExitId = spawn.ExitId,
+                            //ExitName = spawn.ExitSpawn == null ? "" : spawn.ExitSpawn.SpawnName,
+                            //ExitIndex = (spawn.ExitSpawn == null) ? 0 : (spawn.ExitSpawn.SpawnAddress & 0xF0) >> 4,
+                            ID = spawn.ID,
+                            SceneName = spawn.SceneName,
+                            SceneId = spawn.SceneId,
+                            SpawnName = spawn.SpawnName,
+                            SpawnAddress = spawn.SpawnAddress,
+                            SpawnAddressString = spawn.SpawnAddressString,
+                            SpawnType = spawn.SpawnType,
+                            ExitId = spawn.ExitId,
+                            ExitName = spawn.ExitName,
+                            ExitIndex = spawn.ExitIndex
+                        }))
+                        {
+                            if (!added.ContainsKey(s.SpawnName))
+                            {
+                                spawns.Add(s);
+                                spawnIndex++;
+                                added[s.SpawnName] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            string spawnJson = JsonConvert.SerializeObject(spawns,Formatting.Indented);
+            Debug.WriteLine(spawnJson);
+            using (StreamWriter file = new StreamWriter(Values.MainDirectory + @"\Resources\ENTRANCES.json"))
+            {
+                file.Write(spawnJson);
+            }
+        }
+
+        private void ReadTerminaMap()
+        {
+            StreamReader file = new StreamReader(Values.MainDirectory + @"\Resources\ENTRANCES.json");
+            string spawnJson = file.ReadToEnd();
+            List<Exit> spawnData = JsonConvert.DeserializeObject<List<Exit>>(spawnJson);
+            file.Close();
+            foreach (Exit spawn in spawnData)
+            {
+                AddExitSpawn(spawn);
+            }
+            ConnectPairedEntrances();
+        }
+
+        private void BuildTerminaMap()
+        {
+            AddSpawn("Clock Tower: South Clock Town", 0xC010, "Clock Tower");
+            // Assign Clock Tower Scene a name
+            AddSceneSpawns(new string[] {
+                "Clock Tower", "Termina Field", "East Clock Town",
+                "West Clock Town", "North Clock Town", "South West Connection",
+                "Laundry Pool", "South East Connection", "Clock Tower Roof", "Owl Warp"
+            }, 0xD8, 0x6F, "South Clock Town");
+            AddSceneSpawns(new string[] {
+                "Termina Field", "East Clock Town", "South Clock Town", "Clock Town Fairy", "Deku Playground"
+            }, 0xD6, 0x6E, "North Clock Town");
+            AddSceneSpawns(new string[] {
+                "Termina Field", "South West Connection", "South Clock Town",
+                "Swordsman's School", "Curiosity Shop", "Trading Post", "Bomb Shop",
+                "Post Office", "Lottery Shop"
+            }, 0xD4, 0x6D, "West Clock Town");
+            AddSceneSpawns(new string[] {
+                "Termina Field", "South East Connection", "Observatory", "South Clock Town",
+                "Treasure Chest Game", "North Clock Town", "Honey & Darling", "Mayor's Residence",
+                "Town Shooting Gallery", "Stock Pot Inn", "Stock Pot Roof", "Milk Bar"
+            }, 0xD2, 0x6C, "East Clock Town");
+            AddSceneSpawns(new string[] {
+                "South Clock Town"
+            }, 0xDA, 0x70, "Laundry Pool");
+            PairSpawns(
+                "South Clock Town: South West Connection",
+                "West Clock Town: South West Connection",
+                "Overworld");
+            PairSpawns(
+                "South Clock Town: South East Connection",
+                "East Clock Town: South East Connection",
+                "Overworld");
+
+            AddPairedInteriors(
+                new string[] {
+                    "Bomb Shop", "Trading Post", "Swordsman's School", "Curiosity Shop",
+                    "Post Office", "Lottery Shop", "Treasure Chest Game", "Honey & Darling",
+                    "Mayor's Residence", "Town Shooting Gallery", "Stock Pot Inn", "Milk Bar",
+                    "Deku Playground", "Clock Tower Roof" },
+                new ushort[] {
+                    0xCA00, 0x6200, 0xA200, 0x0E00,
+                    0x5600, 0x6C00, 0x2800, 0x0800,
+                    0x0000, 0x3A00, 0xBC00, 0x2400,
+                    0x3600, 0x2C00 },
+                new ushort[] {
+                    0x68, 0x34, 0x54, 0x0D,
+                    0x2E, 0x39, 0x17, 0x11,
+                    0x12, 0x20, 0x61, 0x15,
+                    0x1E, 0x19 }
+                );
+            AddSpawn("Stock Pot Roof", 0xBC10, "Stock Pot Inn");
+            PairInteriorEntrance("East Clock Town: Stock Pot Roof", "Stock Pot Roof");
+
+            PairSingleInterior("Curiosity Shop Backroom", "Laundry Pool", 0x0E10, 0xDA10);
+            AddSpawn("Curiosity Shop: Telescope", 0x0E20, "Curiosity Shop Backroom");
+            AddSpawn("Curiosity Shop Backroom: Telescope", 0x0E30, "Curiosity Shop Backroom");
+
+            AddSceneSpawns(new string[] {
+                "West Clock Town", "Swamp Path", "Great Bay Coast",
+                "Mountain Path", "Ikana Path", "Milk Road", "South Clock Town",
+                "East Clock Town", "North Clock Town", "Observatory", "Telescope"
+            }, 0x54, 0x2D, "Termina Field");
+            AddGrottos(new string[] {
+                "Great Bay Gossip", "Woodfall Gossip", "Stone Tower Gossip",
+                "Snowhead Gossip", "Dodongo", "Scrub Haggle",
+                "Cow", "Beehive", "Peahat"},
+            new ushort[] {
+                0x1400, 0x1410, 0x1420,
+                0x1430, 0x1470, 0x1490,
+                0x14A0, 0x14B0, 0x14D0
+                },
+            "Termina Field");
+
+            AddSceneSpawns(new string[] {
+                "East Clock Town", "Termina Field", "Telescope"
+            }, 0x4C, 0x29,"Observatory");
+            PairInteriorEntrance("East Clock Town: Observatory", "Observatory: East Clock Town");
+            PairInteriorEntrance("Termina Field: Observatory", "Observatory: Termina Field");
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Southern Swamp", "Swamp Shooting Gallery"
+            }, 0x7A, 0x40, "Swamp Path");
+            AddDuplicateSceneSpawns(new string[] {
+                "Swamp Path", "Tourist Center", "Woodfall", "Deku Palace",
+                "Deku Shortcut", "Potion Shop", "", "Woods of Mystery",
+                "Swamp Spider House", "Ikana Canyon", "Owl Warp"
+            }, "Southern Swamp", 0x84, 0x45, "Healed", 0x0C, 0x00);
+
+            AddSceneSpawns(new string[] {
+                "Southern Swamp", "Caught", "Deku King Chamber", "Sonata Monkey",
+                "Deku Shrine", "Deku Shortcut", "", "", "", "Bean Seller", ""
+            }, 0x50, 0x2B, "Deku Palace");
+            AddGrottos(new string[] { "Bean Seller" }, new ushort[] { 0x14C0 }, "Deku Palace");
+            PairInteriorEntrance("Deku Palace: Bean Seller", "Grotto: Bean Seller");
+
+            AddPairedInteriors(
+                new string[] {
+                    "Potion Shop", "Swamp Shooting Gallery", "Swamp Spider House",
+                    "Woods of Mystery", "Tourist Center", "Deku King Chamber",
+                    "Sonata Monkey", "Deku Shrine" },
+                new ushort[] {
+                    0x0400, 0x4200, 0x4800,
+                    0xC200, 0xA800, 0x7600,
+                    0x7610, 0x9E00 },
+                new ushort[] {
+                    0x0A, 0x24, 0x27,
+                    0x64, 0x57, 0x3E,
+                    0x3E, 0x52 });
+            PairSpawns(
+                "Southern Swamp: Deku Shortcut",
+                "Deku Palace: Deku Shortcut",
+                "Overworld");
+            PairSpawns(
+                "Southern Swamp Healed: Deku Shortcut",
+                "Deku Palace: Deku Shortcut",
+                "Overworld");
+
+            AddSceneSpawns(new string[] {
+                "Southern Swamp", "Temple", "Woodfall Fairy", "Deku Princess Room", "Owl Warp"
+            }, 0x86, 0x46, "Woodfall");
+            AddPairedInteriors(new string[] {
+                "Deku Princess Room"
+            }, new ushort[] { 0x3020 }, new ushort[] { 0x1B });
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Mountain Village"
+            }, 0x32, 0x1C, "Mountain Path");
+            AddDuplicateSceneSpawns(new string[] {
+                "", "Smithy", "Twin Islands", "Goron Grave",
+                "Snowhead Path", "", "Mountain Path", "", "Owl Warp"
+            }, "Mountain Village", 0x9A, 0x50, "Spring", 0xAE, 0x5A);
+            AddDuplicateSceneSpawns(new string[] {
+                "Mountain Village", "Goron Village", "Goron Racetrack"
+            }, "Twin Islands", 0xB4, 0x5D, "Spring", 0xB6, 0x5E);
+            AddDuplicateSceneSpawns(new string[] {
+                "Twin Islands", "", "Goron Shrine"
+            }, "Goron Village", 0x94, 0x4D, "Spring", 0x8A, 0x48);
+
+            AddPairedInteriors(
+                new string[] {
+                    "Goron Grave", "Smithy", "Goron Racetrack", "Goron Shrine" },
+                new ushort[] {
+                    0x9600, 0x5200, 0xD000, 0x5E00 },
+                new ushort[] {
+                    0x4E, 0x2C, 0x6B, 0x32 });
+            PairSingleInterior("Lens Grotto", "Goron Village", 0x1500, 0x9430);
+            // override manually
+            PairSingleInterior("Goron Shop", "Goron Shrine", 0x7400, 0x5E10);
+
+            AddSpawn("Goron Racetrack: Minigame", 0xD010, "Goron Racetrack");
+            AddSpawn("Goron Racetrack: Minigame Over", 0xD020, "Goron Racetrack");
+            PairSingleSpawn("Goron Racetrack: Minigame", "Goron Racetrack: Minigame Over", "Minigame");
+
+            AddGrottos(new string[] { "Hot Spring Water Winter" }, new ushort[] { 0x1450 }, "Twin Islands");
+            AddGrottos(new string[] { "Hot Spring Water Spring" }, new ushort[] { 0x1450 }, "Twin Islands Spring");
+
+            AddSceneSpawns(new string[] {
+                "Mountain Village", "Snowhead"
+            }, 0xB0, 0x5B, "Snowhead Path");
+            AddSceneSpawns(new string[] {
+                "Snowhead Path", "Temple", "Snowhead Fairy", "Owl Warp"
+            }, 0xB2, 0x5C, "Snowhead");
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Romani Ranch", "", "Gorman Track", "Owl Warp"
+            }, 0x3E, 0x22, "Milk Road");
+            AddSceneSpawns(new string[] {
+                "Milk Road", "", "Stable", "Ranch House", "Cucco Shack", "Doggy Racetrack",
+                "", "", "", "", "", ""
+            }, 0x64, 0x35, "Romani Ranch");
+            AddPairedInteriors(
+                new string[] {
+                    "Stable", "Ranch House", "Cucco Shack", "Doggy Racetrack", "Gorman Track" },
+                new ushort[] {
+                    0x0600, 0x0610, 0x7E00, 0x7C00, 0xCE00 },
+                new ushort[] {
+                    0x10, 0x10, 0x42, 0x41, 0x6A });
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Zora Cape", "", "Pinnacle Rock", "Fisherman's Hut",
+                "Pirate's Fortress", "", "Marine Lab", "Ocean Spider House", "", "", "Owl Warp", "Caught"
+            }, 0x68, 0x37, "Great Bay Coast");
+            AddPairedInteriors(
+                new string[] {
+                    "Pinnacle Rock", "Fisherman's Hut", "Marine Lab", "Ocean Spider House" },
+                new ushort[] {
+                    0x4400, 0x7200, 0x5800, 0x4A00 },
+                new ushort[] {
+                    0x25, 0x3C, 0x2F, 0x28 });
+            GetSpawn("Great Bay Coast: Pinnacle Rock").SpawnType = "Water";
+            GetSpawn("Pinnacle Rock").SpawnType = "Water";
+
+            AddSceneSpawns(new string[] {
+                "Great Bay Coast", "Pirate's Fortress", "Pirate Tunnel", "Water Jet Exit",
+                "Caught", "Pirate Platform", "Telescope Room"
+            }, 0x70, 0x3B, "Outside PF");
+            AddSceneSpawns(new string[] {
+                "Outside PF", "Hookshot Room", "Hookshot Room Upper", "Well Guarded Room", "Well Guarded Exit",
+                "Barrel Room", "Barrel Room Exit", "Twin Barrel Room", "Twin Barrel Room Exit",
+                "", "Telescope", "", "Pirate Platform"
+            }, 0x22, 0x14, "Pirate's Fortress");
+            PairSpawns("Outside PF: Great Bay Coast", "Great Bay Coast: Pirate's Fortress", "Water");
+            PairInteriorEntrance("Pirate's Fortress: Pirate Platform", "Outside PF: Pirate Platform");
+
+            AddSpawns("Hookshot Room",
+                new string[] { "Main", "Upper" },
+                new ushort[] { 0x4000, 0x4010 },
+                new ushort[] { 0x23, 0x23 });
+            AddSpawns("Well Guarded Room",
+                new string[] { "Entrance", "Exit" },
+                new ushort[] { 0x4020, 0x4030 },
+                new ushort[] { 0x23, 0x23 });
+            AddSpawns("Barrel Room",
+                new string[] { "Entrance", "Exit" },
+                new ushort[] { 0x4040, 0x4050 },
+                new ushort[] { 0x23, 0x23 });
+            AddSpawns("Twin Barrel Room",
+                new string[] { "Entrance", "Exit" },
+                new ushort[] { 0x4060, 0x4070 },
+                new ushort[] { 0x23, 0x23 });
+            AddSpawns("Pirate Tunnel",
+                new string[] { "Telescope", "Entrance", "Exit" },
+                new ushort[] { 0x4080, 0x4090, 0x40A0 },
+                new ushort[] { 0x23, 0x23, 0x23 });
+            PairInteriorEntrance("Pirate's Fortress: Hookshot Room", "Hookshot Room: Main");
+            PairInteriorEntrance("Pirate's Fortress: Hookshot Room Upper", "Hookshot Room: Upper");
+            PairInteriorEntrance("Pirate's Fortress: Well Guarded Room", "Well Guarded Room: Entrance");
+            PairInteriorEntrance("Pirate's Fortress: Well Guarded Exit", "Well Guarded Room: Exit");
+            PairInteriorEntrance("Pirate's Fortress: Barrel Room", "Barrel Room: Entrance");
+            PairInteriorEntrance("Pirate's Fortress: Barrel Room Exit", "Barrel Room: Exit");
+            PairInteriorEntrance("Pirate's Fortress: Twin Barrel Room", "Twin Barrel Room: Entrance");
+            PairSpawns("Pirate's Fortress: Twin Barrel Room Exit", "Twin Barrel Room: Exit", "Permanent");
+            PairInteriorEntrance("Outside PF: Pirate Tunnel", "Pirate Tunnel: Entrance");
+            PairInteriorEntrance("Outside PF: Telescope Room", "Pirate Tunnel: Exit");
+
+            AddSceneSpawns(new string[] {
+                "Great Bay Coast", "Zora Hall Water", "Zora Hall",
+                "", "Waterfall Rapids", "Great Bay Fairy", "Owl Warp", "Temple"
+            }, 0x6A, 0x38,"Zora Cape");
+            AddSceneSpawns(new string[] {
+                "Water", "Zora Cape", "Zora Shop", "Lulu's Room",
+                "Evan's Room", "Japas's Room", "Mikau's Room"
+            }, 0x60, 0x33, "Zora Hall");
+            AddPairedInteriors(
+                new string[] {
+                    "Waterfall Rapids", "Zora Shop", "Lulu's Room",
+                    "Evan's Room", "Japas's Room", "Mikau's Room" },
+                new ushort[] {
+                    0x8E00, 0x9250, 0x9220,
+                    0x9230, 0x9210, 0x9200},
+                new ushort[] {
+                    0x4C, 0x4C, 0x4C,
+                    0x4C, 0x4C, 0x4C});
+            PairSpawns("Zora Cape: Zora Hall Water", "Zora Hall: Water", "Water");
+
+            AddSceneSpawns(new string[] {
+                "Termina Field", "Ikana Canyon", "Ikana Graveyard"
+            }, 0xA0, 0x53, "Ikana Path");
+            AddSceneSpawns(new string[] {
+                "Ikana Path", "Night 3 Grave", "Night 2 Grave",
+                "Night 1 Grave", "Dampe's House", "Defeat Skull Keeta"
+            }, 0x80, 0x43, "Ikana Graveyard");
+            AddPairedInteriors(
+                new string[] {
+                    "Night 2 Grave", "Night 1 Grave", "Night 3 Grave", "Dampe's House" },
+                new ushort[] {
+                    0x0A00, 0x0A10, 0x5A00, 0x5A10 },
+                new ushort[] {
+                    0x0C, 0x0C, 0x30, 0x30 });
+            GetSpawn("Dampe's House").SpawnType = "Permanent";
+            GetSpawn("Ikana Graveyard: Night 3 Grave").SpawnType = "Permanent";
+
+            AddSceneSpawns(new string[] {
+                "Ikana Path", "Poe Hut", "Music Box", "Stone Tower", "Owl Warp",
+                "Well", "Sakon's Hideout", "", "Ikana Castle", "", "",
+                "Stone Tower Fairy", "Secret Shrine", "Cursed Area Exit", "Cursed Area"
+            }, 0x20, 0x13, "Ikana Canyon");
+            PairInteriorEntrance("Ikana Canyon: Cursed Area Exit", "Ikana Canyon: Cursed Area");
+            AddSceneSpawns(new string[] {
+                "Well", "Ikana Canyon", "", "", "", "", "Igos"
+            }, 0x34, 0x1D, "Ikana Castle");
+            AddSceneSpawns(new string[] {
+                "Ikana Canyon", "Ikana Castle"
+            }, 0x90, 0x4B, "Well");
+            AddSceneSpawns(new string[] {
+                "Ikana Canyon", "Inverted Stone Tower", "Stone Tower Temple", "Owl Warp"
+            }, 0xAA, 0x58, "Stone Tower");
+            AddSceneSpawns(new string[] {
+                "Stone Tower", "Temple"
+            }, 0xAC, 0x59, "Inverted Stone Tower");
+            AddPairedInteriors(
+                new string[] {
+                    "Music Box", "Igos", "Secret Shrine", "Poe Hut",
+                    "Stone Tower Temple", "Sakon's Hideout" },
+                new ushort[] {
+                    0xA400, 0xA600, 0xBA00, 0x9C00,
+                    0x2600, 0x9800 },
+                new ushort[] {
+                    0x55, 0x56, 0x60, 0x51,
+                    0x16, 0x4F });
+
+            AddPairedInteriors(
+                new string[] {
+                    "Clock Town Fairy", "Woodfall Fairy", "Snowhead Fairy",
+                    "Great Bay Fairy", "Stone Tower Fairy" },
+                new ushort[] {
+                    0x4600, 0x4610, 0x4620,
+                    0x4630, 0x4640 },
+                new ushort[] {
+                    0x26, 0x26, 0x26,
+                    0x26,0x26 });
+
+            AddSpawn("Woodfall Temple", 0xFFFF, "Woodfall Temple");
+            AddSpawn("Snowhead Temple", 0xFFFF, "Snowhead Temple");
+            AddSpawn("Great Bay Temple", 0xFFFF, "Great Bay Temple");
+            AddSpawn("Inverted Stone Tower Temple", 0xFFFF, "Inverted Stone Tower Temple");
+            PairDungeonSpawns();
+            AddSpawn("Boss Chamber: Odolwa", 0x3800, "Woodfall Temple");
+            AddSpawn("Boss Chamber: Goht", 0x8200, "Snowhead Temple");
+            AddSpawn("Boss Chamber: Gyorg", 0xB800, "Great Bay Temple");
+            AddSpawn("Boss Chamber: Twinmold", 0x6600, "Stone Tower Temple");
+            AddSpawn("Dungeon Clear: Odolwa", 0x3010, "Deku Princess Room");
+            AddSpawn("Dungeon Clear: Goht", 0xAE00, "Mountain Village Spring");
+            AddSpawn("Dungeon Clear: Gyorg", 0x6A90, "Zora Cape");
+            AddSpawn("Dungeon Clear: Twinmold", 0x2070, "Ikana Canyon");
+            foreach (string s in new string[] { "Odolwa", "Goht", "Gyorg", "Twinmold" })
+            {
+                PairSpawns("Dungeon Clear: " + s, "Boss Chamber: " + s, "Boss");
+            }
+            AddSpawn("Moon", 0xC800, "Moon");
+            AddSpawns("Moon",
+                new string[] { "Woodfall Trial", "Snowhead Trial", "Great Bay Trial", "Stone Tower Trial" },
+                new ushort[] { 0x4E00, 0x7800, 0x8800, 0xC600 },
+                new ushort[] { 0x2A, 0x3F, 0x47, 0x66 }
+            );
+            PairMoonSpawns();
+            AddSpawn("Majora Fight", 0x0200, "Moon");
+
+            AddSpawn("Moon Crash Cutscene", 0x54C0, "Clock Tower");
+            AddSpawn("Moon Crash Spawn", 0xC030, "Clock Tower");
+            PairSpawns("Moon Crash Cutscene", "Moon Crash Spawn", "Special");
+            AddSpawn("Twisted Hallway: Clock Tower", 0x2E10, "Twisted Hallway");
+            AddSpawn("Clock Tower: Twisted Hallway", 0xC000, "Clock Tower");
+            PairSpawns("Twisted Hallway: Clock Tower", "Clock Tower: Twisted Hallway", "Permanent");
+
+            PairOverworldSpawns();
+            PairDuplicateSpawns("Southern Swamp", "Healed");
+            PairDuplicateSpawns("Mountain Village", "Spring");
+            PairDuplicateSpawns("Twin Islands", "Spring");
+            PairDuplicateSpawns("Goron Village", "Spring");
+            PairTelescope("Curiosity Shop Backroom: Telescope", "Curiosity Shop: Telescope");
+            PairTelescope("Observatory: Telescope", "Termina Field: Telescope");
+            PairTelescope("Pirate Tunnel: Telescope", "Pirate's Fortress: Telescope");
+        }
+
+        private bool CanReturn(Dictionary<string, bool> AllowedSpawn, Exit S)
+        {
+            bool result = true;
+            if (S.ExitSpawn != null)
+            {
+                if (!AllowedSpawn.ContainsKey(S.ExitSpawn.SpawnName) || !AllowedSpawn[S.ExitSpawn.SpawnName])
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        private Dictionary<string, List<string>> GetEntranceTypes()
+        {
+            Dictionary<string, List<string>> SpawnTypeSet= new Dictionary<string, List<string>>();
+            bool ShuffleInteriors = _settings.RandomizeInteriorEntrances;
+            bool ShuffleOverworld = _settings.RandomizeOverworldEntrances;
+            bool ShuffleOwls = _settings.RandomizeOwlWarps;
+            bool ShuffleOneWay = _settings.RandomizeOneWayEntrances;
+            bool ShuffleMoon = _settings.RandomizeMoonTrials;
+            bool ShuffleGrotto = _settings.RandomizeGrottoEntrances;
+            bool ShuffleSpecial = false;
+            bool MixEntrances = _settings.RandomizeEntranceInsanity;
+            string SpawnType;
+            foreach (Exit S in GetSpawns())
+            {
+                if (S.SpawnAddress == 0xFFFF) { continue; }
+                SpawnType = S.SpawnType == null ? "None" : S.SpawnType;
+
+                if (S.SpawnName.Contains("Boss Chamber") && _settings.RandomizeDungeonEntrances)
+                { SpawnType = "Interior"; }
+                if (S.SpawnName.Contains("Dungeon Clear") && _settings.RandomizeDungeonEntrances)
+                { SpawnType = "Interior Exit"; }
+
+                if (SpawnType == "Interior Exit" && ShuffleOneWay)
+                { SpawnType = "Interior"; }
+                if (SpawnType == "Telescope Spawn" && ShuffleOneWay)
+                { SpawnType = "Telescope"; }
+                if (SpawnType == "Moon" && ShuffleMoon)
+                { SpawnType = "Interior"; }
+
+                if (S.SpawnName.Contains("Owl Warp"))
+                { SpawnType = ShuffleOwls ? "Owl Warp" : "Permanent"; }
+                if (S.SpawnName.Contains("Grotto"))
+                { SpawnType = ShuffleGrotto ? "One Way" : "Permanent"; }
+                if (S.SpawnType == null && S.ExitSpawn == null)
+                { SpawnType = "One Way"; }
+
+                if (!ShuffleInteriors && (SpawnType == "Interior" || SpawnType == "Telescope" || SpawnType == "Interior Exit" || SpawnType == "Telescope Spawn"))
+                { SpawnType = "Permanent"; }
+                if (!ShuffleOverworld && (SpawnType == "Overworld" || SpawnType == "Water"))
+                { SpawnType = "Permanent"; }
+                if (!ShuffleSpecial && SpawnType == "Special")
+                { SpawnType = "Permanent"; }
+                if (!ShuffleOneWay && SpawnType == "One Way")
+                { SpawnType = "Permanent"; }
+
+                if (MixEntrances && SpawnType != "Permanent" && SpawnType != "Dungeon")
+                { SpawnType = "Insanity"; }
+
+                foreach (string SpawnName in new List<string> { "Majora Fight" })
+                {
+                    if (S.SpawnName == SpawnName)
+                    {
+                        SpawnType = "Permanent";
+                    }
+                }
+
+                if (!SpawnTypeSet.ContainsKey(SpawnType))
+                {
+                    SpawnTypeSet.Add(SpawnType, new List<string>());
+                }
+                SpawnTypeSet[SpawnType].Add(S.SpawnName);
+            }
+            return SpawnTypeSet;
+        }
+
+        private List<Dictionary<string,bool>> GetEntrancePools(Dictionary<string, List<string>> SpawnTypeSet)
+        {
+            List<Dictionary<string, bool>> SpawnSet = new List<Dictionary<string, bool>>();
+            
+            if (SpawnTypeSet.ContainsKey("Permanent"))
+            {
+                foreach (string SpawnName in SpawnTypeSet["Permanent"])
+                {
+                    ConnectEntrances(SpawnName, SpawnName, false);
+                }
+            }
+            Dictionary<string, bool> TempPool;
+            foreach (string Type in new List<string>() {
+                "Overworld",
+                "Water",
+                "Interior",
+                "Telescope",
+                "One Way",
+                "Owl Warp",
+                "Insanity",
+            })
+            {
+                if (SpawnTypeSet.ContainsKey(Type))
+                {
+                    TempPool = new Dictionary<string, bool>();
+                    if (SpawnTypeSet[Type].Count > 1)
+                    {
+                        foreach (string SpawnName in SpawnTypeSet[Type])
+                        {
+                            TempPool.Add(SpawnName, true);
+                        }
+                        SpawnSet.Add(TempPool);
+                    }
+                    else if (SpawnTypeSet[Type].Count > 0)
+                    {
+                        ConnectEntrances(SpawnTypeSet[Type][0], SpawnTypeSet[Type][0], false);
+                    }
+                }
+            }
+            return SpawnSet;
+        }
+
+        private void ShuffleEntrances()
+        {
+            Dictionary<string, List<string>> SpawnTypeSet = GetEntranceTypes();
+            List<Dictionary<string, bool>> SpawnSet = GetEntrancePools(SpawnTypeSet);
+            List<Dictionary<string, bool>> ChosenSet = GetEntrancePools(SpawnTypeSet);
+            int pool = 0;
+            List<string> FillWorld = new List<string>(), SpawnTypePool = null;
+            Predicate<Exit> CanAdd = S => S != null && SpawnSet[pool].ContainsKey(S.SpawnName) && SpawnSet[pool][S.SpawnName];
+            Predicate<Exit> CanChoose = S =>
+                S != null && ChosenSet[pool].ContainsKey(S.SpawnName) && ChosenSet[pool][S.SpawnName] &&
+                (S.ExitSpawn == null || S.ExitSpawn != null && CanReturn(SpawnSet[pool], S));
+            Exit To, From;
+            while (pool < SpawnSet.Count)
+            {
+                foreach (string Spawn in SpawnSet[pool].Keys)
+                {
+                    if (SpawnSet[pool][Spawn])
+                    {
+                        FillWorld.Add(Spawn);
+                    }
+                }
+                while (FillWorld.Count > 0)
+                {
+                    From = GetSpawn(FillWorld[0]);
+                    if (CanAdd.Invoke(From))
+                    {
+                        SpawnTypeSet.Values.ToList().ForEach(
+                            TypeSet => { if (TypeSet.Contains(From.SpawnName)) { SpawnTypePool = TypeSet; } });
+                        To = ChooseNextEntrance(ChosenSet[pool], From.SpawnType, SpawnTypePool, CanChoose);
+                        if (To != null)
+                        {
+                            SpawnSet[pool][From.SpawnName] = false;
+                            ChosenSet[pool][To.SpawnName] = false;
+                            FillWorld.RemoveAt(0);
+                            if (From.SpawnName == "South Clock Town: Clock Tower")
+                            {
+                                ConnectEntrances(From.SpawnName, To.SpawnName, false);
+                            }
+                            else
+                            {
+                                ConnectEntrances(From.SpawnName, To.SpawnName, true);
+                                if (To.ExitSpawn != null )
+                                {
+                                    SpawnSet[pool][To.ExitSpawn.SpawnName] = false;
+                                    if (FillWorld.Contains(To.ExitSpawn.SpawnName))
+                                    {
+                                        FillWorld.Remove(To.ExitSpawn.SpawnName);
+                                    }
+                                    if( From.ExitSpawn != null )
+                                    {
+                                        ChosenSet[pool][From.ExitSpawn.SpawnName] = false;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Nowhere Left For '{0}' To Go", FillWorld[0]);
+                            FillWorld.RemoveAt(0);
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Not Allowed To Place {0}", FillWorld[0]);
+                        FillWorld.RemoveAt(0);
+                    }
+                }
+                pool++;
+            }
+        }
+
+        private Exit ChooseNextEntrance(Dictionary<string, bool> SpawnSet, string DepartureType, List<string> DeparturePool, Predicate<Exit> CanAdd)
+        {
+            Dictionary<string, string> spawnTypeMap = new Dictionary<string, string>()
+            {
+                { "Interior", "Interior Exit" },
+                {"Interior Exit", "interior" }
+            };
+            string matchType = spawnTypeMap.ContainsKey(DepartureType) ? spawnTypeMap[DepartureType] : DepartureType;
+            List<string> candidates = new List<string>();
+            foreach (string SpawnName in SpawnSet.Keys)
+            {
+                if (SpawnSet[SpawnName])
+                {
+                    Exit S = GetSpawn(SpawnName);
+                    if (CanAdd.Invoke(S))
+                    {
+                        // need to keep this up to date with the section above
+                        if (matchType == S.SpawnType)
+                        {
+                            candidates.Add(S.SpawnName);
+                        }
+                        else if (DeparturePool != null && DeparturePool.Contains(S.SpawnName))
+                        {
+                            candidates.Add(S.SpawnName);
+                        }
+                    }
+                }
+            }
+            int n = _random.Next(candidates.Count);
+            if (candidates.Count > 0)
+            {
+                return GetSpawn(candidates[n]);
+            }
+            return null;
+        }
+
+        private void AddEntranceToPath(Dictionary<string,List<string[]>> Paths, List<string> CurrentPath, string EntranceName)
+        {
+            string[] TempPath;
+            if (!Paths.ContainsKey(EntranceName))
+            {
+                Paths.Add(EntranceName, new List<string[]>());
+            }
+            CurrentPath.Add(EntranceName);
+            TempPath = new string[CurrentPath.Count];
+            CurrentPath.CopyTo(TempPath);
+            Paths[EntranceName].Add(TempPath);
+            Debug.WriteLine(EntranceName);
+        }
+
+        private void CheckEntrances()
+        {
+            Stack<string> FillWorld = new Stack<string>();
+            Dictionary<string, int> Visited = new Dictionary<string, int>();
+            Dictionary<string, List<string[]>> Paths = new Dictionary<string, List<string[]>>();
+            List<string> CurrentPath = new List<string>();
+            foreach (Exit S in GetSpawns())
+            {
+                Visited[S.SpawnName] = 0;
+            }
+            foreach( string Scene in TerminaMap.Keys)
+            {
+                Visited[Scene] = 0;
+            }
+            Exit Next;
+            List<KeyValuePair<string, int>> Remaining;
+            int group = 0;
+            FillWorld.Push(GetShuffledSpawn("South Clock Town: Clock Tower").SpawnName);
+            AddEntranceToPath(Paths, CurrentPath, "Start");
+            do
+            {
+                group++;
+                while (FillWorld.Count > 0)
+                {
+                    // Add a Scene
+                    if (ShuffledMap.Keys.Contains(FillWorld.Peek()))
+                    {
+                        string SceneName = FillWorld.Pop();
+                        // Already Visited this scene, so remove the loop it causes
+                        if (Visited.ContainsKey(SceneName) && Visited[SceneName] > 0 && CurrentPath.Contains(SceneName))
+                        {
+                            for( int p = CurrentPath.Count-1; p > CurrentPath.LastIndexOf(SceneName) ; p--)
+                            {
+                                Debug.WriteLine($"Already Visited: {SceneName} Remove: {CurrentPath[p]}");
+                                CurrentPath.RemoveAt(p);
+                            }
+                        }
+                        // Visit the Scene
+                        else if (Visited.ContainsKey(SceneName))
+                        {
+                            Visited[SceneName] = group;
+                            AddEntranceToPath(Paths, CurrentPath, SceneName);
+                            if(ShuffledMap.ContainsKey(SceneName))
+                            {
+                                foreach (Exit SpawnPoint in ShuffledMap[SceneName])
+                                {
+                                    if (SpawnPoint != null && SpawnPoint.ExitSpawn != null)
+                                        {
+                                            if (Visited.ContainsKey(SpawnPoint.ExitSpawn.SpawnName) && Visited[SpawnPoint.ExitSpawn.SpawnName] == 0)
+                                            {
+                                                FillWorld.Push(SpawnPoint.ExitSpawn.SpawnName);
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    // Add a Scene Spawn
+                    else if (Visited.ContainsKey(FillWorld.Peek()) && Visited[FillWorld.Peek()] == 0 && GetSpawn(FillWorld.Peek()) != null)
+                    {
+                        Next = GetSpawn(FillWorld.Pop());
+                        Visited[Next.SpawnName] = group;
+                        if (Next != null)
+                        {
+                            if (Next.ExitSpawn != null)
+                            {
+                                AddEntranceToPath(Paths, CurrentPath, Next.SpawnName + " -> " + Next.ExitSpawn.SpawnName);
+                            }
+                            FillWorld.Push(Next.SceneName);
+                        }
+                    }
+                    else
+                    {
+                        FillWorld.Pop();
+                    }
+                }
+                Remaining = Visited.Where(S => S.Value == 0)?.ToList();
+                CurrentPath.Clear();
+                if (Remaining.Count > 0)
+                {
+                    FillWorld.Push(Remaining[0].Key);
+                }
+            } while (FillWorld.Count > 0);
+            Dictionary<string, List<string[]>> Connections = new Dictionary<string, List<string[]>>();
+            Paths.Where(S=>TerminaMap.Keys.Contains(S.Key)).ToList().ForEach(S=>Connections.Add(S.Key,S.Value));
+            foreach(string Scene in Connections.Keys)
+            {
+                Debug.WriteLine( Scene + ": " );
+                int i = 1;
+                foreach(string[] Path in Connections[Scene])
+                {
+                    Debug.WriteLine($"{i}");
+                    foreach ( string S in Path)
+                    {
+                        Debug.WriteLine($"\t{S}");
+                    }
+                    i++;
+                }
+            }
+        }
+
+        private void AddSceneNameIndex(string sceneName, ushort sceneIndex)
+        {
+            if( !SceneNamesByIndex.ContainsKey(sceneIndex))
+            {
+                SceneNamesByIndex[sceneIndex] = new List<string>();
+            }
+            SceneNamesByIndex[sceneIndex].Add(sceneName);
+
+        }
+
+        private void AddDuplicateSceneSpawns(string[] SceneSpawns, string SceneName, ushort AddressPrefix, ushort SceneIndex, string SceneSuffix, ushort DuplicateAddressPrefix, ushort DuplicateSceneIndex)
+        {
+            AddSceneSpawns(SceneSpawns, AddressPrefix, SceneIndex, SceneName);
+            AddSceneSpawns(SceneSpawns, DuplicateAddressPrefix, DuplicateSceneIndex, SceneName + " " + SceneSuffix);
+        }
+
+        private void AddSceneSpawns(string[] spawnName, ushort scenePrefix, ushort sceneIndex, string sceneName)
+        {
+            for (int i = 0; i < spawnName.Length; i++)
+            {
+                if (!spawnName[i].Equals(""))
+                {
+                    AddSpawn(sceneName + ": " + spawnName[i], (ushort)((scenePrefix << 8) + (i << 4)), sceneName);
+                }
+            }
+            AddSceneNameIndex(sceneName, sceneIndex);
+        }
+
+        private void AddSpawns(string parent, string[] sceneName, ushort[] sceneSpawnAddress, ushort[] sceneIndex)
+        {
+            for (int i = 0; i < sceneName.Length; i++)
+            {
+                AddSpawn(parent + ": " + sceneName[i], sceneSpawnAddress[i], parent);
+                AddSceneNameIndex(sceneName[i], sceneIndex[i]);
+            }
+        }
+
+        private void AddSpawn(string Name, ushort Address, string Scene)
+        {
+            if (!TerminaMap.ContainsKey(Scene))
+            {
+                TerminaMap.Add(Scene, new List<Exit>());
+                ShuffledMap.Add(Scene, new List<Exit>());
+            }
+            List<Exit> sceneSpawns = TerminaMap[Scene];
+            Exit newSpawn = new Exit(Name, Address, Scene);
+            sceneSpawns.Add(newSpawn);
+            sceneSpawns = ShuffledMap[Scene];
+            sceneSpawns.Add(null);
+        }
+
+        private void AddExitSpawn(Exit spawn)
+        {
+            string scene = spawn.SceneName;
+            if (!TerminaMap.ContainsKey(scene))
+            {
+                TerminaMap.Add(scene, new List<Exit>());
+                ShuffledMap.Add(scene, new List<Exit>());
+            }
+            List<Exit> sceneSpawns = TerminaMap[scene];
+            sceneSpawns.Add(spawn);
+            sceneSpawns = ShuffledMap[scene];
+            sceneSpawns.Add(null);
+            AddSceneNameIndex(spawn.SceneName, spawn.SceneId);
+        }
+
+        private Exit GetSpawn(string Name)
+        {
+            Exit temp;
+            foreach (List<Exit> SceneSpawns in TerminaMap.Values)
+            {
+                temp = SceneSpawns.Find(u => Name.Equals(u.SpawnName));
+                if (temp != null)
+                {
+                    return temp;
+                }
+            }
+            return null;
+        }
+
+        private void PairInteriorEntrance(string OutdoorEntrance, string IndoorEntrance)
+        {
+            PairSpawns(OutdoorEntrance, IndoorEntrance, "Interior");
+            GetSpawn(OutdoorEntrance).SpawnType = "Interior Exit";
+
+        }
+
+        private void PairSingleSpawn(string From, string To, string Type)
+        {
+            Exit F = GetSpawn(From);
+            Exit T = GetSpawn(To);
+            if (F != null && T != null)
+            {
+                F.SpawnType = Type;
+                T.SpawnType = Type;
+                if (F.ExitSpawn == null)
+                {
+                    F.ExitSpawn = T;
+                }
+            }
+        }
+
+        private void PairSpawns(string From, string To, string Type)
+        {
+            PairSingleSpawn(From, To, Type);
+            PairSingleSpawn(To, From, Type);
+        }
+
+        private void PairDuplicateSpawns(string Scene, string DuplicateSuffix)
+        {
+        }
+
+        private void PairSingleInterior(string InteriorScene, string OuterScene, ushort InteriorAddress, ushort OuterAddress)
+        {
+            AddSpawn(OuterScene + ": " + InteriorScene, OuterAddress, OuterScene);
+            AddPairedInteriors(new string[] { InteriorScene }, new ushort[] { InteriorAddress }, new ushort[] { 0xFFFF });
+        }
+
+        private void PairTelescope(string SpawnPoint, string Telescope)
+        {
+            Exit Room = GetSpawn(SpawnPoint);
+            Exit Scope = GetSpawn(Telescope);
+            if (Room != null && Scope != null)
+            {
+                Scope.SpawnType = "Telescope";
+                Room.SpawnType = "Telescope Spawn";
+                Scope.ExitSpawn = Room;
+            }
+        }
+
+        private void AddPairedInteriors(string[] scene, ushort[] spawnAddress, ushort[] sceneAddress)
+        {
+            for (int i = 0; i < scene.Length; i++)
+            {
+                string spawnName = scene[i];
+                AddSpawn(spawnName, spawnAddress[i], scene[i]);
+                if( sceneAddress[i] != 0xFFFF)
+                {
+                    AddSceneNameIndex(spawnName, sceneAddress[i]);
+                }
+                string to = "";
+                foreach (Exit s in GetSpawns())
+                {
+                    if (!spawnName.Equals(s.SpawnName) && s.SpawnName.Contains(spawnName))
+                    {
+                        PairInteriorEntrance(s.SpawnName, spawnName);
+                    }
+                }
+                if (!to.Equals(""))
+                {
+                }
+            }
+        }
+
+        private void AddGrottos(string[] GrottoName, ushort[] Address, string Scene)
+        {
+            for (int i = 0; i < GrottoName.Length; i++)
+            {
+                string SpawnName = "Grotto: " + GrottoName[i];
+                AddSpawn(SpawnName, Address[i], Scene);
+            }
+        }
+
+        private void PairOverworldSpawns()
+        {
+            List<Exit> SpawnSet = GetSpawns();
+            Dictionary<Exit, string> SpawnPoint = new Dictionary<Exit, string>();
+            Dictionary<Exit, string> SpawnExit = new Dictionary<Exit, string>();
+            int sep;
+            foreach (Exit S in SpawnSet)
+            {
+                sep = S.SpawnName.IndexOf(':');
+                if (sep != -1)
+                {
+                    SpawnPoint[S] = S.SpawnName.Substring(0, sep);
+                    SpawnExit[S] = S.SpawnName.Substring(sep + 2);
+                }
+            }
+            int j;
+            for (int i = 0; i < SpawnSet.Count; i++)
+            {
+                if (SpawnSet[i].ExitSpawn == null && SpawnPoint.ContainsKey(SpawnSet[i]) && SpawnExit.ContainsKey(SpawnSet[i]))
+                {
+                    j = SpawnSet.FindIndex((S) =>
+                    {
+                        if (!SpawnPoint.ContainsKey(S) || !SpawnExit.ContainsKey(S))
+                        {
+                            return false;
+                        }
+                        return SpawnPoint[S].Equals(SpawnExit[SpawnSet[i]]) && SpawnExit[S].Equals(SpawnPoint[SpawnSet[i]]);
+                    });
+                    if (j != -1)
+                    {
+                        if (SpawnSet[i].SpawnType != "" || SpawnSet[j].SpawnType != "")
+                        {
+                            PairSpawns(SpawnSet[i].SpawnName, SpawnSet[j].SpawnName, "Overworld");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void PairDungeonSpawns()
+        {
+            int[] DungeonOrder = _randomized.NewDestinationIndices;
+            string[] dungeons = new string[] { "Woodfall", "Snowhead", "Inverted Stone Tower", "Great Bay" };
+            string[] areas = new string[] { "Woodfall", "Snowhead", "Inverted Stone Tower", "Zora Cape" };
+            int j;
+            for(int i = 0; i < dungeons.Length; i++)
+            {
+                j = _settings.RandomizeDungeonEntrances ? DungeonOrder[i] : i;
+                PairSpawns(areas[i] + ": Temple", dungeons[j] + " Temple", "Dungeon");
+                ConnectEntrances(areas[i] + ": Temple", dungeons[j] + " Temple", true);
+            }
+        }
+
+        private void PairMoonSpawns()
+        {
+            foreach(Exit S in TerminaMap["Moon"])
+            {
+                if(S.SpawnName != "Moon")
+                {
+                    PairSingleSpawn(S.SpawnName, "Moon", "Moon");
+                }
+            }
+        }
+
+        private Exit GetShuffledSpawn(string Spawn)
+        {
+            Exit S = GetSpawn(Spawn);
+            int i;
+            foreach (string SceneSpawns in TerminaMap.Keys)
+            {
+                if (TerminaMap[SceneSpawns].Contains(S))
+                {
+                    i = TerminaMap[SceneSpawns].FindIndex(T => T == S);
+                    return ShuffledMap[SceneSpawns][i];
+                }
+            }
+            return null;
+        }
+
+        private void SetShuffledSpawn(Exit f, Exit t)
+        {
+            int shuffleIndex = -1;
+            List<Exit> temp = TerminaMap[f.SceneName];
+            if (temp != null && temp.Contains(f))
+            {
+                shuffleIndex = temp.FindIndex(S => S == f);
+                temp = ShuffledMap[f.SceneName];
+            }
+            else
+            {
+                temp = null;
+                foreach (string SceneSpawns in TerminaMap.Keys)
+                {
+                    if (TerminaMap[SceneSpawns].Contains(f))
+                    {
+                        temp = ShuffledMap[SceneSpawns];
+                        shuffleIndex = temp.FindIndex(S => S == f);
+                        break;
+                    }
+                }
+            }
+            if (temp != null && shuffleIndex != -1)
+            {
+                temp[shuffleIndex] = t;
+            }
+        }
+
+        private void ConnectEntrances(string from, string to, bool connectReverse)
+        {
+            Exit f = GetSpawn(from);
+            Exit t = GetSpawn(to);
+            if (f != null && t != null)
+            {
+                SetShuffledSpawn(f, t);
+                if (connectReverse && f.ExitSpawn != null && t.ExitSpawn != null)
+                {
+                    SetShuffledSpawn(t.ExitSpawn, f.ExitSpawn);
+                }
+            }
+        }
+
+        private List<Exit> GetSpawns()
+        {
+            List<Exit> Spawns = new List<Exit>();
+            foreach (List<Exit> Scene in TerminaMap.Values)
+            {
+                Spawns.AddRange(Scene);
+            }
+            return Spawns;
+        }
+
+        public void FinalizeEntrances()
+        {
+            Dictionary<ushort, List<Exit>> EntranceShuffle = new Dictionary<ushort, List<Exit>>();
+            _randomized.EntranceList = new Dictionary<int, ushort[]>();
+            _randomized.ShuffledEntranceList = new Dictionary<int, ushort[]>();
+            _randomized.ExitListIndices = new Dictionary<int, int[]>();
+            _randomized.EntranceSpoilers = new List<SpoilerEntrance>();
+            ushort[] sceneExitList, shuffledSceneExitList;
+            int[] sceneExitIndices;
+            Exit ShuffledExit;
+            bool WasPlaced;
+            int numExits, currExit;
+
+            foreach ( Exit s in GetSpawns())
+            {
+                if(!EntranceShuffle.ContainsKey(s.SceneId))
+                {
+                    EntranceShuffle[s.SceneId] = new List<Exit>();
+                }
+                EntranceShuffle[s.SceneId].Add(s);
+            }
+
+            foreach (ushort sceneIndex in EntranceShuffle.Keys)
+            {
+                numExits = EntranceShuffle[sceneIndex].Count;
+                sceneExitList = new ushort[numExits];
+                _randomized.EntranceList[sceneIndex] = sceneExitList;
+                shuffledSceneExitList = new ushort[numExits];
+                _randomized.ShuffledEntranceList[sceneIndex] = shuffledSceneExitList;
+                sceneExitIndices = new int[numExits];
+                _randomized.ExitListIndices[sceneIndex] = sceneExitIndices;
+                currExit = 0;
+                foreach (Exit Exit in EntranceShuffle[sceneIndex])
+                {
+                    ShuffledExit = GetShuffledSpawn(Exit.SpawnName);
+                    sceneExitList[currExit] = Exit.SpawnAddress;
+                    sceneExitIndices[currExit] = Exit.ExitIndex;
+                    if (Exit.SpawnAddress != 0xFFFF)
+                    {
+                        WasPlaced = ShuffledExit != null && ShuffledExit.SpawnAddress != 0xFFFF;
+                        if (WasPlaced)
+                        {
+                            shuffledSceneExitList[currExit] = ShuffledExit.SpawnAddress;
+                            _randomized.EntranceSpoilers.Add(new SpoilerEntrance(Exit, ShuffledExit, WasPlaced));
+                        } else {
+                            shuffledSceneExitList[currExit] = Exit.SpawnAddress;
+                            _randomized.EntranceSpoilers.Add(new SpoilerEntrance(Exit, Exit, WasPlaced));
+                        }
+                    }
+                    currExit++;
+                }
+            }
+        }
+        #endregion
 
         #region Sequences and BGM
 
@@ -1676,8 +2855,20 @@ namespace MMRando
 
                 if (_settings.RandomizeDungeonEntrances)
                 {
-                    worker.ReportProgress(10, "Shuffling entrances...");
+                    worker.ReportProgress(10, "Shuffling dungeons...");
+                    DungeonShuffle();
+                }
+
+                if (true)
+                {
+                    worker.ReportProgress(15, "Shuffling entrances...");
                     EntranceShuffle();
+                }
+
+                if (_settings.RandomizeOwlStatues)
+                {
+                    worker.ReportProgress(25, "Shuffling owl statues...");
+                    OwlShuffle(false);
                 }
 
                 _randomized.Logic = ItemList.Select(io => new ItemLogic(io)).ToList();

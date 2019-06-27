@@ -27,7 +27,8 @@ namespace MMRando.Utils
                 SettingsString = settingsString,
                 Seed = settings.Seed,
                 RandomizeDungeonEntrances = settings.RandomizeDungeonEntrances,
-                ItemList = itemList.Where(u => !ItemUtils.IsFakeItem(u.Id)).ToList(),
+                EntranceList = randomized.EntranceSpoilers,
+                ItemList = itemList.ToList(),
                 NewDestinationIndices = randomized.NewDestinationIndices,
                 Logic = randomized.Logic,
                 CustomItemListString = settings.UseCustomItemList ? settings.CustomItemListString : null,
@@ -121,6 +122,15 @@ namespace MMRando.Utils
                     log.AppendLine($"{hint.Key,-25} -> {hint.Value}");
                 }
             }
+
+            log.AppendLine($" {"Location",-50}    {"Item"}");
+            foreach (var item in spoiler.EntranceList)
+            {
+                log.AppendLine($"{item.OriginalAddress.ToString("X4")}: {item.OriginalEntrance,-50} -> {item.ShuffledAddress.ToString("X4")}: {item.ShuffledEntrance}");
+            }
+
+            log.AppendLine();
+            log.AppendLine();
 
             using (StreamWriter sw = new StreamWriter(path))
             {

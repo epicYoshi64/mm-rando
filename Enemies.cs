@@ -33,7 +33,7 @@ namespace MMRando
                 e.Object = Convert.ToInt32(lines[i + 1], 16);
                 e.ObjectSize = ObjUtils.GetObjSize(e.Object);
                 string[] varlist = lines[i + 2].Split(',');
-                for (int j = 0; j <  varlist.Length; j++)
+                for (int j = 0; j < varlist.Length; j++)
                 {
                     e.Variables.Add(Convert.ToInt32(varlist[j], 16));
                 }
@@ -280,7 +280,5 @@ namespace MMRando
                 }
             }
         }
-
     }
-
 }

@@ -1,4 +1,4 @@
-﻿using MMRando.Constants;
+using MMRando.Constants;
 using MMRando.Models;
 using MMRando.Models.Rom;
 using MMRando.Models.Settings;
@@ -160,6 +160,34 @@ namespace MMRando
             if (_settings.ShortenCutscenes)
             {
                 ResourceUtils.ApplyHack(Values.ModsDirectory + "short-cutscenes");
+            }
+        }
+
+        private void WriteEntrances()
+        {
+            if (_settings.AreEntrancesRandomized())
+            {
+                SceneUtils.ReadSceneTable();
+                SceneUtils.GetMaps();
+                SceneUtils.GetMapHeaders();
+                int[] fakeExits = Enumerable.Range(0, 32).ToArray();
+                foreach (int sceneIndex in RomData.SceneList.Select(s=>s.Number))
+                {
+                    if (_randomized.EntranceList.ContainsKey(sceneIndex) && _randomized.ShuffledEntranceList.ContainsKey(sceneIndex) )
+                    {
+                        System.Diagnostics.Debug.WriteLine("Scene " + sceneIndex.ToString("X2") + "\n-----\n");
+                        EntranceUtils.WriteSceneExits(sceneIndex, _randomized.EntranceList[sceneIndex], _randomized.ShuffledEntranceList[sceneIndex], _randomized.ExitListIndices[sceneIndex]);
+                        //EntranceUtils.WriteSceneExits(sceneIndex, fakeExits.Select(x=>(ushort)x).ToArray(), fakeExits.Select(x => (ushort)x).ToArray(), fakeExits);
+                    }
+                }
+            }
+        }
+
+        private void WriteOwlStatues()
+        {
+            if (_settings.RandomizeOwlStatues)
+            {
+
             }
         }
 
@@ -608,8 +636,14 @@ namespace MMRando
                 worker.ReportProgress(62, "Writing cutscenes...");
                 WriteCutscenes();
 
+                worker.ReportProgress(63, "Writing entrances...");
+                WriteEntrances();
+
                 worker.ReportProgress(63, "Writing dungeons...");
                 WriteDungeons();
+
+                worker.ReportProgress(63, "Writing owl statues...");
+                WriteOwlStatues();
 
                 worker.ReportProgress(64, "Writing gimmicks...");
                 WriteGimmicks();
