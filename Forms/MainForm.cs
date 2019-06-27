@@ -864,5 +864,10 @@ namespace MMRando
                 tPatch.Text = null;
             }
         }
+
+        private void nStartingRemains_ValueChanged(object sender, EventArgs e)
+        {
+            _settings.StartingRemains = (int)nStartingRemains.Value;
+        }
     }
 }

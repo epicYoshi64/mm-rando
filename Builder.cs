@@ -354,6 +354,11 @@ namespace MMRando
             }
             PutOrCombine(startingItems, 0xC5CE72, 0x10); // add Song of Time
 
+            if( _settings.StartingRemains > 0)
+            {
+                PutOrCombine(startingItems, 0xC5CE73, _randomized.StartingRemains);
+            }
+
             foreach (var id in itemIds)
             {
                 var itemAddress = Items.ITEM_ADDRS[id];

@@ -122,6 +122,8 @@ namespace MMRando
             this.tpPatchSettings = new System.Windows.Forms.TabPage();
             this.tPatch = new System.Windows.Forms.TextBox();
             this.bLoadPatch = new System.Windows.Forms.Button();
+            this.nStartingRemains = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.tSettings.SuspendLayout();
             this.tabROMSettings.SuspendLayout();
             this.tabMain.SuspendLayout();
@@ -131,6 +133,7 @@ namespace MMRando
             this.ttOutput.SuspendLayout();
             this.tpOutputSettings.SuspendLayout();
             this.tpPatchSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nStartingRemains)).BeginInit();
             this.SuspendLayout();
             // 
             // bopen
@@ -297,6 +300,8 @@ namespace MMRando
             // 
             // tabMain
             // 
+            this.tabMain.Controls.Add(this.label8);
+            this.tabMain.Controls.Add(this.nStartingRemains);
             this.tabMain.Controls.Add(this.cMoonItems);
             this.tabMain.Controls.Add(this.label3);
             this.tabMain.Controls.Add(this.label2);
@@ -1212,6 +1217,30 @@ namespace MMRando
             this.bLoadPatch.UseVisualStyleBackColor = true;
             this.bLoadPatch.Click += new System.EventHandler(this.BLoadPatch_Click);
             // 
+            // nStartingRemains
+            // 
+            this.nStartingRemains.Location = new System.Drawing.Point(105, 170);
+            this.nStartingRemains.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nStartingRemains.Name = "nStartingRemains";
+            this.nStartingRemains.Size = new System.Drawing.Size(37, 20);
+            this.nStartingRemains.TabIndex = 16;
+            this.nStartingRemains.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nStartingRemains.ValueChanged += new System.EventHandler(this.nStartingRemains_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 172);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(98, 13);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "Start With Remains";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1249,6 +1278,7 @@ namespace MMRando
             this.tpOutputSettings.PerformLayout();
             this.tpPatchSettings.ResumeLayout(false);
             this.tpPatchSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nStartingRemains)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1346,6 +1376,8 @@ namespace MMRando
         private System.Windows.Forms.CheckBox cNoDowngrades;
         private System.Windows.Forms.Label lGossip;
         private System.Windows.Forms.ComboBox cGossipHints;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown nStartingRemains;
     }
 }
 
