@@ -12,7 +12,7 @@ namespace MMRando.Utils
 
         public static bool IsOutOfRange(int itemId)
         {
-            return itemId > Items.MaskFierceDeity;
+            return itemId > Items.FairyStoneTowerWindFunnel;
         }
 
         public static bool IsShopItem(int itemId)
@@ -82,7 +82,37 @@ namespace MMRando.Utils
                     && itemId <= Items.ItemStoneTowerKey4;
         }
 
-        public static bool IsBottleCatchContent(int itemId)
+        public static bool IsDungeonItem(int itemIndex, int dungeonIndex)
+        {
+            if( dungeonIndex == 0)
+            {
+                return itemIndex >= Items.ItemWoodfallMap && itemIndex <= Items.ItemWoodfallKey1 
+                    || itemIndex >= Items.FairyWoodfallLobby && itemIndex <= Items.FairyWoodfallBoe 
+                    || itemIndex == Items.ItemBow;
+            }
+            if (dungeonIndex == 1)
+            {
+                return itemIndex >= Items.FairySnowheadWhiteRoom && itemIndex <= Items.FairySnowheadInvisibleStaircase
+                    || itemIndex >= Items.ItemSnowheadMap && itemIndex <= Items.ItemSnowheadKey3
+                    || itemIndex == Items.ItemFireArrow;
+            }
+            if (dungeonIndex == 2)
+            {
+                return itemIndex >= Items.FairyGreatBayBioBaba && itemIndex <= Items.FairyGreatBayLobby
+                    || itemIndex >= Items.ItemGreatBayMap && itemIndex <= Items.ItemGreatBayKey1
+                    || itemIndex == Items.ItemIceArrow;
+            }
+            if (dungeonIndex == 3)
+            {
+                return itemIndex >= Items.FairyInvertedTowerLobby && itemIndex <= Items.FairyStoneTowerWindFunnel
+                    || itemIndex >= Items.ItemStoneTowerMap && itemIndex <= Items.ItemStoneTowerKey4
+                    || itemIndex == Items.ItemLightArrow || itemIndex == Items.MaskGiant;
+            }
+            return itemIndex >= Items.ItemWoodfallMap
+                    && itemIndex <= Items.ItemStoneTowerKey4;
+        }
+
+        public static bool IsBottleCatchContent(int itemIndex)
         {
             return itemId >= Items.BottleCatchFairy
                    && itemId <= Items.BottleCatchMushroom;
@@ -104,7 +134,13 @@ namespace MMRando.Utils
                     && item <= Items.TradeItemOceanDeed;
         }
 
-        public static bool IsHeartPiece(int itemId)
+        internal static bool IsStrayFairy(int item)
+        {
+            return item >= Items.FairyWoodfallLobby
+                    && item <= Items.FairyStoneTowerWindFunnel;
+        }
+
+        public static bool IsHeartPiece(int itemIndex)
         {
             return (itemId >= Items.HeartPieceNotebookMayor && itemId <= Items.HeartPieceKnuckle)
                 || (itemId >= Items.HeartPieceSouthClockTown && itemId <= Items.HeartContainerStoneTower)

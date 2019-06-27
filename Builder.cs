@@ -436,6 +436,8 @@ namespace MMRando
                 ResourceUtils.ApplyHack(Values.ModsDirectory + "fix-downgrades");
             }
 
+            SceneUtils.WriteDungeonFairiesToChests(_randomized.ItemList);
+
             foreach (var item in _randomized.ItemList)
             {
                 bool isRepeatable = Items.REPEATABLE.Contains(item.ID);
@@ -456,11 +458,22 @@ namespace MMRando
                 {
                     ItemSwapUtils.WriteNewBottle(item.ReplacesItemId, item.ID);
                 }
-                else
+                else if (!ItemUtils.IsStrayFairy(item.ID))
                 {
                     ItemSwapUtils.WriteNewItem(item.ReplacesItemId, item.ID, isRepeatable, isCycleRepeatable);
                 }
             }
+
+            for (int pot = 18; pot < 30; pot++)
+            {
+                SceneUtils.UpdateSingleActor(0x18, 8, pot, 0x82, 0x11, 0xFFFF);
+            }
+            for (int rupee = 0; rupee < 11; rupee++)
+            {
+                SceneUtils.UpdateSingleActor(0x18, 8, rupee, 0x1B0, 0x0, 0xFFFF);
+            }
+            SceneUtils.UpdateSingleActor(0x21, 2, 0, 0x90, 0x6400, 0xFFFF);
+            SceneUtils.UpdateSingleActor(0x1B, 11, 2, 0xEC, 0xFF81, 0xFFFF);
 
             if (_settings.AddShopItems)
             {
@@ -640,7 +653,6 @@ namespace MMRando
             worker.ReportProgress(100, "Done!");
 
         }
-
     }
 
 }

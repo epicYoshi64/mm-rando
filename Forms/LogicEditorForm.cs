@@ -54,7 +54,15 @@ namespace MMRando
         "Pirates' Fortress HP", "Zora Hall Scrub HP", "Path to Snowhead HP", "Great Bay Coast HP", "Ikana Scrub HP", "Ikana Castle HP", 
         "Odolwa Heart Container", "Goht Heart Container", "Gyorg Heart Container", "Twinmold Heart Container", "Map: Clock Town", "Map: Woodfall",
         "Map: Snowhead", "Map: Romani Ranch", "Map: Great Bay", "Map: Stone Tower", "Goron Racetrack Grotto", "Ikana Scrub 200r", "One Mask", "Two Masks",
-        "Three Masks", "Four Masks", "Moon Access", "Deku Trial HP", "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask" };
+        "Three Masks", "Four Masks", "Moon Access", "Deku Trial HP", "Goron Trial HP", "Zora Trial HP", "Link Trial HP", "Fierce Deity's Mask",
+        "Woodfall Lobby Stray Fairy", "Woodfall Spinning Flower Stray Fairy", "Woodfall Black Boe Gauntlet Stray Fairy", "Snowhead White Room Stray Fairy",
+        "Snowhead Yellow Room Stray Fairy", "Snowhead Bottom Pillar Stray Fairy", "Snowhead Deku Flower Stray Fairy", "Snowhead Green Room Stray Fairy",
+        "Snowhead Ice Stalactite Room Stray Fairy", "Snowhead Invisible Staircase Stray Fairy", "Great Bay Bio Baba Stray Fairy", "Great Bay Stray Fairy Above Water Wheel",
+        "Great Bay Torch Alcove Stray Fairy", "Great Bay Seesaw Room Stray Fairy", "Great Bay Stray Fairy Above Reservoirs", "Great Bay Lobby Torches Stray Fairy",
+        "Inverted Stone Tower Lobby Stray Fairy", "Stone Tower Lower Lobby Stray Fairy", "Stone Tower Upper Lobby Stray Fairy", "Stone Tower Eyegore Stray Fairy",
+        "Stone Tower Water Sunblock Stray Fairy", "Inverted Stone Tower Wind Funnel Stray Fairy", "Inverted Stone Tower Frozen Eye Switch Stray Fairy",
+        "Stone Tower Underwater Sun Switch Stray Fairy", "Inverted Stone Tower Wizzrobe Stray Fairy", "Stone Tower Wizzrobe Stray Fairy", "Stone Tower Mirror Room Sun Switch Stray Fairy",
+        "Stone Tower Mirror Room Stray Fairy", "Stone Tower Spike Roller Stray Fairy", "Stone Tower Fire Ring Stray Fairy", "Stone Tower Wind Funnel Stray Fairy" };
 
         string[] ITEM_NAMES = DEFAULT_ITEM_NAMES.ToArray();
 

@@ -95,6 +95,7 @@
     <Compile Include="Models\Rom\SequenceInfo.cs" />
     <Compile Include="Models\Vectors\vecf32.cs" />
     <Compile Include="Models\Vectors\vec16.cs" />
+    <Compile Include="Utils\ActorUtils.cs" />
     <Compile Include="Utils\Base36Utils.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="Constants\Values.cs" />

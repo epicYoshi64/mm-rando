@@ -111,6 +111,130 @@ namespace MMRando
 
         private readonly Dictionary<int, List<int>> ForbiddenPlacedAt = new Dictionary<int, List<int>>
         {
+            {
+                Items.FairyWoodfallLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
+            {
+                Items.FairyWoodfallFlower,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
+            {
+                Items.FairyWoodfallBoe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 0)).ToList()
+            },
+            {
+                Items.FairySnowheadWhiteRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadYellowRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadBottom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadDeku,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadGreenRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadIceStalactite,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairySnowheadInvisibleStaircase,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 1)).ToList()
+            },
+            {
+                Items.FairyGreatBayBioBaba,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayWaterWheel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayAlcove,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBaySeesaw,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayReservoirs,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyGreatBayLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 2)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerLowerLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerUpperLobby,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerEyegore,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWaterSunblock,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerWindFunnel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerFrozenEyeSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerUnderwaterSunSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyInvertedTowerWizzrobe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWizzrobe,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerMirrorSunSwitch,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerMirrorRoom,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerSpikeRollers,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerTimedFireRing,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
+            {
+                Items.FairyStoneTowerWindFunnel,
+                Enumerable.Range(0, Items.TotalNumberOfItems).Where(item => !ItemUtils.IsDungeonItem(item, 3)).ToList()
+            },
         };
 
         #endregion
@@ -1098,6 +1222,10 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<int> itemPool)
         {
+            for( int i = Items.FairyWoodfallLobby; i <= Items.FairyStoneTowerWindFunnel; i++)
+            {
+                PlaceItem(i, itemPool);
+            }
             for (int i = Items.ItemWoodfallMap; i <= Items.ItemStoneTowerKey4; i++)
             {
                 PlaceItem(i, itemPool);

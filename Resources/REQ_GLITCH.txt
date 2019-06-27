@@ -1334,3 +1334,158 @@
 
 0
 0
+- Woodfall Fairy Lobby
+
+0,10
+0
+0
+- Woodfall Fairy Spinning Flower
+
+0,10
+0
+0
+- Woodfall Fairy Boe Gauntlet
+
+0,10
+0
+0
+- Snowhead Fairy White Room
+
+1
+0
+0
+- Snowhead Fairy Yellow Room
+
+1
+0
+0
+- Snowhead Fairy Bottom Pillar
+
+88
+0
+0
+- Snowhead Fairy Deku Flower
+
+1
+0
+0
+- Snowhead Fairy Green Room
+
+1
+0
+0
+- Snowhead Fairy Ice Stalactite
+
+1
+0
+0
+- Snowhead Fairy Invisible Staircase
+
+1
+0
+0
+- Great Bay Fairy Bio Baba
+
+89
+0
+0
+- Great Bay Fairy Water Wheel
+
+89
+0
+0
+- Great Bay Fairy Alcove
+
+89
+0
+0
+- Great Bay Fairy Seesaw
+
+89
+0
+0
+- Great Bay Fairy Reservoir
+
+89
+0
+0
+- Great Bay Fairy Lobby
+
+89
+0
+0
+- ISTT Fairy Lobby
+
+4
+0
+0
+- STT Fairy Lower Lobby
+
+4
+0
+0
+- STT Fairy Upper Lobby
+
+4
+0
+0
+- STT Eyegore Lobby
+
+4
+0
+0
+- STT Fairy Water Sunblock
+
+4
+0
+0
+- ISTT Fairy Wind Funnel
+
+4
+0
+0
+- ISTT Fairy Frozen Eye Switch
+
+4
+0
+0
+- STT Fairy Underwater Sun Switch
+
+4
+0
+0
+- ISTT Fairy Wizzrobe
+
+4
+0
+0
+- STT Fairy Wizzrobe
+
+4
+0
+0
+- STT Fairy Mirror Room Sun Switch
+
+4
+0
+0
+- STT Fairy Mirror Room
+
+4
+0
+0
+- STT Fairy Spike Roller
+
+4
+0
+0
+- STT Fairy Fire Ring
+
+4
+0
+0
+- STT Fairy Wind Funnel
+
+4
+0
+0

@@ -1,5 +1,8 @@
-﻿using MMRando.Models.Rom;
+using MMRando.Models;
+using MMRando.Models.Rom;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MMRando.Utils
 {
@@ -28,7 +31,7 @@ namespace MMRando.Utils
             }
 
             int bit = 1 << (num & 7);
-            int f =RomUtils. GetFileIndexForWriting(SCENE_FLAG_MASKS);
+            int f = RomUtils.GetFileIndexForWriting(SCENE_FLAG_MASKS);
             int addr = SCENE_FLAG_MASKS - RomData.MMFileList[f].Addr + offset;
             RomData.MMFileList[f].Data[addr] |= (byte)bit;
         }
@@ -250,6 +253,178 @@ namespace MMRando.Utils
             }
         }
 
-    }
+        public static List<Actor> GetSceneActorsByNumber(int sceneNumber, int actorNumber)
+        {
+            List<Actor> searchActors = new List<Actor>();
+            Scene searchScene = RomData.SceneList.Single(s => s.Number == sceneNumber);
+            foreach (Map map in searchScene.Maps)
+            {
+                searchActors.AddRange(map.Actors.Where(a => a.n == actorNumber));
+            }
+            return searchActors;
+        }
 
+        public static void UpdateSceneByNumber(int sceneNumber)
+        {
+            Scene sceneToUpdate = RomData.SceneList.Single(s => s.Number == sceneNumber);
+            UpdateScene(sceneToUpdate);
+        }
+
+        public static void WriteDungeonFairiesToChests(List<ItemObject> itemList)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
+            // WF, SH, GB, ST, IST
+            int[] dungeonScenes = new int[] { 0x1B, 0x21, 0x49, 0x16 };
+            // WF
+            // spinning flower fairy, first room fairy, Compass, Small Key, Map, Bow, BK, dark room fairy
+            List<List<int>> dungeonItemIndices = new List<List<int>>() {
+                new List<int>(){
+                    Items.FairyWoodfallFlower, Items.FairyWoodfallLobby, Items.ItemWoodfallCompass, Items.ItemWoodfallKey1,
+                    Items.ItemWoodfallMap, Items.ItemBow, Items.ItemWoodfallBossKey, Items.FairyWoodfallBoe
+                },
+                new List<int>()
+                {
+                    Items.FairySnowheadWhiteRoom, Items.ItemSnowheadCompass, Items.ItemSnowheadKey3,
+                    Items.FairySnowheadYellowRoom, Items.ItemSnowheadKey1, Items.FairySnowheadBottom,
+                    Items.ItemSnowheadBossKey, Items.FairySnowheadDeku, Items.FairySnowheadGreenRoom,
+                    Items.ItemFireArrow, Items.FairySnowheadIceStalactite, Items.ItemSnowheadKey2,
+                    Items.FairySnowheadInvisibleStaircase, Items.ItemSnowheadMap
+                },
+                new List<int>()
+                {
+                    Items.ItemGreatBayMap, Items.FairyGreatBayBioBaba, Items.ItemGreatBayBossKey,
+                    Items.ItemGreatBayKey1, Items.ItemGreatBayCompass, Items.ItemIceArrow,
+                    Items.FairyGreatBayWaterWheel, Items.FairyGreatBayAlcove, Items.FairyGreatBaySeesaw,
+                    Items.FairyGreatBayReservoirs, Items.FairyGreatBayLobby
+                },
+                new List<int>()
+                {
+                    Items.FairyInvertedTowerLobby, Items.FairyStoneTowerLowerLobby, Items.FairyStoneTowerUpperLobby,
+                    Items.FairyStoneTowerEyegore, Items.MaskGiant, Items.ItemStoneTowerKey2, Items.ItemStoneTowerKey4,
+                    Items.FairyStoneTowerWaterSunblock, Items.FairyInvertedTowerWindFunnel, Items.FairyInvertedTowerFrozenEyeSwitch,
+                    Items.FairyStoneTowerUnderwaterSunSwitch, Items.ItemStoneTowerKey3, Items.ItemStoneTowerCompass,
+                    Items.FairyInvertedTowerWizzrobe, Items.ItemStoneTowerKey1, Items.FairyStoneTowerWizzrobe,
+                    Items.ItemStoneTowerMap, Items.FairyStoneTowerMirrorSunSwitch, Items.FairyStoneTowerMirrorRoom,
+                    Items.FairyStoneTowerSpikeRollers, Items.FairyStoneTowerTimedFireRing, Items.FairyStoneTowerWindFunnel,
+                    Items.ItemLightArrow, Items.ItemStoneTowerBossKey
+                }
+            };
+            int d = 0, i, j;
+            List<Actor> invertedStoneTowerChests = GetSceneActorsByNumber(0x18, 0x006);
+            List<ItemObject> fairyChests, itemChests;
+            ItemObject displacedItem;
+            Dictionary<int, int> itemUpdates = new Dictionary<int, int>();
+            short itemValue = 0x00, fairyValue = 0x00;
+            ushort getItemMask = 0xFE0, chestFlagMask = 0x1F;
+            int chestFlagBits = 5;
+            foreach (int dungeonSceneNumber in dungeonScenes)
+            {
+                List<Actor> templeChests = GetSceneActorsByNumber(dungeonSceneNumber, 0x0006);
+                // these chests are set to have an item in them
+                itemChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ID) && ItemUtils.IsDungeonItem(item.ReplacesItemId,d) && !ItemUtils.IsStrayFairy(item.ReplacesItemId)).ToList();
+                // these chests are set to have fairies in them
+                fairyChests = itemList.Where(item => ItemUtils.IsStrayFairy(item.ReplacesItemId) && ItemUtils.IsDungeonItem(item.ReplacesItemId, d) && !ItemUtils.IsStrayFairy(item.ID)).ToList();
+                foreach (ItemObject fairy in fairyChests)
+                {
+                    if (itemChests.Count > 0)
+                    {
+                        displacedItem = itemChests[0];
+                        itemChests.RemoveAt(0);
+                        i = dungeonItemIndices[d].FindIndex(c => c == fairy.ReplacesItemId);
+                        j = dungeonItemIndices[d].FindIndex(c => c == displacedItem.ReplacesItemId);
+
+                        if (i != -1 && j != -1)
+                        {
+                            fairyValue = (short)((templeChests[i].v & getItemMask) >> chestFlagBits);
+                            itemValue = (short)((templeChests[j].v & getItemMask) >> chestFlagBits);
+
+                            templeChests[i].v = (itemValue << chestFlagBits) + (templeChests[i].v & (0xF000 | chestFlagMask));
+                            templeChests[j].v = (fairyValue << chestFlagBits) + (templeChests[j].v & (0xF000 | chestFlagMask));
+                            if (d == 3)
+                            {
+                                fairyValue = (short)((invertedStoneTowerChests[i].v & getItemMask) >> chestFlagBits);
+                                itemValue = (short)((invertedStoneTowerChests[j].v & getItemMask) >> chestFlagBits);
+
+                                invertedStoneTowerChests[i].v = (itemValue << chestFlagBits) + (invertedStoneTowerChests[i].v & (0xF000 | chestFlagMask));
+                                invertedStoneTowerChests[j].v = (fairyValue << chestFlagBits) + (invertedStoneTowerChests[j].v & (0xF000 | chestFlagMask));
+                            }
+                        }
+                    }
+                }
+                UpdateSceneByNumber(dungeonScenes[d]);
+                d++;
+            }
+        }
+
+        public static void ShuffleSceneActorsInPlace(ushort[] sceneNumbers, int[] actorTypes, ushort[] actorMasks)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
+            List<Actor> actorPool = new List<Actor>();
+            Dictionary<int, List<ushort>> actorContents;
+            ushort contents;
+            int type;
+            foreach (ushort scene in sceneNumbers)
+            {
+                type = 0;
+                actorContents = new Dictionary<int, List<ushort>>();
+                foreach (int actorType in actorTypes)
+                {
+                    foreach (Actor actor in GetSceneActorsByNumber(scene, actorType))
+                    {
+                        actorPool.Add(actor);
+                        contents = (ushort)(actor.v & actorMasks[type]);
+                        if (!actorContents.ContainsKey(actorType))
+                        {
+                            actorContents.Add(actorType, new List<ushort>());
+                        }
+                        actorContents[actorType].Add(contents);
+                        System.Diagnostics.Debug.WriteLine(actor.v.ToString("X4"));
+                    }
+                    type++;
+                }
+                System.Diagnostics.Debug.WriteLine("");
+
+                if (actorContents.Count > 0)
+                {
+                    Random RNG = new Random();
+                    int i, m;
+                    foreach (Actor actor in actorPool)
+                    {
+                        m = actorTypes.ToList().FindIndex(a => a == actor.n);
+                        if (actorContents.ContainsKey(actor.n) && actorContents[actor.n].Count > 0 && m != -1 && m >= 0 && m < actorMasks.Length)
+                        {
+                            i = RNG.Next(actorContents[actor.n].Count);
+                            actor.v = (actor.v & ~actorMasks[m]) + actorContents[actor.n][i];
+                            actor.v = 0x0011;
+                            actorContents[actor.n].RemoveAt(i);
+                            System.Diagnostics.Debug.WriteLine(actor.v.ToString("X4"));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("Couldn't place");
+                        }
+                    }
+                    UpdateSceneByNumber(scene);
+                }
+            }
+        }
+
+        public static void UpdateSingleActor(ushort scene, int room, int i, int actor, int variable, int mask)
+        {
+            ReadSceneTable();
+            GetMaps();
+            GetMapHeaders();
+            GetActors();
+            Actor a = RomData.SceneList.Find(s => scene == s.Number).Maps[room].Actors[i];
+            a.n = actor;
+            a.v = (~mask & a.v) + (variable & mask);
+            UpdateSceneByNumber(scene);
+        }
+    }
 }

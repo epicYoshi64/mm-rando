@@ -313,6 +313,37 @@ namespace MMRando
         public const int HeartPieceZoraTrial = 264;
         public const int HeartPieceLinkTrial = 265;
         public const int MaskFierceDeity = 266;
+        public const int FairyWoodfallLobby = 267;
+        public const int FairyWoodfallFlower = 268;
+        public const int FairyWoodfallBoe = 269;
+        public const int FairySnowheadWhiteRoom = 270;
+        public const int FairySnowheadYellowRoom = 271;
+        public const int FairySnowheadBottom = 272;
+        public const int FairySnowheadDeku = 273;
+        public const int FairySnowheadGreenRoom = 274;
+        public const int FairySnowheadIceStalactite = 275;
+        public const int FairySnowheadInvisibleStaircase = 276;
+        public const int FairyGreatBayBioBaba = 277;
+        public const int FairyGreatBayWaterWheel = 278;
+        public const int FairyGreatBayAlcove = 279;
+        public const int FairyGreatBaySeesaw = 280;
+        public const int FairyGreatBayReservoirs = 281;
+        public const int FairyGreatBayLobby = 282;
+        public const int FairyInvertedTowerLobby = 283;
+        public const int FairyStoneTowerLowerLobby = 284;
+        public const int FairyStoneTowerUpperLobby = 285;
+        public const int FairyStoneTowerEyegore = 286;
+        public const int FairyStoneTowerWaterSunblock = 287;
+        public const int FairyInvertedTowerWindFunnel = 288;
+        public const int FairyInvertedTowerFrozenEyeSwitch = 289;
+        public const int FairyStoneTowerUnderwaterSunSwitch = 290;
+        public const int FairyInvertedTowerWizzrobe = 291;
+        public const int FairyStoneTowerWizzrobe = 292;
+        public const int FairyStoneTowerMirrorSunSwitch = 293;
+        public const int FairyStoneTowerMirrorRoom = 294;
+        public const int FairyStoneTowerSpikeRollers = 295;
+        public const int FairyStoneTowerTimedFireRing = 296;
+        public const int FairyStoneTowerWindFunnel = 297;
 
         public static readonly ReadOnlyCollection<int> DOWNGRADABLE_ITEMS
             = new ReadOnlyCollection<int>(new int[]
@@ -937,6 +968,37 @@ namespace MMRando
                 "Heart Piece",
                 "Heart Piece",
                 "Fierce Deity's Mask",
+                "Woodfall Fairy",
+                "Woodfall Fairy",
+                "Woodfall Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Snowhead Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Great Bay Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
+                "Stone Tower Fairy",
         });
 
         public static readonly ReadOnlyCollection<string> LOCATION_NAMES
@@ -1208,6 +1270,37 @@ namespace MMRando
                 "Zora Trial Heart Piece",
                 "Link Trial Heart Piece",
                 "Majora Child",
+                "Woodfall Lobby Stray Fairy",
+                "Woodfall Spinning Flower Stray Fairy",
+                "Woodfall Black Boe Gauntlet Stray Fairy",
+                "Snowhead White Room Stray Fairy",
+                "Snowhead Yellow Room Stray Fairy",
+                "Snowhead Bottom Pillar Stray Fairy",
+                "Snowhead Deku Flower Stray Fairy",
+                "Snowhead Green Room Stray Fairy",
+                "Snowhead Ice Stalactite Room Stray Fairy",
+                "Snowhead Invisible Staircase Stray Fairy",
+                "Great Bay Bio Baba Stray Fairy",
+                "Great Bay Stray Fairy Above Water Wheel",
+                "Great Bay Torch Alcove Stray Fairy",
+                "Great Bay Seesaw Room Stray Fairy",
+                "Great Bay Stray Fairy Above Reservoirs",
+                "Great Bay Lobby Torches Stray Fairy",
+                "Inverted Stone Tower Lobby Stray Fairy",
+                "Stone Tower Lower Lobby Stray Fairy",
+                "Stone Tower Upper Lobby Stray Fairy",
+                "Stone Tower Eyegore Stray Fairy",
+                "Stone Tower Water Sunblock Stray Fairy",
+                "Inverted Stone Tower Wind Funnel Stray Fairy",
+                "Inverted Stone Tower Frozen Eye Switch Stray Fairy",
+                "Stone Tower Underwater Sun Switch Stray Fairy",
+                "Inverted Stone Tower Wizzrobe Stray Fairy",
+                "Stone Tower Wizzrobe Stray Fairy",
+                "Stone Tower Mirror Room Sun Switch Stray Fairy",
+                "Stone Tower Mirror Room Stray Fairy",
+                "Stone Tower Spike Roller Stray Fairy",
+                "Stone Tower Fire Ring Stray Fairy",
+                "Stone Tower Wind Funnel Stray Fairy"
         });
 
         public static readonly ReadOnlyCollection<string> HINT_REGIONS
@@ -1481,7 +1574,7 @@ namespace MMRando
                 "",//"Majora Child",
         });
 
-        internal static readonly int TotalNumberOfItems = 267;
+        internal static readonly int TotalNumberOfItems = 298;
 
     }
 }
