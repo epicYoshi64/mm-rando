@@ -65,11 +65,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\GossipRestrictAttribute.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\KeyEqualityComparer.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Forms\Tooltips\TooltipBuilder.cs" />
+    <Compile Include="GameObjects\GossipQuote.cs" />
+    <Compile Include="Models\MoonPathItem.cs" />
     <Compile Include="Models\RandomizedResult.cs" />
     <Compile Include="Models\Rom\MessageTable.cs" />
     <Compile Include="Models\Rom\Enemy.cs" />
+    <Compile Include="Models\Settings\GossipHintStyle.cs" />
     <Compile Include="Models\Settings\ClockSpeedMode.cs" />
     <Compile Include="Models\Settings\SettingsObject.cs" />
     <Compile Include="Models\SpoilerItem.cs" />

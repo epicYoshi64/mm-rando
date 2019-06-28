@@ -49,8 +49,8 @@ namespace MMRando
             if (_settings.NoBGM)
             {
                 var codeFileAddress = 0xB3C000;
-                var offset = 0x135A08; // address is read when scene music is loaded
-                ReadWriteUtils.WriteToROM(codeFileAddress + offset, 0x01); // change to non-zero so it doesn't play
+                var offset = 0x102350; // address for branch when scene music is loaded
+                ReadWriteUtils.WriteToROM(codeFileAddress + offset, 0x1000); // change to always branch (do not load)
             }
         }
 
@@ -435,6 +435,14 @@ namespace MMRando
 
             foreach (var item in _randomized.ItemList)
             {
+                bool isRepeatable = Items.REPEATABLE.Contains(item.ID);
+                bool isCycleRepeatable = Items.CYCLE_REPEATABLE.Contains(item.ID);
+
+                if (!_settings.PreventDowngrades)
+                {
+                    isRepeatable |= Items.DOWNGRADABLE_ITEMS.Contains(item.ID);
+                }
+
                 // Unused item
                 if (!item.ReplacesAnotherItem)
                 {
@@ -447,7 +455,7 @@ namespace MMRando
                 }
                 else if (!ItemUtils.IsStrayFairy(item.ID))
                 {
-                    ItemSwapUtils.WriteNewItem(item.ReplacesItemId, item.ID);
+                    ItemSwapUtils.WriteNewItem(item.ReplacesItemId, item.ID, isRepeatable, isCycleRepeatable);
                 }
             }
 
@@ -480,7 +488,7 @@ namespace MMRando
                 WriteFreeHints();
             }
 
-            if (_settings.EnableGossipHints)
+            if (_settings.GossipHintStyle != GossipHintStyle.Default)
             {
                 _messageTable.UpdateMessages(_randomized.GossipQuotes);
             }

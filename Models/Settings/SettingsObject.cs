@@ -142,11 +142,6 @@ namespace MMRando.Models.Settings
         public bool ExcludeSongOfSoaring { get; set; }
 
         /// <summary>
-        /// Gossip stones give hints on where to find items, and sometimes junk
-        /// </summary>
-        public bool EnableGossipHints { get; set; }
-
-        /// <summary>
         /// Randomize which dungeon you appear in when entering one
         /// </summary>
         public bool RandomizeDungeonEntrances { get; set; }
@@ -244,6 +239,11 @@ namespace MMRando.Models.Settings
         /// </summary>
         public TatlColorSchema TatlColorSchema { get; set; }
 
+        /// <summary>
+        /// Method to write the gossip stone hints.
+        /// </summary>
+        public GossipHintStyle GossipHintStyle { get; set; }
+
 
         /// <summary>
         ///  Custom item list selections
@@ -283,7 +283,7 @@ namespace MMRando.Models.Settings
             FreeHints = (part1 & 16384) > 0;
             UseCustomItemList = (part1 & 8192) > 0;
             AddOther = (part1 & 4096) > 0;
-            EnableGossipHints = (part1 & 2048) > 0;
+            // 2048
             ExcludeSongOfSoaring = (part1 & 1024) > 0;
             GenerateSpoilerLog = (part1 & 512) > 0;
             AddSongs = (part1 & 256) > 0;
@@ -310,6 +310,7 @@ namespace MMRando.Models.Settings
                 part3 & 0xFF);
 
             var clockSpeedIndex = (byte)(part4 & 0xFF);
+            var gossipHintsIndex = (byte)((part4 & 0xFF00) >> 8);
 
             DamageMode = (DamageMode)damageMultiplierIndex;
             DamageEffect = (DamageEffect)damageTypeIndex;
@@ -320,6 +321,7 @@ namespace MMRando.Models.Settings
             FloorType = (FloorType)floorTypeIndex;
             TunicColor = tunicColor;
             ClockSpeed = (ClockSpeed)clockSpeedIndex;
+            GossipHintStyle = (GossipHintStyle)gossipHintsIndex;
 
         }
 
@@ -336,7 +338,7 @@ namespace MMRando.Models.Settings
             if (FreeHints) { parts[0] += 16384; };
             if (UseCustomItemList) { parts[0] += 8192; };
             if (AddOther) { parts[0] += 4096; };
-            if (EnableGossipHints) { parts[0] += 2048; };
+            // 2048
             if (ExcludeSongOfSoaring) { parts[0] += 1024; };
             if (GenerateSpoilerLog) { parts[0] += 512; };
             if (AddSongs) { parts[0] += 256; };
@@ -361,7 +363,8 @@ namespace MMRando.Models.Settings
                 | ((byte)FloorType << 24)
                     | ((byte)MovementMode << 28);
 
-            parts[3] = (byte) ClockSpeed;
+            parts[3] = (byte) ClockSpeed
+                | ((byte)GossipHintStyle << 8);
 
             return parts;
         }

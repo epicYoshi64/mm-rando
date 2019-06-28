@@ -1,4 +1,5 @@
 using MMRando.Constants;
+using MMRando.Extensions;
 using MMRando.LogicMigrator;
 using MMRando.Models;
 using MMRando.Models.Rom;
@@ -50,7 +51,7 @@ namespace MMRando
         }
 
         // Starting items should not be replaced by trade items, or items that can be downgraded.
-        private readonly ReadOnlyCollection<int> ForbiddenStartingItems = new List<int>
+        private readonly List<int> ForbiddenStartingItems = new List<int>
             {
                 Items.ChestMountainVillageGrottoBottle,
 
@@ -61,8 +62,7 @@ namespace MMRando
             }
             .Concat(Enumerable.Range(Items.TradeItemMoonTear, Items.TradeItemMamaLetter - Items.TradeItemMoonTear + 1))
             .Concat(Enumerable.Range(Items.ItemBottleWitch, Items.ItemBottleMadameAroma - Items.ItemBottleWitch + 1))
-            .ToList()
-            .AsReadOnly();
+            .ToList();
         private readonly ReadOnlyCollection<ReadOnlyCollection<int>> ForbiddenStartTogether = new List<List<int>>()
         {
             new List<int>
@@ -245,6 +245,11 @@ namespace MMRando
         public Randomizer(SettingsObject settings)
         {
             _settings = settings;
+            if (!_settings.PreventDowngrades)
+            {
+                ForbiddenReplacedBy[Items.MaskKeaton].AddRange(Items.DOWNGRADABLE_ITEMS);
+                ForbiddenStartingItems.AddRange(Items.DOWNGRADABLE_ITEMS);
+            }
         }
 
         //rando functions
@@ -254,7 +259,7 @@ namespace MMRando
         private void MakeGossipQuotes()
         {
             _randomized.GossipQuotes = MessageUtils.MakeGossipQuotes
-                (_settings, ItemList, _random);
+                (_randomized);
         }
 
         #endregion
@@ -482,6 +487,7 @@ namespace MMRando
             {
                 if (line.Contains("-"))
                 {
+                    currentItem.Name = line.Substring(2);
                     continue;
                 }
 
@@ -1558,6 +1564,78 @@ namespace MMRando
             }
         }
 
+        private ReadOnlyCollection<MoonPathItem> GetRequiredItems(int itemId, List<ItemLogic> itemLogic, List<int> logicPath = null, Dictionary<int, ReadOnlyCollection<MoonPathItem>> checkedItems = null, int depth = 0)
+        {
+            if (logicPath == null)
+            {
+                logicPath = new List<int>();
+            }
+            if (logicPath.Contains(itemId))
+            {
+                return null;
+            }
+            logicPath.Add(itemId);
+            if (checkedItems == null)
+            {
+                checkedItems = new Dictionary<int, ReadOnlyCollection<MoonPathItem>>();
+            }
+            if (checkedItems.ContainsKey(itemId))
+            {
+                var oldMinDepth = checkedItems[itemId].Min(t => (int?)t.Depth) ?? 0;
+                return checkedItems[itemId].Select(mpi => new MoonPathItem(mpi.Depth - oldMinDepth + depth, mpi.ItemId)).ToList().AsReadOnly();
+            }
+            var itemObject = ItemList[itemId];
+            var locationId = itemObject.ReplacesAnotherItem ? itemObject.ReplacesItemId : itemId;
+            var locationLogic = itemLogic[locationId];
+            var result = new List<MoonPathItem>();
+            if (locationLogic.RequiredItemIds != null)
+            {
+                foreach (var requiredItemId in locationLogic.RequiredItemIds)
+                {
+                    var requiredChildren = GetRequiredItems(requiredItemId, itemLogic, logicPath.ToList(), checkedItems, depth + 1);
+                    if (requiredChildren == null)
+                    {
+                        return null;
+                    }
+                    result.Add(new MoonPathItem(depth, requiredItemId));
+                    result.AddRange(requiredChildren);
+                }
+            }
+            if (locationLogic.ConditionalItemIds != null)
+            {
+                List<MoonPathItem> lowestRequirements = null;
+                foreach (var conditions in locationLogic.ConditionalItemIds)
+                {
+                    var conditionalRequirements = new List<MoonPathItem>();
+                    foreach (var conditionalItemId in conditions)
+                    {
+                        var requiredChildren = GetRequiredItems(conditionalItemId, itemLogic, logicPath.ToList(), checkedItems, depth + 1);
+                        if (requiredChildren == null)
+                        {
+                            conditionalRequirements = null;
+                            break;
+                        }
+
+                        conditionalRequirements.Add(new MoonPathItem(depth, conditionalItemId));
+                        conditionalRequirements.AddRange(requiredChildren);
+                    }
+                    conditionalRequirements = conditionalRequirements?.DistinctBy(mpi => mpi.ItemId).ToList();
+                    if (conditionalRequirements != null && (lowestRequirements == null || conditionalRequirements.Count < lowestRequirements.Count))
+                    {
+                        lowestRequirements = conditionalRequirements;
+                    }
+                }
+                if (lowestRequirements == null)
+                {
+                    return null;
+                }
+                result.AddRange(lowestRequirements);
+            }
+            var readonlyResult = result.DistinctBy(mpi => mpi.ItemId).ToList().AsReadOnly();
+            checkedItems[itemId] = readonlyResult;
+            return readonlyResult;
+        }
+
         /// <summary>
         /// Randomizes the ROM with respect to the configured ruleset.
         /// </summary>
@@ -1583,8 +1661,13 @@ namespace MMRando
                 worker.ReportProgress(30, "Shuffling items...");
                 RandomizeItems();
 
+                _randomized.RequiredItemsForMoonAccess = GetRequiredItems(Items.AreaMoonAccess, _randomized.Logic);
+                if (_randomized.RequiredItemsForMoonAccess == null)
+                {
+                    throw new Exception("Moon Access is unobtainable.");
+                }
 
-                if (_settings.EnableGossipHints)
+                if (_settings.GossipHintStyle != GossipHintStyle.Default)
                 {
                     worker.ReportProgress(35, "Making gossip quotes...");
 
