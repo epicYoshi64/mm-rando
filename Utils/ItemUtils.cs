@@ -82,37 +82,37 @@ namespace MMRando.Utils
                     && itemId <= Items.ItemStoneTowerKey4;
         }
 
-        public static bool IsDungeonItem(int itemIndex, int dungeonIndex)
+        public static bool IsDungeonItem(int itemId, int dungeonId)
         {
-            if( dungeonIndex == 0)
+            if( dungeonId == 0)
             {
-                return itemIndex >= Items.ItemWoodfallMap && itemIndex <= Items.ItemWoodfallKey1 
-                    || itemIndex >= Items.FairyWoodfallLobby && itemIndex <= Items.FairyWoodfallBoe 
-                    || itemIndex == Items.ItemBow;
+                return itemId >= Items.ItemWoodfallMap && itemId <= Items.ItemWoodfallKey1 
+                    || itemId >= Items.FairyWoodfallLobby && itemId <= Items.FairyWoodfallBoe 
+                    || itemId == Items.ItemBow;
             }
-            if (dungeonIndex == 1)
+            if (dungeonId == 1)
             {
-                return itemIndex >= Items.FairySnowheadWhiteRoom && itemIndex <= Items.FairySnowheadInvisibleStaircase
-                    || itemIndex >= Items.ItemSnowheadMap && itemIndex <= Items.ItemSnowheadKey3
-                    || itemIndex == Items.ItemFireArrow;
+                return itemId >= Items.FairySnowheadWhiteRoom && itemId <= Items.FairySnowheadInvisibleStaircase
+                    || itemId >= Items.ItemSnowheadMap && itemId <= Items.ItemSnowheadKey3
+                    || itemId == Items.ItemFireArrow;
             }
-            if (dungeonIndex == 2)
+            if (dungeonId == 2)
             {
-                return itemIndex >= Items.FairyGreatBayBioBaba && itemIndex <= Items.FairyGreatBayLobby
-                    || itemIndex >= Items.ItemGreatBayMap && itemIndex <= Items.ItemGreatBayKey1
-                    || itemIndex == Items.ItemIceArrow;
+                return itemId >= Items.FairyGreatBayBioBaba && itemId <= Items.FairyGreatBayLobby
+                    || itemId >= Items.ItemGreatBayMap && itemId <= Items.ItemGreatBayKey1
+                    || itemId == Items.ItemIceArrow;
             }
-            if (dungeonIndex == 3)
+            if (dungeonId == 3)
             {
-                return itemIndex >= Items.FairyInvertedTowerLobby && itemIndex <= Items.FairyStoneTowerWindFunnel
-                    || itemIndex >= Items.ItemStoneTowerMap && itemIndex <= Items.ItemStoneTowerKey4
-                    || itemIndex == Items.ItemLightArrow || itemIndex == Items.MaskGiant;
+                return itemId >= Items.FairyInvertedTowerLobby && itemId <= Items.FairyStoneTowerWindFunnel
+                    || itemId >= Items.ItemStoneTowerMap && itemId <= Items.ItemStoneTowerKey4
+                    || itemId == Items.ItemLightArrow || itemId == Items.MaskGiant;
             }
-            return itemIndex >= Items.ItemWoodfallMap
-                    && itemIndex <= Items.ItemStoneTowerKey4;
+            return itemId >= Items.ItemWoodfallMap
+                    && itemId <= Items.ItemStoneTowerKey4;
         }
 
-        public static bool IsBottleCatchContent(int itemIndex)
+        public static bool IsBottleCatchContent(int itemId)
         {
             return itemId >= Items.BottleCatchFairy
                    && itemId <= Items.BottleCatchMushroom;
@@ -140,7 +140,7 @@ namespace MMRando.Utils
                     && item <= Items.FairyStoneTowerWindFunnel;
         }
 
-        public static bool IsHeartPiece(int itemIndex)
+        public static bool IsHeartPiece(int itemId)
         {
             return (itemId >= Items.HeartPieceNotebookMayor && itemId <= Items.HeartPieceKnuckle)
                 || (itemId >= Items.HeartPieceSouthClockTown && itemId <= Items.HeartContainerStoneTower)

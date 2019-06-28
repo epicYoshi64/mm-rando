@@ -1574,7 +1574,6 @@ namespace MMRando
                 "",//"Majora Child",
         });
 
-        internal static readonly int TotalNumberOfItems = 267;
         internal static readonly int TotalNumberOfItems = 298;
 
     }
