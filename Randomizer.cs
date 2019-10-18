@@ -1202,26 +1202,22 @@ namespace MMRando
             }
             if (_settings.StartingRemains > 0)
             {
-                List<string> remains = new List<string>() { "Odolwa", "Goht", "Gyorg", "Twinmold" };
-                bool[] given = new bool[4];
-                int startingRemains = 0;
+                List<(string name, byte mask)> remains = new List<(string,byte)>() {
+                    ("Odolwa",      0x01),
+                    ("Goht",        0x02),
+                    ("Gyorg",       0x04),
+                    ("Twinmold",    0x08)
+                };
+                byte startingRemains = 0;
                 for( int i = 0; i < _settings.StartingRemains; i++)
                 {
-                    int j;
-                    do{
-                        j = _random.Next(4);
-                    } while (given[j]);
-                    given[j] = true;
+                    int j = _random.Next(remains.Count);
+                    var pick = remains[j];
+                    remains.RemoveAt(j);
+                    Debug.WriteLine($"Given {pick.name}'s Remains");
+                    startingRemains |= pick.mask;
                 }
-                for(int i = 0;i < given.Length; i++)
-                {
-                    if( given[i])
-                    {
-                        Debug.WriteLine($"Given {remains[i]} Remains");
-                        startingRemains |= 1 << i;
-                    }
-                }
-                _randomized.StartingRemains = (byte) startingRemains;
+                _randomized.StartingRemains = startingRemains;
             }
 
         }
