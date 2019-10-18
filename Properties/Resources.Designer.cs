@@ -19,7 +19,7 @@ namespace MMRando.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -115,7 +115,7 @@ namespace MMRando.Properties {
         ///0000
         ///0
         ///1
-        ///
+        ///1b,21,60,66
         ///-shabom
         ///001d
         ///000e
@@ -126,9 +126,7 @@ namespace MMRando.Properties {
         ///-skulltula
         ///0024
         ///0020
-        ///003f,007f,0004
-        ///3
-        ///0 [rest of string was truncated]&quot;;.
+        ///003f,007f [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ENEMIES {
             get {
@@ -137,166 +135,30 @@ namespace MMRando.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to a new file;a quest&apos;s inception
-        ///a woodland spirit
-        ///Woodfall Temple;the sleeping temple
-        ///a projectile;a ranged weapon
-        ///Snowhead Temple;an icy gale
-        ///the power of fire;a magical item
-        ///Great Bay Temple;the ocean temple
-        ///the power of ice;a magical item
-        ///Stone Tower Temple;the cursed temple
-        ///the power of light;a magical item
-        ///a town shop
-        ///an item carrier;a vessel of explosives
-        ///a hidden merchant;a gorging merchant
-        ///a plant seed
-        ///a large goron
-        ///gunpowder;a dangerous item;an explosive barrel
-        ///a witch
-        ///a light recor [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string GOSSIP {
-            get {
-                return ResourceManager.GetString("GOSSIP", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to -deku mask
-        ///78
-        ///-items
-        ///22
-        ///25
-        ///26
-        ///27
-        ///1b
-        ///11e
-        ///123
-        ///43
-        ///42
-        ///41
-        ///3b
-        ///59
-        ///60
-        ///-6a replace Gold Dust Bottle with regular Gold Dust
-        ///93
-        ///5a
-        ///64
-        ///6f
-        ///50
-        ///-upgrades
-        ///38
-        ///39
-        ///33
-        ///23
-        ///24
-        ///1c
-        ///1d
-        ///8
-        ///9
-        ///-trade items
-        ///96
-        ///97
-        ///98
-        ///99
-        ///9a
-        ///a0
-        ///aa
-        ///ab
-        ///a1
-        ///-notebook hps
-        ///3
-        ///ce
-        ///2b
-        ///2c
-        ///2d
-        ///2f
-        ///-other hp
-        ///30
-        ///31
-        ///90
-        ///94
-        ///9f
-        ///a2
-        ///a3
-        ///a5
-        ///a6
-        ///a7
-        ///a8
-        ///ac
-        ///ad
-        ///ae
-        ///af
-        ///b0
-        ///b1
-        ///b2
-        ///17
-        ///18
-        ///20
-        ///29
-        ///2e
-        ///14
-        ///44
-        ///-mask
-        ///84
-        ///7e
-        ///8d
-        ///8b
-        ///86
-        ///80
-        ///8c
-        ///7f
-        ///88
-        ///8e
-        ///82
-        ///83
-        ///8f
-        ///85
-        ///8a
-        ///89
-        ///87
-        ///81
-        ///7c
-        ///7d
-        ///79
-        ///7a
-        ///-songs
-        ///70
-        ///71
-        ///72
-        ///73 [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ITEM_INDICES {
-            get {
-                return ResourceManager.GetString("ITEM_INDICES", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - Deku Mask
+        ///   Looks up a localized string similar to -version 13
+        ///- Deku Mask
         ///
         ///
         ///0
         ///0
         ///- Hero&apos;s Bow
-        ///99
-        ///10;0,115;0,124
+        ///104
+        ///10;0,120;0,129
         ///0
         ///0
         ///- Fire Arrow
-        ///102
-        ///2,88,115;2,89,115;10,88;88,89,114,128;88,89,114,129;88,89,114,130;88,114,128,129;88,114,128,130;88,114,129,130;10,89
+        ///107
+        ///2,92,120,433;2,93,120,433;10,92,433;10,93;92,119,433,434;92,93,119,433,435
         ///0
         ///0
         ///- Ice Arrow
-        ///107,134,10,89
+        ///112,139,10,93
         ///
         ///0
         ///0
         ///- Light Arrow
-        ///111
-        ///4,115,138;4,115,139;4,115,140;4,115,141;21,88,89,114,138,139,0;21,88,89,114,138,140,0;21,88,89,114,138,141,0;21,88,89,114,139,140,0;21,88,89,114,139,141,0;21,88,89,114,140,141,0
+        ///116
+        ///4,120,436,433;25,119,437
         ///0
         ///0
         ///- Bomb Bag (20)
@@ -305,11 +167,33 @@ namespace MMRando.Properties {
         ///0
         ///0
         ///- Magic Bean
-        ///98,0
+        ///103,0
         ///
         ///0
         ///0
-        ///- Powder K [rest of string was truncated]&quot;;.
+        ///- Powder Keg
+        ///106,2,92,120,433
+        ///
+        ///0
+        ///0
+        ///- Pictobox
+        ///
+        ///444;447
+        ///0
+        ///0
+        ///- Lens of Truth
+        ///106
+        ///9,433;95
+        ///0
+        ///0
+        ///- Hookshot
+        ///111
+        ///92,120;0,92;10,120;0,10
+        ///0
+        ///0
+        ///- Great Fairy Magic Meter
+        ///346
+        ///0;9 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string REQ_CASUAL {
             get {
@@ -318,93 +202,50 @@ namespace MMRando.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///
-        ///0
-        ///0
-        ///99
-        ///5;24;25;10;124
-        ///0
-        ///0
-        ///102
-        ///5;24;25
-        ///0
-        ///0
-        ///107,115,134
-        ///
-        ///0
-        ///0
-        ///111,114,138,139
-        ///
-        ///0
-        ///0
+        ///   Looks up a localized string similar to -version 13
+        ///- Deku Mask
         ///
         ///
         ///0
         ///0
-        ///98
-        ///
+        ///- Hero&apos;s Bow
+        ///104
+        ///0,129;435,444,445;10;0,120;119,120,444;120,270;129,270;119,270
         ///0
         ///0
-        ///101
-        ///2;12;13;209;15;16;17
+        ///- Fire Arrow
+        ///107
+        ///119,441;93,119,440;2,120,433;435,444,445;10;270
         ///0
         ///0
-        ///
-        ///12;13;209;15;16;17
+        ///- Ice Arrow
+        ///112,139,438
+        ///435,444,445;92,445;93;119,270,445
         ///0
         ///0
-        ///101
-        ///
+        ///- Light Arrow
+        ///116,442
+        ///4,120,433;0,25,92,93,101,443;25,92,119;10,435,444;25,92,101,270,443;435,444,445
         ///0
         ///0
-        ///106
-        ///0;1;22;23
-        ///0
-        ///0
-        ///112,111,113,72
-        ///
-        ///0
-        ///0
+        ///- Bomb Bag (20)
         ///
         ///
         ///0
         ///0
-        ///104,115
-        ///
-        ///0
-        ///2
-        ///103,88
-        ///
-        ///15
-        ///0
-        ///106,10
+        ///- Magic Bean
+        ///103
         ///
         ///0
         ///0
-        ///109
-        ///
-        ///0
-        ///32
-        ///36,80
-        ///
-        ///0
-        ///32
-        ///
-        ///0;89;1;22;23;10
+        ///- Powder Keg
+        ///92,106
+        ///119,444,445;120;108;173,270,436
         ///0
         ///0
-        ///------------------------
-        ///101,26
-        ///2;12;13;209;15;16;17
-        ///0
-        ///12
-        ///101,14
-        ///2;12;13;209;15;16;17
-        ///0
-        ///48
-        ///110
-        ///1,2,10;22,2,10;23,2,10;1,2,89;22,2,89;23,2,89;1, [rest of string was truncated]&quot;;.
+        ///- Pictobox
+        ///436
+        ///16; [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string REQ_GLITCH {
             get {

@@ -1,4 +1,5 @@
-﻿using MMRando.GameObjects;
+﻿using MMRando.Extensions;
+using MMRando.GameObjects;
 using MMRando.Models;
 using MMRando.Models.Settings;
 using System;
@@ -14,7 +15,8 @@ namespace MMRando.Utils
         public static void CreateSpoilerLog(RandomizedResult randomized, SettingsObject settings)
         {
             var itemList = randomized.ItemList
-                .Select(u => new SpoilerItem(u, randomized.ItemList.SingleOrDefault(io => io.ID == u.ReplacesItemId)?.Name));
+                .Where(io => !io.Item.IsFake())
+                .Select(u => new SpoilerItem(u));
             var settingsString = settings.ToString();
 
             var directory = Path.GetDirectoryName(settings.OutputROMFilename);
@@ -27,10 +29,11 @@ namespace MMRando.Utils
                 SettingsString = settingsString,
                 Seed = settings.Seed,
                 RandomizeDungeonEntrances = settings.RandomizeDungeonEntrances,
-                ItemList = itemList.Where(u => !ItemUtils.IsFakeItem(u.Id)).ToList(),
+                ItemList = itemList.Where(u => !u.Item.IsFake()).ToList(),
                 NewDestinationIndices = randomized.NewDestinationIndices,
                 Logic = randomized.Logic,
                 CustomItemListString = settings.UseCustomItemList ? settings.CustomItemListString : null,
+                CustomStartingItemListString = settings.CustomStartingItemList.Any() ? settings.CustomStartingItemListString : null,
                 GossipHints = randomized.GossipQuotes?.ToDictionary(me => (GossipQuote) me.Id, (me) =>
                 {
                     var message = me.Message.Substring(1);
@@ -80,6 +83,10 @@ namespace MMRando.Utils
             {
                 log.AppendLine($"{"Custom Item List:",-17} {spoiler.CustomItemListString}");
             }
+            if (spoiler.CustomStartingItemListString != null)
+            {
+                log.AppendLine($"{"Custom Starting Item List:",-17} {spoiler.CustomStartingItemListString}");
+            }
             log.AppendLine();
 
             if (spoiler.RandomizeDungeonEntrances)
@@ -95,18 +102,14 @@ namespace MMRando.Utils
             }
 
             log.AppendLine($" {"Location",-50}    {"Item"}");
-            foreach (var item in spoiler.ItemList)
+            foreach (var region in spoiler.ItemList.GroupBy(item => item.Region).OrderBy(g => g.Key))
             {
-                log.AppendLine($"{item.NewLocationName,-50} -> {item.Name}");
-            }
-
-            log.AppendLine();
-            log.AppendLine();
-
-            log.AppendLine($" {"Location",-50}    {"Item"}");
-            foreach (var item in spoiler.ItemList.OrderBy(i => i.NewLocationId))
-            {
-                log.AppendLine($"{item.NewLocationName,-50} -> {item.Name}");
+                log.AppendLine();
+                log.AppendLine($" {region.Key}");
+                foreach (var item in region.OrderBy(item => item.NewLocationName))
+                {
+                    log.AppendLine($"{item.NewLocationName,-50} -> {item.Name}");
+                }
             }
 
 
