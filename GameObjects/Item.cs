@@ -3301,5 +3301,12 @@ namespace MMRando.GameObjects
 
         //[GetItemIndex(0x1A1)]
 
+        RemainOdolwa,
+
+        RemainGoht,
+
+        RemainGyorg,
+
+        RemainTwinmold
     }
 }

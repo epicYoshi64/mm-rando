@@ -1205,26 +1205,39 @@ namespace MMRando
                     availableStartingItems.RemoveAll(item => forbiddenStartTogether.Contains(item.Value));
                 }
             }
-            if (_settings.StartingRemains > 0)
-            {
-                List<(string name, byte mask)> remains = new List<(string,byte)>() {
-                    ("Odolwa",      0x01),
-                    ("Goht",        0x02),
-                    ("Gyorg",       0x04),
-                    ("Twinmold",    0x08)
-                };
-                byte startingRemains = 0;
-                for( int i = 0; i < _settings.StartingRemains; i++)
-                {
-                    int j = _random.Next(remains.Count);
-                    var pick = remains[j];
-                    remains.RemoveAt(j);
-                    Debug.WriteLine($"Given {pick.name}'s Remains");
-                    startingRemains |= pick.mask;
-                }
-                _randomized.StartingRemains = startingRemains;
-            }
 
+        }
+
+        private void PlaceFreeRemains()
+        {
+            List<(string name, byte mask, Item logicTempleAccess)> remains = new List<(string, byte, Item)>() {
+                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess),
+                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess),
+                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess),
+                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess)
+            };
+            byte startingRemains = 0;
+            List<Item> itemsInRemainDungeon;
+            for (int i = 0; i < _settings.StartingRemains; i++)
+            {
+                int j = _random.Next(remains.Count);
+                var pick = remains[j];
+                remains.RemoveAt(j);
+                Debug.WriteLine($"Given {pick.name}'s Remains");
+                startingRemains |= pick.mask;
+                itemsInRemainDungeon = ItemList.Where(io =>
+                    io.DependsOnItems?.Contains(pick.logicTempleAccess) ?? false
+                ).Select(io => io.Item).ToList();
+                if( "Twinmold".Equals(pick.name))
+                {
+                    itemsInRemainDungeon.AddRange(ItemList.Where(io =>
+                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false)
+                        .Select(io => io.Item)
+                    );
+                }
+                _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
+            }
+            _randomized.StartingRemains = startingRemains;
         }
 
         /// <summary>
@@ -1717,6 +1730,12 @@ namespace MMRando
                 {
                     worker.ReportProgress(10, "Shuffling entrances...");
                     EntranceShuffle();
+                }
+
+                if(_settings.StartingRemains > 0)
+                {
+                    worker.ReportProgress(20, "Giving Free Remains");
+                    PlaceFreeRemains();
                 }
 
                 _randomized.Logic = ItemList.Select(io => new ItemLogic(io)).ToList();
