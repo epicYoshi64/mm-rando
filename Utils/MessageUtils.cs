@@ -59,7 +59,9 @@ namespace MMRando.Utils
                 {
                     var preventRegions = new List<string> { "The Moon", "Bottle Catch", "Misc" };
                     var itemRegion = item.NewLocation.Value.Region();
-                    if (!string.IsNullOrWhiteSpace(itemRegion) && !preventRegions.Contains(itemRegion) && (randomizedResult.Settings.AddSongs || !ItemUtils.IsSong(item.Item)))
+                    if (!string.IsNullOrWhiteSpace(itemRegion)
+                        && !preventRegions.Contains(itemRegion)
+                        && !randomizedResult.Settings.CustomJunkLocations.Contains(item.NewLocation.Value))
                     {
                         if (!itemsInRegions.ContainsKey(itemRegion))
                         {
@@ -74,7 +76,12 @@ namespace MMRando.Utils
                         continue;
                     }
 
-                    if (competitiveHintInfo.IsOnlyForUsefulItems && !randomizedResult.ItemsRequiredForMoonAccess.Contains(item.Item))
+                    if (randomizedResult.Settings.CustomJunkLocations.Contains(item.NewLocation.Value))
+                    {
+                        continue;
+                    }
+
+                    if (competitiveHintInfo.Condition != null && competitiveHintInfo.Condition(randomizedResult.Settings))
                     {
                         continue;
                     }
@@ -93,7 +100,12 @@ namespace MMRando.Utils
                 foreach (var kvp in itemsInRegions)
                 {
                     bool regionHasRequiredItem;
-                    if (kvp.Value.Any(io => !io.Item.Name().Contains("Heart") && !ItemUtils.IsStrayFairy(io.Item) && !ItemUtils.IsSkulltulaToken(io.Item) && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item)))
+                    if (kvp.Value.Any(io => !io.Item.Name().Contains("Heart")
+                        && (randomizedResult.Settings.AddSongs || !ItemUtils.IsSong(io.Item))
+                        && io.Item != Item.MaskGiant
+                        && !ItemUtils.IsStrayFairy(io.Item) 
+                        && !ItemUtils.IsSkulltulaToken(io.Item) 
+                        && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item)))
                     {
                         regionHasRequiredItem = true;
                     }
@@ -220,11 +232,15 @@ namespace MMRando.Utils
                         {
                             if (randomizedResult.Settings.GossipHintStyle == GossipHintStyle.Competitive)
                             {
-                                item = unusedItems.GroupBy(io => io.NewLocation.Value.GetAttribute<GossipCompetitiveHintAttribute>().Priority)
-                                    .OrderByDescending(g => g.Key)
-                                    .First()
-                                    .ToList()
-                                    .Random(randomizedResult.Random);
+                                item = unusedItems.FirstOrDefault(io => unusedItems.Count(x => x.Item == io.Item) == 1);
+                                if (item == null)
+                                {
+                                    item = unusedItems.GroupBy(io => io.NewLocation.Value.GetAttribute<GossipCompetitiveHintAttribute>().Priority)
+                                        .OrderByDescending(g => g.Key)
+                                        .First()
+                                        .ToList()
+                                        .Random(randomizedResult.Random);
+                                }
                             }
                             else
                             {
