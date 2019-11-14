@@ -159,6 +159,10 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool AddStrayFairies { get; set; }
 
+        public DungeonItemAlgorithm KeyPlacement { get; set; } = DungeonItemAlgorithm.Anywhere;
+
+        public DungeonItemAlgorithm BossKeyPlacement { get; set; } = DungeonItemAlgorithm.IncludeFairies;
+
         /// <summary>
         /// Add mundane rewards to the randomization pool
         /// </summary>
