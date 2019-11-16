@@ -1238,14 +1238,13 @@ namespace MMRando
                     );
                 }
                 _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
-                ItemObject remainLogic = ItemList[(int)pick.logicRemain];
+                ItemObject remainLogic = ItemList.Find(io => io.Item == pick.logicRemain);
                 if (remainLogic.DependsOnItems != null)
                 {
                     remainLogic.DependsOnItems.Remove(pick.logicTempleClear);
                 }
                 remainLogic.IsRandomized = true;
             }
-            _randomized.StartingRemains = startingRemains;
         }
 
         /// <summary>

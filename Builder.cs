@@ -654,8 +654,8 @@ namespace MMRando
             var newMessages = new List<MessageEntry>();
             foreach (var item in _randomized.ItemList)
             {
-                // Unused item
-                if (item.NewLocation == null)
+                // Unused item or remain
+                if (item.NewLocation == null || (item.Item >= Item.RemainOdolwa && item.Item <= Item.RemainTwinmold))
                 {
                     continue;
                 }

@@ -27,8 +27,6 @@ namespace MMRando.Models
         public int[] NewDCMasks = new int[] { -1, -1, -1, -1 };
         public int[] NewDestinationIndices = new int[] { -1, -1, -1, -1 };
 
-        public byte StartingRemains { get; set; }
-
         public RandomizedResult(SettingsObject settings, Random random)
         {
             Settings = settings;
