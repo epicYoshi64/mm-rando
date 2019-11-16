@@ -1,10 +1,9 @@
-﻿namespace MMRando.Models.Settings
+﻿namespace MMRando.Models
 {
     public enum DungeonItemAlgorithm
     {
-        Vanilla,
         Shuffled,
         IncludeFairies,
-        Anywhere
+        Anywhere,
     }
 }
