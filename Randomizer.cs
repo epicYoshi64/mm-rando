@@ -954,6 +954,8 @@ namespace MMRando
                 Setup();
             }
 
+            PreserveRemains();
+
             UpdateLogicForSettings();
 
             var itemPool = new List<Item>();
@@ -1210,15 +1212,14 @@ namespace MMRando
 
         private void PlaceFreeRemains()
         {
-            List<(string name, byte mask, Item logicTempleAccess, Item logicTempleClear)> remains = new List<(string, byte, Item, Item)>() {
-                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear),
-                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear),
-                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear),
-                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear)
+            List<(string name, byte mask, Item logicTempleAccess, Item logicTempleClear, Item logicRemain)> remains = new List<(string, byte, Item, Item, Item)>() {
+                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear,   Item.RemainOdolwa),
+                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear,   Item.RemainGoht),
+                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
+                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
             };
             byte startingRemains = 0;
             List<Item> itemsInRemainDungeon;
-            ItemObject moonAccess = ItemList[(int)Item.AreaMoonAccess];
             for (int i = 0; i < _settings.StartingRemains; i++)
             {
                 int j = _random.Next(remains.Count);
@@ -1237,7 +1238,12 @@ namespace MMRando
                     );
                 }
                 _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
-                moonAccess.DependsOnItems.Remove(pick.logicTempleClear);
+                ItemObject remainLogic = ItemList[(int)pick.logicRemain];
+                if (remainLogic.DependsOnItems != null)
+                {
+                    remainLogic.DependsOnItems.Remove(pick.logicTempleClear);
+                }
+                remainLogic.IsRandomized = true;
             }
             _randomized.StartingRemains = startingRemains;
         }
@@ -1525,6 +1531,17 @@ namespace MMRando
         private void PreserveGlitchedCowMilk()
         {
             ItemList[(int)Item.ItemRanchBarnOtherCowMilk2].NewLocation = Item.ItemRanchBarnOtherCowMilk2;
+        }
+
+        /// <summary>
+        /// Keeps remains vanilla
+        /// </summary>
+        private void PreserveRemains()
+        {
+            for (var i = Item.RemainOdolwa; i <= Item.RemainTwinmold; i++)
+            {
+                ItemList[(int)i].NewLocation = i;
+            }
         }
 
         /// <summary>

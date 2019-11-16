@@ -548,11 +548,6 @@ namespace MMRando
                 }
             }
 
-            if( _settings.StartingRemains > 0)
-            {
-                PutOrCombine(startingItems, 0xC5CE73, _randomized.StartingRemains);
-            }
-
             itemList = itemList
                 .GroupBy(item => ItemUtils.ForbiddenStartTogether.FirstOrDefault(fst => fst.Contains(item)))
                 .SelectMany(g => g.Key == null ? g.ToList() : g.OrderByDescending(item => g.Key.IndexOf(item)).Take(1))
@@ -579,6 +574,24 @@ namespace MMRando
             if (itemList.Count(item => item.Name() == "Heart Container") == 1)
             {
                 ReadWriteUtils.WriteToROM(0x00B97E8F, 0x0C); // reduce low health beep threshold
+            }
+        }
+
+        private void WriteFreeRemains(List<Item> freeRemains)
+        {
+            Dictionary<int, byte> startingRemains = new Dictionary<int, byte>();
+            foreach ( Item remain in freeRemains)
+            {
+                var startingRemainValues = remain.GetAttributes<StartingItemAttribute>();
+                foreach (var startingRemain in startingRemainValues)
+                {
+                    PutOrCombine(startingRemains, startingRemain.Address, startingRemain.Value, startingRemain.IsAdditional);
+                }
+
+                foreach( var kvp in startingRemains)
+                {
+                    ReadWriteUtils.WriteToROM(kvp.Key, kvp.Value);
+                }
             }
         }
 
@@ -614,6 +627,12 @@ namespace MMRando
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingHeartContainer1).Item);
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingHeartContainer2).Item);
             WriteFreeItems(freeItems.ToArray());
+
+            List<Item> freeRemains = _randomized.ItemList
+                    .Where(io => io.Item >= Item.RemainOdolwa && io.Item <= Item.RemainTwinmold)
+                    .Where(io => io.IsRandomized).Select(io => io.Item).ToList();
+
+            WriteFreeRemains(freeRemains);
 
             //write everything else
             ItemSwapUtils.ReplaceGetItemTable(Values.ModsDirectory);
