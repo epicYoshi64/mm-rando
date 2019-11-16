@@ -961,9 +961,9 @@ namespace MMRando
             AddAllItems(itemPool);
 
             PlaceFreeItems(itemPool);
+            PlaceDungeonItems(itemPool);
             PlaceQuestItems(itemPool);
             PlaceTradeItems(itemPool);
-            PlaceDungeonItems(itemPool);
             PlaceStartingItems(itemPool);
             PlaceUpgrades(itemPool);
             PlaceSongs(itemPool);
@@ -1112,7 +1112,44 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<Item> itemPool)
         {
+            List<Item> dungeonItemPool;
+            // keep a pool to defer placing items that wish to be placed anywhere
+            // this stops WFT/SHT/GBT from filling up slots in STT
+            List<Item> remainingItems = new List<Item>();
             for (var i = Item.ItemWoodfallMap; i <= Item.ItemStoneTowerKey4; i++)
+            {
+                if( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
+                    (ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Anywhere) ||
+                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere))
+                {
+                    remainingItems.Add(i);
+                    continue;
+                }
+                dungeonItemPool = itemPool.Where(item => 
+                    i.Region().Equals(item.Region()) &&
+                    // exclude heart containers as a location for the keys to end up
+                    !(item >= Item.HeartContainerWoodfall && item <= Item.HeartContainerStoneTower)        
+                ).ToList();
+                // TODO make a setting for mixing stone tower chests together
+                // this segregates the sides of stone tower
+                // any chest requiring access to both sides is treated the same as an STT chest
+                if( true && "Stone Tower Temple".Equals(i.Region()))
+                {
+                    dungeonItemPool = dungeonItemPool.Where(item => ItemUtils.IsInvertedST(i) == ItemUtils.IsInvertedST(item)).ToList();
+                }
+                if ((ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Shuffled) ||
+                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Shuffled))
+                {
+                    dungeonItemPool = dungeonItemPool.Where(item => !ItemUtils.IsStrayFairy(item)).ToList();
+                }
+                PlaceItem(i, dungeonItemPool);
+                var itemLocation = ItemList[(int)i].NewLocation;
+                if( itemLocation is Item)
+                {
+                    itemPool.Remove((Item)itemLocation);
+                }
+            }
+            foreach( Item i in remainingItems)
             {
                 PlaceItem(i, itemPool);
             }
