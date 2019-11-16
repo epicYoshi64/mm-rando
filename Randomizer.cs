@@ -945,6 +945,12 @@ namespace MMRando
 
         private void RandomizeItems()
         {
+            PreserveRemains();
+            if (_settings.StartingRemains > 0)
+            {
+                PlaceFreeRemains();
+            }
+
             if (_settings.UseCustomItemList)
             {
                 SetupCustomItems();
@@ -953,8 +959,6 @@ namespace MMRando
             {
                 Setup();
             }
-
-            PreserveRemains();
 
             UpdateLogicForSettings();
 
@@ -1122,7 +1126,8 @@ namespace MMRando
             {
                 if( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
                     (ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Anywhere) ||
-                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere))
+                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere) ||
+                    _settings.CustomJunkLocations.Contains(i))
                 {
                     remainingItems.Add(i);
                     continue;
@@ -1255,30 +1260,42 @@ namespace MMRando
                 ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
                 ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
             };
+            if( _settings.RandomizeDungeonEntrances)
+            {
+                var shuffledRemains = new List<(string, byte, Item, Item, Item)>();
+                for( int i = 0; i < _randomized.NewDestinationIndices.Length; i++)
+                {
+                    shuffledRemains.Add((
+                        remains[_randomized.NewDestinationIndices[i]].name, 
+                        remains[_randomized.NewDestinationIndices[i]].mask, 
+                        remains[i].logicTempleAccess, 
+                        remains[_randomized.NewDestinationIndices[i]].logicTempleClear,
+                        remains[_randomized.NewDestinationIndices[i]].logicRemain));
+                }
+                remains = shuffledRemains;
+            }
             byte startingRemains = 0;
             List<Item> itemsInRemainDungeon;
             for (int i = 0; i < _settings.StartingRemains; i++)
             {
                 int j = _random.Next(remains.Count);
-                var pick = remains[j];
+                var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
                 remains.RemoveAt(j);
-                Debug.WriteLine($"Given {pick.name}'s Remains");
-                startingRemains |= pick.mask;
+                startingRemains |= mask;
                 itemsInRemainDungeon = ItemList.Where(io =>
-                    io.DependsOnItems?.Contains(pick.logicTempleAccess) ?? false
+                    io.DependsOnItems?.Contains(logicTempleAccess) ?? false
                 ).Select(io => io.Item).ToList();
-                if( "Twinmold".Equals(pick.name))
+                if( "Twinmold".Equals(name))
                 {
                     itemsInRemainDungeon.AddRange(ItemList.Where(io =>
-                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false)
-                        .Select(io => io.Item)
-                    );
+                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false
+                    ).Select(io => io.Item));
                 }
                 _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
-                ItemObject remainLogic = ItemList.Find(io => io.Item == pick.logicRemain);
+                ItemObject remainLogic = ItemList.Find(io => io.Item == logicRemain);
                 if (remainLogic.DependsOnItems != null)
                 {
-                    remainLogic.DependsOnItems.Remove(pick.logicTempleClear);
+                    remainLogic.DependsOnItems.Remove(logicTempleClear);
                 }
                 remainLogic.IsRandomized = true;
             }
@@ -1787,13 +1804,8 @@ namespace MMRando
                     EntranceShuffle();
                 }
 
-                if(_settings.StartingRemains > 0)
-                {
-                    worker.ReportProgress(20, "Giving Free Remains");
-                    PlaceFreeRemains();
-                }
-
                 _randomized.Logic = ItemList.Select(io => new ItemLogic(io)).ToList();
+
                 var logicForRequiredItems = _settings.LogicMode == LogicMode.Casual
                     ? ItemList.Select(io =>
                     {
