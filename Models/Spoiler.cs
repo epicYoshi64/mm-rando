@@ -57,6 +57,8 @@ namespace MMRando.Models
             Item.AreaInvertedStoneTowerTempleAccess,
             Item.AreaGreatBayTempleAccess,
         };
+
+        public List<string> StartingRemains { get; set; }
     }
 }
 
