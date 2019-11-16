@@ -577,6 +577,24 @@ namespace MMRando
             }
         }
 
+        private void WriteFreeRemains(List<Item> freeRemains)
+        {
+            Dictionary<int, byte> startingRemains = new Dictionary<int, byte>();
+            foreach ( Item remain in freeRemains)
+            {
+                var startingRemainValues = remain.GetAttributes<StartingItemAttribute>();
+                foreach (var startingRemain in startingRemainValues)
+                {
+                    PutOrCombine(startingRemains, startingRemain.Address, startingRemain.Value, startingRemain.IsAdditional);
+                }
+
+                foreach( var kvp in startingRemains)
+                {
+                    ReadWriteUtils.WriteToROM(kvp.Key, kvp.Value);
+                }
+            }
+        }
+
         private void WriteItems()
         {
             var freeItems = new List<Item>();
@@ -610,6 +628,12 @@ namespace MMRando
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingHeartContainer2).Item);
             WriteFreeItems(freeItems.ToArray());
 
+            List<Item> freeRemains = _randomized.ItemList
+                    .Where(io => io.Item >= Item.RemainOdolwa && io.Item <= Item.RemainTwinmold)
+                    .Where(io => io.IsRandomized).Select(io => io.Item).ToList();
+
+            WriteFreeRemains(freeRemains);
+
             //write everything else
             ItemSwapUtils.ReplaceGetItemTable(Values.ModsDirectory);
             ItemSwapUtils.InitItems();
@@ -630,8 +654,8 @@ namespace MMRando
             var newMessages = new List<MessageEntry>();
             foreach (var item in _randomized.ItemList)
             {
-                // Unused item
-                if (item.NewLocation == null)
+                // Unused item or remain
+                if (item.NewLocation == null || (item.Item >= Item.RemainOdolwa && item.Item <= Item.RemainTwinmold))
                 {
                     continue;
                 }

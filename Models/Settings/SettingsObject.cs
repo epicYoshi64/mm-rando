@@ -188,6 +188,8 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool RandomizeEnemies { get; set; }
 
+        public int StartingRemains { get; set; } = 1;
+
         /// <summary>
         /// Prevents player starting with any items that are randomized.
         /// </summary>
