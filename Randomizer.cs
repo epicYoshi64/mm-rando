@@ -1210,14 +1210,15 @@ namespace MMRando
 
         private void PlaceFreeRemains()
         {
-            List<(string name, byte mask, Item logicTempleAccess)> remains = new List<(string, byte, Item)>() {
-                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess),
-                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess),
-                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess),
-                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess)
+            List<(string name, byte mask, Item logicTempleAccess, Item logicTempleClear)> remains = new List<(string, byte, Item, Item)>() {
+                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear),
+                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear),
+                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear),
+                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear)
             };
             byte startingRemains = 0;
             List<Item> itemsInRemainDungeon;
+            ItemObject moonAccess = ItemList[(int)Item.AreaMoonAccess];
             for (int i = 0; i < _settings.StartingRemains; i++)
             {
                 int j = _random.Next(remains.Count);
@@ -1236,6 +1237,7 @@ namespace MMRando
                     );
                 }
                 _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
+                moonAccess.DependsOnItems.Remove(pick.logicTempleClear);
             }
             _randomized.StartingRemains = startingRemains;
         }
