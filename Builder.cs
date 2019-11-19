@@ -1,4 +1,5 @@
-﻿using MMRando.Attributes;
+﻿using MMRando.Asm;
+using MMRando.Attributes;
 using MMRando.Constants;
 using MMRando.Extensions;
 using MMRando.GameObjects;
@@ -1058,6 +1059,28 @@ namespace MMRando
             RomData.MMFileList[1142].Data = data.ToArray();
         }
 
+        private void WriteAsmPatch()
+        {
+            // Load patcher from internal resource file
+            var patcher = Patcher.Load();
+            var options = _settings.PatcherOptions;
+
+            // Load the symbols and use them to apply the patch data
+            patcher.Apply(options);
+        }
+
+        private void WriteAsmConfigPostPatch()
+        {
+            // Parse Symbols data from the ROM (specific MMFile)
+            Symbols symbols = Symbols.FromROM();
+
+            if (symbols != null)
+            {
+                // Apply current configuration on top of existing Asm patch file
+                symbols.TryApplyConfiguration(_settings.PatcherOptions);
+            }
+        }
+
         public void MakeROM(string InFile, string FileName, BackgroundWorker worker)
         {
             using (BinaryReader OldROM = new BinaryReader(File.Open(InFile, FileMode.Open, FileAccess.Read)))
@@ -1073,6 +1096,9 @@ namespace MMRando
             {
                 worker.ReportProgress(50, "Applying patch...");
                 hash = RomUtils.ApplyPatch(_settings.InputPatchFilename);
+
+                // Apply Asm configuration post-patch
+                WriteAsmConfigPostPatch();
             }
             else
             {
@@ -1124,8 +1150,11 @@ namespace MMRando
 
                 worker.ReportProgress(69, "Writing startup...");
                 WriteStartupStrings();
+
+                worker.ReportProgress(70, "Writing ASM patch...");
+                WriteAsmPatch();
                 
-                worker.ReportProgress(70, _settings.GeneratePatch ? "Generating patch..." : "Computing hash...");
+                worker.ReportProgress(71, _settings.GeneratePatch ? "Generating patch..." : "Computing hash...");
                 hash = RomUtils.CreatePatch(_settings.GeneratePatch ? FileName : null, originalMMFileList);
             }
 
@@ -1133,11 +1162,11 @@ namespace MMRando
             WriteTatlColour();
             WriteTunicColor();
 
-            worker.ReportProgress(50, "Writing music...");
+            worker.ReportProgress(73, "Writing music...");
             WriteAudioSeq(new Random(BitConverter.ToInt32(hash, 0)));
             WriteMuteMusic();
 
-            worker.ReportProgress(67, "Writing sound effects...");
+            worker.ReportProgress(74, "Writing sound effects...");
             WriteSoundEffects(new Random(BitConverter.ToInt32(hash, 0)));
 
             if (_settings.GenerateROM)
@@ -1148,7 +1177,7 @@ namespace MMRando
                 if (_settings.OutputVC)
                 {
                     worker.ReportProgress(90, "Building VC...");
-                    VCInjectionUtils.BuildVC(ROM, Values.VCDirectory, Path.ChangeExtension(FileName, "wad"));
+                    VCInjectionUtils.BuildVC(ROM, _settings.PatcherOptions, Values.VCDirectory, Path.ChangeExtension(FileName, "wad"));
                 }
             }
             worker.ReportProgress(100, "Done!");

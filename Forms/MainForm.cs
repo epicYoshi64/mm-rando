@@ -1,4 +1,5 @@
-﻿using MMRando.Forms;
+﻿using MMRando.Asm;
+using MMRando.Forms;
 using MMRando.Forms.Tooltips;
 using MMRando.Models;
 using MMRando.Models.Settings;
@@ -924,6 +925,20 @@ namespace MMRando
             tSString.Enabled = v;
         }
 
+        private void mDPadConfig_Click(object sender, EventArgs e)
+        {
+            var items = DPadItem.All();
+            var presets = DPadPreset.All();
+            var config = _settings.PatcherOptions.DPadConfig;
+
+            DPadForm form = new DPadForm(presets, items, config);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                config.State = form.State;
+                config.Pad = form.Selected;
+            }
+        }
+
         #endregion
 
         #region Settings
@@ -1046,6 +1061,16 @@ namespace MMRando
                 try
                 {
                     _builder.MakeROM(_settings.InputROMFilename, _settings.OutputROMFilename, worker);
+                }
+                catch (PatchMagicException ex)
+                {
+                    MessageBox.Show($"Error applying patch: Not a valid patch file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                catch (PatchVersionException ex)
+                {
+                    MessageBox.Show($"Error applying patch: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 catch (Exception ex)
                 {

@@ -68,6 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asm\DPad.cs" />
+    <Compile Include="Asm\Patcher.cs" />
+    <Compile Include="Asm\Symbols.cs" />
     <Compile Include="Attributes\ChestAttribute.cs" />
     <Compile Include="Attributes\ChestTypeAttribute.cs" />
     <Compile Include="Attributes\CycleRepeatableAttribute.cs" />
@@ -98,6 +101,12 @@
     </Compile>
     <Compile Include="Forms\JunkLocationEditForm.Designer.cs">
       <DependentUpon>JunkLocationEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DPadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DPadForm.Designer.cs">
+      <DependentUpon>DPadForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\StartingItemEditForm.cs">
       <SubType>Form</SubType>
@@ -201,6 +210,7 @@
     <Compile Include="Utils\Mzxrules\Align.cs" />
     <Compile Include="Utils\Mzxrules\Endian.cs" />
     <Compile Include="Utils\Mzxrules\Vectors.cs" />
+    <Compile Include="Utils\PatchUtil.cs" />
     <Compile Include="Utils\SceneUtils.cs" />
     <Compile Include="Enemies.cs" />
     <Compile Include="Utils\EntranceUtils.cs" />
@@ -238,6 +248,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DPadForm.resx">
+      <DependentUpon>DPadForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemEditForm.resx">
       <DependentUpon>ItemEditForm.cs</DependentUpon>
@@ -901,6 +914,8 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>HtmlSpoiler.cs</LastGenOutput>
     </Content>
+    <None Include="Resources\asm\rom_patch.txt" />
+    <None Include="Resources\asm\symbols.json" />
     <None Include="Resources\ENEMIES.txt" />
     <None Include="Resources\SEQS.txt" />
     <None Include="Resources\REQ_CASUAL.txt" />
