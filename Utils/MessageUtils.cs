@@ -99,21 +99,14 @@ namespace MMRando.Utils
                 var nonRequiredHints = new List<string>();
                 foreach (var kvp in itemsInRegions)
                 {
-                    bool regionHasRequiredItem;
-                    if (kvp.Value.Any(io => !io.Item.Name().Contains("Heart")
+                    var numberOfRequiredItems = kvp.Value.Count(io => !io.Item.Name().Contains("Heart")
                         && (randomizedResult.Settings.AddSongs || !ItemUtils.IsSong(io.Item))
-                        && io.Item != Item.MaskGiant
-                        && !ItemUtils.IsStrayFairy(io.Item) 
-                        && !ItemUtils.IsSkulltulaToken(io.Item) 
-                        && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item)))
-                    {
-                        regionHasRequiredItem = true;
-                    }
-                    else if (!kvp.Value.Any(io => !io.Item.Name().Contains("Heart") && randomizedResult.AllItemsOnPathToMoon.Contains(io.Item)))
-                    {
-                        regionHasRequiredItem = false;
-                    }
-                    else
+                        && !ItemUtils.IsStrayFairy(io.Item)
+                        && !ItemUtils.IsSkulltulaToken(io.Item)
+                        && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item));
+                    var numberOfOptionalItems = kvp.Value.Count(io => !io.Item.Name().Contains("Heart") && randomizedResult.AllItemsOnPathToMoon.Contains(io.Item));
+
+                    if (numberOfRequiredItems == 0 && numberOfOptionalItems > 0)
                     {
                         continue;
                     }
@@ -123,48 +116,18 @@ namespace MMRando.Utils
 
                     string sfx = $"{(char)((soundEffectId >> 8) & 0xFF)}{(char)(soundEffectId & 0xFF)}";
                     var locationMessage = kvp.Key;
-                    var mid = "is";
-                    var itemMessage = regionHasRequiredItem
-                        ? "on the Way of the Hero"
-                        : "a foolish choice";
-                    var list = regionHasRequiredItem
+                    //var mid = "is";
+                    //var itemMessage = numberOfRequiredItems > 0
+                    //    ? "on the Way of the Hero"
+                    //    : "a foolish choice";
+                    var list = numberOfRequiredItems > 0
                         ? requiredHints
                         : nonRequiredHints;
 
-                    list.Add($"\x1E{sfx}{start} \x01{locationMessage}\x00 {mid} \x06{itemMessage}\x00...\xBF".Wrap(35, "\x11"));
-                }
+                    //list.Add($"\x1E{sfx}{start} \x01{locationMessage}\x00 {mid} \x06{itemMessage}\x00...\xBF".Wrap(35, "\x11"));
 
-                var collectionMessageFormat = "\x1E\x69\x0C{0} \u0001collecting {1}\u0000 is \u0006on the Way of the Hero\u0000...\xBF";
-                if (randomizedResult.Settings.AddSkulltulaTokens)
-                {
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Swamp Skulltula Spirit"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Swamp Skulltula Spirits").Wrap(35, "\x11"));
-                    }
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Ocean Skulltula Spirit"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Ocean Skulltula Spirits").Wrap(35, "\x11"));
-                    }
-                }
-                
-                if (randomizedResult.Settings.AddStrayFairies)
-                {
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Woodfall Stray Fairy"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Woodfall Stray Fairies").Wrap(35, "\x11"));
-                    }
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Snowhead Stray Fairy"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Snowhead Stray Fairies").Wrap(35, "\x11"));
-                    }
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Great Bay Stray Fairy"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Great Bay Stray Fairies").Wrap(35, "\x11"));
-                    }
-                    if (randomizedResult.ItemsRequiredForMoonAccess.Any(item => item.Name() == "Stone Tower Stray Fairy"))
-                    {
-                        competitiveHints.Add(string.Format(collectionMessageFormat, Gossip.MessageStartSentences.Random(randomizedResult.Random), "Stone Tower Stray Fairies").Wrap(35, "\x11"));
-                    }
+                    var mid = "has";
+                    list.Add($"\x1E{sfx}{start} \x01{locationMessage}\x00 {mid} \x06{NumberToWords(numberOfOptionalItems)} important item{(numberOfRequiredItems == 1 ? "" : "s")}\x00...\xBF".Wrap(35, "\x11"));
                 }
 
                 var numberOfRequiredHints = 3;
@@ -384,6 +347,54 @@ namespace MMRando.Utils
         public static string GetAlternateName(Item item)
         {
             return Regex.Replace(item.Name(), "[0-9]+ ", "");
+        }
+
+        private static string[] numberWordUnitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+        private static string[] numberWordTensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+        public static string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                if (number < 20)
+                    words += numberWordUnitsMap[number];
+                else
+                {
+                    words += numberWordTensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + numberWordUnitsMap[number % 10];
+                }
+            }
+
+            return words;
         }
     }
 }

@@ -945,6 +945,12 @@ namespace MMRando
 
         private void RandomizeItems()
         {
+            PreserveRemains();
+            if (_settings.RandomRemains > 0)
+            {
+                PlaceFreeRemains();
+            }
+
             if (_settings.UseCustomItemList)
             {
                 SetupCustomItems();
@@ -954,8 +960,6 @@ namespace MMRando
                 Setup();
             }
 
-            PreserveRemains();
-
             UpdateLogicForSettings();
 
             var itemPool = new List<Item>();
@@ -963,9 +967,9 @@ namespace MMRando
             AddAllItems(itemPool);
 
             PlaceFreeItems(itemPool);
+            PlaceDungeonItems(itemPool);
             PlaceQuestItems(itemPool);
             PlaceTradeItems(itemPool);
-            PlaceDungeonItems(itemPool);
             PlaceStartingItems(itemPool);
             PlaceUpgrades(itemPool);
             PlaceSongs(itemPool);
@@ -1114,7 +1118,46 @@ namespace MMRando
         /// </summary>
         private void PlaceDungeonItems(List<Item> itemPool)
         {
+            List<Item> dungeonItemPool;
+            // keep a pool to defer placing items that wish to be placed anywhere
+            // this stops WFT/SHT/GBT from filling up slots in STT
+            List<Item> remainingItems = new List<Item>();
             for (var i = Item.ItemWoodfallMap; i <= Item.ItemStoneTowerKey4; i++)
+            {
+                if( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
+                    (ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Anywhere) ||
+                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere) ||
+                    _settings.CustomJunkLocations.Contains(i))
+                {
+                    remainingItems.Add(i);
+                    continue;
+                }
+                dungeonItemPool = itemPool.Where(item => 
+                    i.Region().Equals(item.Region()) &&
+                    // exclude heart containers as a location for the keys to end up
+                    !(item >= Item.HeartContainerWoodfall && item <= Item.HeartContainerStoneTower)        
+                ).ToList();
+                // TODO make a setting for mixing stone tower chests together
+                // this segregates the sides of stone tower
+                // any chest requiring access to both sides is treated the same as an STT chest
+                if( true && "Stone Tower Temple".Equals(i.Region()) 
+                    && ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Shuffled)
+                {
+                    dungeonItemPool = dungeonItemPool.Where(item => ItemUtils.IsInvertedST(i) == ItemUtils.IsInvertedST(item)).ToList();
+                }
+                if ((ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Shuffled) ||
+                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Shuffled))
+                {
+                    dungeonItemPool = dungeonItemPool.Where(item => !ItemUtils.IsStrayFairy(item)).ToList();
+                }
+                PlaceItem(i, dungeonItemPool);
+                var itemLocation = ItemList[(int)i].NewLocation;
+                if( itemLocation is Item)
+                {
+                    itemPool.Remove((Item)itemLocation);
+                }
+            }
+            foreach( Item i in remainingItems)
             {
                 PlaceItem(i, itemPool);
             }
@@ -1218,30 +1261,42 @@ namespace MMRando
                 ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
                 ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
             };
+            if( _settings.RandomizeDungeonEntrances)
+            {
+                var shuffledRemains = new List<(string, byte, Item, Item, Item)>();
+                for( int i = 0; i < _randomized.NewDestinationIndices.Length; i++)
+                {
+                    shuffledRemains.Add((
+                        remains[_randomized.NewDestinationIndices[i]].name, 
+                        remains[_randomized.NewDestinationIndices[i]].mask, 
+                        remains[i].logicTempleAccess, 
+                        remains[_randomized.NewDestinationIndices[i]].logicTempleClear,
+                        remains[_randomized.NewDestinationIndices[i]].logicRemain));
+                }
+                remains = shuffledRemains;
+            }
             byte startingRemains = 0;
             List<Item> itemsInRemainDungeon;
-            for (int i = 0; i < _settings.StartingRemains; i++)
+            for (int i = 0; i < _settings.RandomRemains; i++)
             {
                 int j = _random.Next(remains.Count);
-                var pick = remains[j];
+                var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
                 remains.RemoveAt(j);
-                Debug.WriteLine($"Given {pick.name}'s Remains");
-                startingRemains |= pick.mask;
+                startingRemains |= mask;
                 itemsInRemainDungeon = ItemList.Where(io =>
-                    io.DependsOnItems?.Contains(pick.logicTempleAccess) ?? false
+                    io.DependsOnItems?.Contains(logicTempleAccess) ?? false
                 ).Select(io => io.Item).ToList();
-                if( "Twinmold".Equals(pick.name))
+                if( "Twinmold".Equals(name))
                 {
                     itemsInRemainDungeon.AddRange(ItemList.Where(io =>
-                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false)
-                        .Select(io => io.Item)
-                    );
+                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false
+                    ).Select(io => io.Item));
                 }
                 _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
-                ItemObject remainLogic = ItemList.Find(io => io.Item == pick.logicRemain);
+                ItemObject remainLogic = ItemList.Find(io => io.Item == logicRemain);
                 if (remainLogic.DependsOnItems != null)
                 {
-                    remainLogic.DependsOnItems.Remove(pick.logicTempleClear);
+                    remainLogic.DependsOnItems.Remove(logicTempleClear);
                 }
                 remainLogic.IsRandomized = true;
             }
@@ -1750,13 +1805,19 @@ namespace MMRando
                     EntranceShuffle();
                 }
 
-                if(_settings.StartingRemains > 0)
-                {
-                    worker.ReportProgress(20, "Giving Free Remains");
-                    PlaceFreeRemains();
-                }
-
                 _randomized.Logic = ItemList.Select(io => new ItemLogic(io)).ToList();
+
+                var logicForRequiredItems = _settings.LogicMode == LogicMode.Casual
+                    ? ItemList.Select(io =>
+                    {
+                        var itemLogic = new ItemLogic(io);
+                        if (io.Item == Item.AreaStoneTowerClear || io.Item == Item.HeartContainerStoneTower)
+                        {
+                            itemLogic.RequiredItemIds.Remove((int)Item.MaskGiant);
+                        }
+                        return itemLogic;
+                    }).ToList()
+                    : _randomized.Logic;
 
                 worker.ReportProgress(30, "Shuffling items...");
                 RandomizeItems();
@@ -1777,7 +1838,7 @@ namespace MMRando
                 var itemsRequiredForMoonAccess = new List<Item>();
                 foreach (var item in _randomized.AllItemsOnPathToMoon)
                 {
-                    var checkPaths = GetRequiredItems(Item.AreaMoonAccess, _randomized.Logic, exclude: item);
+                    var checkPaths = GetRequiredItems(Item.AreaMoonAccess, logicForRequiredItems, exclude: item);
                     if (checkPaths == null)
                     {
                         itemsRequiredForMoonAccess.Add(item);

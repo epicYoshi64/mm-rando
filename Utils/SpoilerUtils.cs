@@ -34,27 +34,30 @@ namespace MMRando.Utils
                 Logic = randomized.Logic,
                 CustomItemListString = settings.UseCustomItemList ? settings.CustomItemListString : null,
                 CustomStartingItemListString = settings.CustomStartingItemList.Any() ? settings.CustomStartingItemListString : null,
-                GossipHints = randomized.GossipQuotes?.ToDictionary(me => (GossipQuote) me.Id, (me) =>
-                {
-                    var message = me.Message.Substring(1);
-                    var soundEffect = message.Substring(0, 2);
-                    message = message.Substring(2);
-                    if (soundEffect == "\x69\x0C")
-                    {
-                        // real
-                    }
-                    else if (soundEffect == "\x69\x0A")
-                    {
-                        // fake
-                        message = "FAKE - " + message;
-                    }
-                    else
-                    {
-                        // junk
-                        message = "JUNK - " + message;
-                    }
-                    return plainTextRegex.Replace(message.Replace("\x11", " "), "");
-                }),
+                CustomJunkLocationsString = settings.CustomJunkLocationsString,
+                GossipHints = randomized.GossipQuotes?.ToDictionary(me => (GossipQuote)me.Id, (me) =>
+               {
+                   var message = me.Message.Substring(1);
+                   var soundEffect = message.Substring(0, 2);
+                   message = message.Substring(2);
+                   if (soundEffect == "\x69\x0C")
+                   {
+                       // real
+                   }
+                   else if (soundEffect == "\x69\x0A")
+                   {
+                       // fake
+                       message = "FAKE - " + message;
+                   }
+                   else
+                   {
+                       // junk
+                       message = "JUNK - " + message;
+                   }
+                   return plainTextRegex.Replace(message.Replace("\x11", " "), "");
+               }),
+                StartingRemains = randomized.ItemList.Where(io => io.Item >= Item.RemainOdolwa && io.Item <= Item.RemainTwinmold && io.IsRandomized)
+                .Select(io => io.Item.ToString().Substring(6)).ToList()
             };
 
             if (settings.GenerateHTMLLog)
@@ -87,6 +90,10 @@ namespace MMRando.Utils
             {
                 log.AppendLine($"{"Custom Starting Item List:",-17} {spoiler.CustomStartingItemListString}");
             }
+            if (spoiler.CustomJunkLocationsString != null)
+            {
+                log.AppendLine($"{"Enforce Junk Locations List:",-17} {spoiler.CustomJunkLocationsString}");
+            }
             log.AppendLine();
 
             if (spoiler.RandomizeDungeonEntrances)
@@ -100,6 +107,12 @@ namespace MMRando.Utils
                 }
                 log.AppendLine("");
             }
+
+            if( spoiler.StartingRemains.Count > 0)
+            {
+                log.AppendLine($"Starting Remains: {string.Join(", ", spoiler.StartingRemains.ToArray())}");
+            }
+            log.AppendLine("");
 
             log.AppendLine($" {"Location",-50}    {"Item"}");
             foreach (var region in spoiler.ItemList.GroupBy(item => item.Region).OrderBy(g => g.Key))

@@ -1,4 +1,5 @@
-﻿using MMRando.Utils;
+﻿using MMRando.Asm;
+using MMRando.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -81,6 +82,11 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool GeneratePatch { get; set; }
 
+        /// <summary>
+        /// Options for the Asm <see cref="Patcher"/>.
+        /// </summary>
+        public PatcherOptions PatcherOptions { get; set; } = new PatcherOptions();
+
         #endregion
 
         #region Random Elements
@@ -159,6 +165,10 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool AddStrayFairies { get; set; }
 
+        public DungeonItemAlgorithm KeyPlacement { get; set; }
+
+        public DungeonItemAlgorithm BossKeyPlacement { get; set; }
+
         /// <summary>
         /// Add mundane rewards to the randomization pool
         /// </summary>
@@ -184,7 +194,7 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool RandomizeEnemies { get; set; }
 
-        public int StartingRemains { get; set; } = 1;
+        public int RandomRemains { get; set; }
 
         /// <summary>
         /// Prevents player starting with any items that are randomized.

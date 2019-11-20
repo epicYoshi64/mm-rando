@@ -42,6 +42,36 @@ namespace MMRando.Utils
             return item >= Item.CollectibleStrayFairyClockTown && item <= Item.CollectibleStrayFairyStoneTower15;
         }
 
+
+        public static bool IsKey(Item item)
+        {
+            return item == Item.ItemWoodfallKey1
+                || item == Item.ItemSnowheadKey1
+                || item == Item.ItemSnowheadKey2
+                || item == Item.ItemSnowheadKey3
+                || item == Item.ItemGreatBayKey1
+                || (item >= Item.ItemStoneTowerKey1 && item <= Item.ItemStoneTowerKey4);
+        }
+
+        public static bool IsBossKey(Item item)
+        {
+            return item == Item.ItemWoodfallBossKey
+                || item == Item.ItemSnowheadBossKey
+                || item == Item.ItemGreatBayBossKey
+                || item == Item.ItemStoneTowerBossKey;
+        }
+
+        public static bool IsInvertedST(Item item)
+        {
+            return item == Item.MaskGiant
+                || item == Item.ItemStoneTowerBossKey
+                || item == Item.ItemStoneTowerKey3
+                || item == Item.ItemStoneTowerKey4
+                || item == Item.CollectibleStrayFairyStoneTower6
+                || item == Item.CollectibleStrayFairyStoneTower7
+                || item == Item.CollectibleStrayFairyStoneTower9;
+        }
+
         public static int AddItemOffset(int itemId)
         {
             if (itemId >= (int)Item.AreaSouthAccess)

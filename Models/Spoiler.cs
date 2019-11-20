@@ -29,6 +29,8 @@ namespace MMRando.Models
 
         public string CustomStartingItemListString { get; set; }
 
+        public string CustomJunkLocationsString { get; set; }
+
         public string LogicJson
         {
             get
@@ -55,6 +57,8 @@ namespace MMRando.Models
             Item.AreaInvertedStoneTowerTempleAccess,
             Item.AreaGreatBayTempleAccess,
         };
+
+        public List<string> StartingRemains { get; set; }
     }
 }
 

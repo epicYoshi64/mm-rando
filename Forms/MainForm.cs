@@ -1,4 +1,5 @@
-﻿using MMRando.Forms;
+﻿using MMRando.Asm;
+using MMRando.Forms;
 using MMRando.Forms.Tooltips;
 using MMRando.Models;
 using MMRando.Models.Settings;
@@ -215,6 +216,8 @@ namespace MMRando
             }
 
             _settings.OutputROMFilename = saveROM.FileName;
+
+            JunkLocationEditor.UpdateChecks(tJunkLocationsList.Text);
 
             EnableAllControls(false);
             bgWorker.RunWorkerAsync();
@@ -467,6 +470,21 @@ namespace MMRando
         private void cStrayFairies_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.AddStrayFairies = cStrayFairies.Checked);
+        }
+
+        private void cKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.KeyPlacement = (DungeonItemAlgorithm)cKeyShuffle.SelectedIndex);
+        }
+
+        private void cBossKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.BossKeyPlacement = (DungeonItemAlgorithm)cBossKeyShuffle.SelectedIndex);
+        }
+
+        private void nRandomRemains_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.RandomRemains = (int)nRandomRemains.Value);
         }
 
         private void cSFX_CheckedChanged(object sender, EventArgs e)
@@ -924,6 +942,20 @@ namespace MMRando
             tSString.Enabled = v;
         }
 
+        private void mDPadConfig_Click(object sender, EventArgs e)
+        {
+            var items = DPadItem.All();
+            var presets = DPadPreset.All();
+            var config = _settings.PatcherOptions.DPadConfig;
+
+            DPadForm form = new DPadForm(presets, items, config);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                config.State = form.State;
+                config.Pad = form.Selected;
+            }
+        }
+
         #endregion
 
         #region Settings
@@ -943,6 +975,9 @@ namespace MMRando
             cClockSpeed.SelectedIndex = 0;
             cBlastCooldown.SelectedIndex = 0;
             cMusic.SelectedIndex = 0;
+            cKeyShuffle.SelectedIndex = 1;
+            cBossKeyShuffle.SelectedIndex = 0;
+            nRandomRemains.Value = 1;
             cSpoiler.Checked = true;
             cSoS.Checked = true;
             cNoDowngrades.Checked = true;
@@ -1046,6 +1081,16 @@ namespace MMRando
                 try
                 {
                     _builder.MakeROM(_settings.InputROMFilename, _settings.OutputROMFilename, worker);
+                }
+                catch (PatchMagicException ex)
+                {
+                    MessageBox.Show($"Error applying patch: Not a valid patch file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                catch (PatchVersionException ex)
+                {
+                    MessageBox.Show($"Error applying patch: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 catch (Exception ex)
                 {

@@ -153,6 +153,8 @@ namespace MMRando.Utils
                 using (var compressStream = new GZipStream(cryptoStream, CompressionMode.Compress))
                 using (var writer = new BinaryWriter(compressStream))
                 {
+                    writer.Write(ReadWriteUtils.Byteswap32(PatchUtil.PATCH_MAGIC));
+                    writer.Write(ReadWriteUtils.Byteswap32((uint)PatchUtil.PATCH_VERSION));
                     for (var fileIndex = 0; fileIndex < RomData.MMFileList.Count; fileIndex++)
                     {
                         var file = RomData.MMFileList[fileIndex];
@@ -163,6 +165,7 @@ namespace MMRando.Utils
                         if (fileIndex >= originalMMFiles.Count)
                         {
                             writer.Write(ReadWriteUtils.Byteswap32((uint)fileIndex));
+                            writer.Write(ReadWriteUtils.Byteswap32((uint)file.Addr));
                             writer.Write(ReadWriteUtils.Byteswap32((uint)0));
                             writer.Write(ReadWriteUtils.Byteswap32((uint)file.Data.Length));
                             writer.Write(file.Data);
@@ -173,6 +176,7 @@ namespace MMRando.Utils
                         if (file.Data.Length != originalFile.Data.Length)
                         {
                             writer.Write(ReadWriteUtils.Byteswap32((uint)fileIndex));
+                            writer.Write(ReadWriteUtils.Byteswap32((uint)file.Addr));
                             writer.Write(-1);
                             writer.Write(ReadWriteUtils.Byteswap32((uint)file.Data.Length));
                             writer.Write(file.Data);
@@ -187,6 +191,7 @@ namespace MMRando.Utils
                                 if (modifiedBuffer.Any())
                                 {
                                     writer.Write(ReadWriteUtils.Byteswap32((uint)fileIndex));
+                                    writer.Write(ReadWriteUtils.Byteswap32((uint)file.Addr));
                                     writer.Write(ReadWriteUtils.Byteswap32((uint)modifiedIndex.Value));
                                     writer.Write(ReadWriteUtils.Byteswap32((uint)modifiedBuffer.Count));
                                     writer.Write(modifiedBuffer.ToArray());
@@ -227,21 +232,36 @@ namespace MMRando.Utils
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 using (var reader = new BinaryReader(memoryStream))
                 {
+                    var magic = ReadWriteUtils.ReadU32(reader);
+                    var version = ReadWriteUtils.ReadU32(reader);
+
+                    // Make sure this is a patch file by checking the magic value
+                    if (magic != PatchUtil.PATCH_MAGIC)
+                    {
+                        throw new PatchMagicException(magic);
+                    }
+
+                    // Check that this patch version is supported
+                    if (version != (uint)PatchUtil.PATCH_VERSION)
+                    {
+                        throw new PatchVersionException(PatchUtil.PATCH_VERSION, (PatchVersion)version);
+                    }
+
                     while (reader.BaseStream.Position != reader.BaseStream.Length)
                     {
                         var fileIndex = ReadWriteUtils.ReadS32(reader);
+                        var fileAddr = ReadWriteUtils.ReadS32(reader);
                         var index = ReadWriteUtils.ReadS32(reader);
                         var length = ReadWriteUtils.ReadS32(reader);
                         var data = reader.ReadBytes(length);
                         if (fileIndex >= RomData.MMFileList.Count)
                         {
-                            var start = RomData.MMFileList[RomData.MMFileList.Count - 1].End;
                             var newFile = new MMFile
                             {
-                                Addr = start,
+                                Addr = fileAddr,
                                 IsCompressed = false,
                                 Data = data,
-                                End = start + data.Length
+                                End = fileAddr + data.Length
                             };
                             RomData.MMFileList.Add(newFile);
                         }
