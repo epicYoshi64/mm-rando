@@ -1275,30 +1275,36 @@ namespace MMRando
                 }
                 remains = shuffledRemains;
             }
-            byte startingRemains = 0;
-            List<Item> itemsInRemainDungeon;
-            for (int i = 0; i < _settings.RandomRemains; i++)
             {
-                int j = _random.Next(remains.Count);
-                var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
-                remains.RemoveAt(j);
-                startingRemains |= mask;
-                itemsInRemainDungeon = ItemList.Where(io =>
-                    io.DependsOnItems?.Contains(logicTempleAccess) ?? false
-                ).Select(io => io.Item).ToList();
-                if( "Twinmold".Equals(name))
+                byte startingRemains = 0;
+                List<Item> itemsInRemainDungeon;
+                List<Item> remainItems = ItemUtils.AllLocations().Where(item => item >= Item.RemainOdolwa && item <= Item.RemainTwinmold &
+                    !ItemList[(int)item].NewLocation.HasValue).ToList();
+                int i = 0;
+                while (remains.Count > 0 && i < _settings.RandomRemains)
                 {
-                    itemsInRemainDungeon.AddRange(ItemList.Where(io =>
-                        io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false
-                    ).Select(io => io.Item));
+                    int j = _random.Next(remains.Count);
+                    var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
+                    remains.RemoveAt(j);
+                    startingRemains |= mask;
+                    itemsInRemainDungeon = ItemList.Where(io =>
+                        io.DependsOnItems?.Contains(logicTempleAccess) ?? false
+                    ).Select(io => io.Item).ToList();
+                    if ("Twinmold".Equals(name))
+                    {
+                        itemsInRemainDungeon.AddRange(ItemList.Where(io =>
+                            io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false
+                        ).Select(io => io.Item));
+                    }
+                    _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
+                    ItemObject remainLogic = ItemList.Find(io => io.Item == logicRemain);
+                    if (remainLogic.DependsOnItems != null)
+                    {
+                        remainLogic.DependsOnItems.Remove(logicTempleClear);
+                    }
+                    remainLogic.IsRandomized = true;
+                    i++;
                 }
-                _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
-                ItemObject remainLogic = ItemList.Find(io => io.Item == logicRemain);
-                if (remainLogic.DependsOnItems != null)
-                {
-                    remainLogic.DependsOnItems.Remove(logicTempleClear);
-                }
-                remainLogic.IsRandomized = true;
             }
         }
 
