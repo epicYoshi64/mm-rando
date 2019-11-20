@@ -83,6 +83,11 @@ namespace MMRando
             this.lMode = new System.Windows.Forms.Label();
             this.cMode = new System.Windows.Forms.ComboBox();
             this.tabGimmick = new System.Windows.Forms.TabPage();
+            this.nRandomRemains = new System.Windows.Forms.NumericUpDown();
+            this.lBossKeyShuffle = new System.Windows.Forms.Label();
+            this.lKeyShuffle = new System.Windows.Forms.Label();
+            this.cBossKeyShuffle = new System.Windows.Forms.ComboBox();
+            this.cKeyShuffle = new System.Windows.Forms.ComboBox();
             this.cBlastCooldown = new System.Windows.Forms.ComboBox();
             this.lBlastMask = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -165,6 +170,7 @@ namespace MMRando
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabGimmick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).BeginInit();
             this.tabComfort.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.mMenu.SuspendLayout();
@@ -828,6 +834,11 @@ namespace MMRando
             // 
             // tabGimmick
             // 
+            this.tabGimmick.Controls.Add(this.nRandomRemains);
+            this.tabGimmick.Controls.Add(this.lBossKeyShuffle);
+            this.tabGimmick.Controls.Add(this.lKeyShuffle);
+            this.tabGimmick.Controls.Add(this.cBossKeyShuffle);
+            this.tabGimmick.Controls.Add(this.cKeyShuffle);
             this.tabGimmick.Controls.Add(this.cBlastCooldown);
             this.tabGimmick.Controls.Add(this.lBlastMask);
             this.tabGimmick.Controls.Add(this.label7);
@@ -849,6 +860,64 @@ namespace MMRando
             this.tabGimmick.TabIndex = 2;
             this.tabGimmick.Text = "Gimmicks";
             this.tabGimmick.UseVisualStyleBackColor = true;
+            // 
+            // nRandomRemains
+            // 
+            this.nRandomRemains.Location = new System.Drawing.Point(127, 375);
+            this.nRandomRemains.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nRandomRemains.Name = "nRandomRemains";
+            this.nRandomRemains.Size = new System.Drawing.Size(158, 20);
+            this.nRandomRemains.TabIndex = 25;
+            this.nRandomRemains.ValueChanged += new System.EventHandler(this.nRandomRemains_ValueChanged);
+            // 
+            // lBossKeyShuffle
+            // 
+            this.lBossKeyShuffle.AutoSize = true;
+            this.lBossKeyShuffle.Location = new System.Drawing.Point(32, 344);
+            this.lBossKeyShuffle.Name = "lBossKeyShuffle";
+            this.lBossKeyShuffle.Size = new System.Drawing.Size(87, 13);
+            this.lBossKeyShuffle.TabIndex = 24;
+            this.lBossKeyShuffle.Text = "Boss Key Shuffle";
+            // 
+            // lKeyShuffle
+            // 
+            this.lKeyShuffle.AutoSize = true;
+            this.lKeyShuffle.Location = new System.Drawing.Point(32, 307);
+            this.lKeyShuffle.Name = "lKeyShuffle";
+            this.lKeyShuffle.Size = new System.Drawing.Size(89, 13);
+            this.lKeyShuffle.TabIndex = 23;
+            this.lKeyShuffle.Text = "Small Key Shuffle";
+            // 
+            // cBossKeyShuffle
+            // 
+            this.cBossKeyShuffle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cBossKeyShuffle.FormattingEnabled = true;
+            this.cBossKeyShuffle.Items.AddRange(new object[] {
+            "Shuffled",
+            "Include Fairies",
+            "Anywhere"});
+            this.cBossKeyShuffle.Location = new System.Drawing.Point(127, 336);
+            this.cBossKeyShuffle.Name = "cBossKeyShuffle";
+            this.cBossKeyShuffle.Size = new System.Drawing.Size(158, 21);
+            this.cBossKeyShuffle.TabIndex = 22;
+            // 
+            // cKeyShuffle
+            // 
+            this.cKeyShuffle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cKeyShuffle.FormattingEnabled = true;
+            this.cKeyShuffle.Items.AddRange(new object[] {
+            "Shuffled",
+            "Include Fairies",
+            "Anywhere"});
+            this.cKeyShuffle.Location = new System.Drawing.Point(127, 299);
+            this.cKeyShuffle.Name = "cKeyShuffle";
+            this.cKeyShuffle.Size = new System.Drawing.Size(158, 21);
+            this.cKeyShuffle.TabIndex = 21;
+            this.cKeyShuffle.Click += new System.EventHandler(this.cKeyShuffle_SelectedIndexChanged);
             // 
             // cBlastCooldown
             // 
@@ -1724,6 +1793,7 @@ namespace MMRando
             this.groupBox2.PerformLayout();
             this.tabGimmick.ResumeLayout(false);
             this.tabGimmick.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).EndInit();
             this.tabComfort.ResumeLayout(false);
             this.tabComfort.PerformLayout();
             this.groupBox5.ResumeLayout(false);
@@ -1865,6 +1935,11 @@ namespace MMRando
         private System.Windows.Forms.Button bJunkLocationsEditor;
         private System.Windows.Forms.TextBox tJunkLocationsList;
         private System.Windows.Forms.ToolStripMenuItem mDPadConfig;
+        private System.Windows.Forms.ComboBox cKeyShuffle;
+        private System.Windows.Forms.Label lKeyShuffle;
+        private System.Windows.Forms.ComboBox cBossKeyShuffle;
+        private System.Windows.Forms.Label lBossKeyShuffle;
+        private System.Windows.Forms.NumericUpDown nRandomRemains;
     }
 }
 

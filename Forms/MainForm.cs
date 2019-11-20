@@ -217,6 +217,8 @@ namespace MMRando
 
             _settings.OutputROMFilename = saveROM.FileName;
 
+            JunkLocationEditor.UpdateChecks(tJunkLocationsList.Text);
+
             EnableAllControls(false);
             bgWorker.RunWorkerAsync();
         }
@@ -468,6 +470,21 @@ namespace MMRando
         private void cStrayFairies_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.AddStrayFairies = cStrayFairies.Checked);
+        }
+
+        private void cKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.KeyPlacement = (DungeonItemAlgorithm)cKeyShuffle.SelectedIndex);
+        }
+
+        private void cBossKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.BossKeyPlacement = (DungeonItemAlgorithm)cBossKeyShuffle.SelectedIndex);
+        }
+
+        private void nRandomRemains_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.RandomRemains = (int)nRandomRemains.Value);
         }
 
         private void cSFX_CheckedChanged(object sender, EventArgs e)
@@ -958,6 +975,9 @@ namespace MMRando
             cClockSpeed.SelectedIndex = 0;
             cBlastCooldown.SelectedIndex = 0;
             cMusic.SelectedIndex = 0;
+            cKeyShuffle.SelectedIndex = 1;
+            cBossKeyShuffle.SelectedIndex = 0;
+            nRandomRemains.Value = 1;
             cSpoiler.Checked = true;
             cSoS.Checked = true;
             cNoDowngrades.Checked = true;

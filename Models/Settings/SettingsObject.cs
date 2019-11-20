@@ -165,9 +165,9 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool AddStrayFairies { get; set; }
 
-        public DungeonItemAlgorithm KeyPlacement { get; set; } = DungeonItemAlgorithm.IncludeFairies;
+        public DungeonItemAlgorithm KeyPlacement { get; set; }
 
-        public DungeonItemAlgorithm BossKeyPlacement { get; set; } = DungeonItemAlgorithm.Shuffled;
+        public DungeonItemAlgorithm BossKeyPlacement { get; set; }
 
         /// <summary>
         /// Add mundane rewards to the randomization pool
@@ -194,7 +194,7 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool RandomizeEnemies { get; set; }
 
-        public int StartingRemains { get; set; } = 1;
+        public int RandomRemains { get; set; }
 
         /// <summary>
         /// Prevents player starting with any items that are randomized.

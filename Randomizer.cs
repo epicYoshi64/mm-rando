@@ -946,7 +946,7 @@ namespace MMRando
         private void RandomizeItems()
         {
             PreserveRemains();
-            if (_settings.StartingRemains > 0)
+            if (_settings.RandomRemains > 0)
             {
                 PlaceFreeRemains();
             }
@@ -1140,7 +1140,8 @@ namespace MMRando
                 // TODO make a setting for mixing stone tower chests together
                 // this segregates the sides of stone tower
                 // any chest requiring access to both sides is treated the same as an STT chest
-                if( true && "Stone Tower Temple".Equals(i.Region()))
+                if( true && "Stone Tower Temple".Equals(i.Region()) 
+                    && ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Shuffled)
                 {
                     dungeonItemPool = dungeonItemPool.Where(item => ItemUtils.IsInvertedST(i) == ItemUtils.IsInvertedST(item)).ToList();
                 }
@@ -1276,7 +1277,7 @@ namespace MMRando
             }
             byte startingRemains = 0;
             List<Item> itemsInRemainDungeon;
-            for (int i = 0; i < _settings.StartingRemains; i++)
+            for (int i = 0; i < _settings.RandomRemains; i++)
             {
                 int j = _random.Next(remains.Count);
                 var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
