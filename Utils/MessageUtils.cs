@@ -101,6 +101,7 @@ namespace MMRando.Utils
                 {
                     var numberOfRequiredItems = kvp.Value.Count(io => !io.Item.Name().Contains("Heart")
                         && (randomizedResult.Settings.AddSongs || !ItemUtils.IsSong(io.Item))
+                        && (randomizedResult.Settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere || !ItemUtils.IsBossKey(io.Item))
                         && !ItemUtils.IsStrayFairy(io.Item)
                         && !ItemUtils.IsSkulltulaToken(io.Item)
                         && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item));
