@@ -976,7 +976,7 @@ namespace MMRando
             PlaceMasks(itemPool);
             PlaceRegularItems(itemPool);
             PlaceSkulltulaTokens(itemPool);
-            PlaceStrayFairies(itemPool);
+            //PlaceStrayFairies(itemPool);
             PlaceMundaneRewards(itemPool);
             PlaceShopItems(itemPool);
             PlaceCowMilk(itemPool);
@@ -1122,15 +1122,25 @@ namespace MMRando
             // keep a pool to defer placing items that wish to be placed anywhere
             // this stops WFT/SHT/GBT from filling up slots in STT
             List<Item> remainingItems = new List<Item>();
-            for (var i = Item.ItemWoodfallMap; i <= Item.ItemStoneTowerKey4; i++)
+            IEnumerable<Item> dungeonItems = ItemUtils.AllLocations().Where(i=>
+                (i>=Item.ItemWoodfallMap&&i<=Item.ItemStoneTowerKey4) || (ItemUtils.IsStrayFairy(i) && i != Item.CollectibleStrayFairyClockTown));
+            foreach (var i in dungeonItems)
             {
-                if( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
+                int fairyCount = ItemList.Count(io => ItemUtils.IsStrayFairy(io.Item) && i.Region().Equals(io.Item.Region()) && io.NewLocation == null);
+                Debug.WriteLine(fairyCount);
+                fairyCount = ItemList.Count(io => ItemUtils.IsStrayFairy(io.Item) && i.Region().Equals(io.Item.Region()) &&
+                    i.Region().Equals(io.NewLocation?.Region()));
+                Debug.WriteLine(fairyCount);
+                if ( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
                     (ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Anywhere) ||
                     (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere) ||
                     _settings.CustomJunkLocations.Contains(i))
                 {
-                    remainingItems.Add(i);
-                    continue;
+                    if (!ItemUtils.IsStrayFairy(i) || fairyCount >= 10)
+                    {
+                        remainingItems.Add(i);
+                        continue;
+                    }
                 }
                 dungeonItemPool = itemPool.Where(item => 
                     i.Region().Equals(item.Region()) &&
@@ -1150,11 +1160,17 @@ namespace MMRando
                 {
                     dungeonItemPool = dungeonItemPool.Where(item => !ItemUtils.IsStrayFairy(item)).ToList();
                 }
-                PlaceItem(i, dungeonItemPool);
-                var itemLocation = ItemList[(int)i].NewLocation;
-                if( itemLocation is Item)
+                if(dungeonItemPool.Count > 0)
                 {
-                    itemPool.Remove((Item)itemLocation);
+                    PlaceItem(i, dungeonItemPool);
+                    var itemLocation = ItemList[(int)i].NewLocation;
+                    if (itemLocation is Item)
+                    {
+                        itemPool.Remove((Item)itemLocation);
+                    }
+                } else
+                {
+                    remainingItems.Add(i);
                 }
             }
             foreach( Item i in remainingItems)
