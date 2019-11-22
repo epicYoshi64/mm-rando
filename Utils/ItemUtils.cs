@@ -72,6 +72,11 @@ namespace MMRando.Utils
                 || item == Item.CollectibleStrayFairyStoneTower9;
         }
 
+        public static bool IsRemain(Item item)
+        {
+            return (int)item >= (int)Item.RemainOdolwa && (int)item <= (int)Item.RemainTwinmold;
+        }
+
         public static int AddItemOffset(int itemId)
         {
             if (itemId >= (int)Item.AreaSouthAccess)

@@ -1133,7 +1133,7 @@ namespace MMRando
                 {
                     int fairyCount = ItemList.Count(io => ItemUtils.IsStrayFairy(io.Item) && i.Region().Equals(io.Item.Region()) &&
                         i.Region().Equals(io.NewLocation?.Region()));
-                    if (!ItemUtils.IsStrayFairy(i) || fairyCount >= 10)
+                    if (!ItemUtils.IsStrayFairy(i) || fairyCount >= 5)
                     {
                         remainingItems.Add(i);
                         continue;
@@ -1268,48 +1268,49 @@ namespace MMRando
 
         private void PlaceFreeRemains()
         {
-            List<(string name, byte mask, Item logicTempleAccess, Item logicTempleClear, Item logicRemain)> remains = new List<(string, byte, Item, Item, Item)>() {
-                ("Odolwa",      0x01,   Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear,   Item.RemainOdolwa),
-                ("Goht",        0x02,   Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear,   Item.RemainGoht),
-                ("Gyorg",       0x04,   Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
-                ("Twinmold",    0x08,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
+            List<(string name, byte mask, string templeName, Item logicTempleAccess, Item logicTempleClear, Item logicRemain)> remains = new List<(string, byte, string, Item, Item, Item)>() {
+                ("Odolwa",      0x01,   "Woodfall Temple",      Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear,   Item.RemainOdolwa),
+                ("Goht",        0x02,   "Snowhead Temple",      Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear,   Item.RemainGoht),
+                ("Gyorg",       0x04,   "Great Bay Temple",     Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
+                ("Twinmold",    0x08,   "Stone Tower Temple",   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
             };
-            if( _settings.RandomizeDungeonEntrances)
-            {
-                var shuffledRemains = new List<(string, byte, Item, Item, Item)>();
-                for( int i = 0; i < _randomized.NewDestinationIndices.Length; i++)
-                {
-                    shuffledRemains.Add((
-                        remains[_randomized.NewDestinationIndices[i]].name, 
-                        remains[_randomized.NewDestinationIndices[i]].mask, 
-                        remains[i].logicTempleAccess, 
-                        remains[_randomized.NewDestinationIndices[i]].logicTempleClear,
-                        remains[_randomized.NewDestinationIndices[i]].logicRemain));
-                }
-                remains = shuffledRemains;
-            }
             {
                 byte startingRemains = 0;
                 List<Item> itemsInRemainDungeon;
-                List<Item> remainItems = ItemUtils.AllLocations().Where(item => item >= Item.RemainOdolwa && item <= Item.RemainTwinmold &
-                    !ItemList[(int)item].NewLocation.HasValue).ToList();
-                int i = 0;
-                while (remains.Count > 0 && i < _settings.RandomRemains)
+                List<Item> remainItems = _settings.CustomStartingItemList.Where(item => ItemUtils.IsRemain(item) ).ToList();
+                int i = 0, j, count = Math.Min(_settings.RandomRemains + remainItems.Count, remains.Count);
+                while (i < count)
                 {
-                    int j = _random.Next(remains.Count);
-                    var (name, mask, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
+                    if( remainItems.Count > 0)
+                    {
+                        j = remains.FindIndex(r => r.logicRemain == remainItems[0]);
+                        remainItems.RemoveAt(0);
+                    }
+                    else
+                    {
+                        j = _random.Next(remains.Count);
+                    }
+                    var (name, mask, templeName, logicTempleAccess, logicTempleClear, logicRemain) = remains[j];
                     remains.RemoveAt(j);
                     startingRemains |= mask;
-                    itemsInRemainDungeon = ItemList.Where(io =>
-                        io.DependsOnItems?.Contains(logicTempleAccess) ?? false
-                    ).Select(io => io.Item).ToList();
-                    if ("Twinmold".Equals(name))
+                    itemsInRemainDungeon = ItemUtils.AllLocations().Where(item => templeName.Equals(item.Region())).ToList();
+                    if( templeName.Equals("Woodfall Temple") || templeName.Equals("Great Bay Temple"))
                     {
-                        itemsInRemainDungeon.AddRange(ItemList.Where(io =>
-                            io.DependsOnItems?.Contains(Item.AreaStoneTowerTempleAccess) ?? false
-                        ).Select(io => io.Item));
+                        itemsInRemainDungeon.Add(Item.HeartPieceChoir);
                     }
-                    _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon);
+                    // option to choose to skip post dungeon checks
+                    if( true )
+                    {
+                        var postDungeonChecks = ItemList.Where(io =>
+                            io.DependsOnItems?.Contains(logicTempleClear) ?? false
+                        ).Select(io => io.Item);
+                        itemsInRemainDungeon.AddRange(postDungeonChecks);
+                        if ("Twinmold".Equals(name))
+                        {
+                            itemsInRemainDungeon.AddRange(new List<Item>(){Item.ChestInvertedStoneTowerBean, Item.ChestInvertedStoneTowerBombchu10, Item.ChestInvertedStoneTowerSilverRupee});
+                        }
+                    }
+                    _settings.CustomJunkLocations.AddRange(itemsInRemainDungeon.Where(item => !ItemUtils.IsRemain(item) && !_settings.CustomJunkLocations.Contains(item)));
                     ItemObject remainLogic = ItemList.Find(io => io.Item == logicRemain);
                     if (remainLogic.DependsOnItems != null)
                     {

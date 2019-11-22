@@ -627,14 +627,13 @@ namespace MMRando
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingShield).Item);
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingHeartContainer1).Item);
             freeItems.Add(_randomized.ItemList.Find(u => u.NewLocation == Item.StartingHeartContainer2).Item);
-            WriteFreeItems(freeItems.ToArray());
 
             List<Item> freeRemains = _randomized.ItemList
                     .Where(io => io.Item >= Item.RemainOdolwa && io.Item <= Item.RemainTwinmold)
                     .Where(io => io.IsRandomized).Select(io => io.Item).ToList();
+            freeItems.AddRange(freeRemains);
 
-            WriteFreeRemains(freeRemains);
-
+            WriteFreeItems(freeItems.ToArray());
             //write everything else
             ItemSwapUtils.ReplaceGetItemTable(Values.ModsDirectory);
             ItemSwapUtils.InitItems();
