@@ -904,6 +904,7 @@ namespace MMRando
             this.cBossKeyShuffle.Name = "cBossKeyShuffle";
             this.cBossKeyShuffle.Size = new System.Drawing.Size(158, 21);
             this.cBossKeyShuffle.TabIndex = 22;
+            this.cBossKeyShuffle.SelectedIndexChanged += new System.EventHandler(this.cBossKeyShuffle_SelectedIndexChanged);
             // 
             // cKeyShuffle
             // 
@@ -917,7 +918,7 @@ namespace MMRando
             this.cKeyShuffle.Name = "cKeyShuffle";
             this.cKeyShuffle.Size = new System.Drawing.Size(158, 21);
             this.cKeyShuffle.TabIndex = 21;
-            this.cKeyShuffle.Click += new System.EventHandler(this.cKeyShuffle_SelectedIndexChanged);
+            this.cKeyShuffle.SelectedIndexChanged += new System.EventHandler(this.cKeyShuffle_SelectedIndexChanged);
             // 
             // cBlastCooldown
             // 

@@ -389,6 +389,7 @@ namespace MMRando.Models.Settings
             int part3 = (int)parts[2];
             int part4 = (int)parts[3];
             int part5 = (int)parts[4];
+            int part6 = (int)parts[5];
 
             UseCustomItemList = (part1 & 8192) > 0;
 
@@ -467,6 +468,10 @@ namespace MMRando.Models.Settings
             SpeedupDogRace = (part5 & (1 << 2)) > 0;
             SpeedupLabFish = (part5 & (1 << 3)) > 0;
 
+            var keyPlacement = (byte)(part6 & 0xFF);
+            var bossKeyPlacement = (byte)((part6 & 0xFF00) >> 8);
+            var randomRemains = (byte)((part6 & 0xFF0000) >> 16);
+
             DamageMode = (DamageMode)damageMultiplierIndex;
             DamageEffect = (DamageEffect)damageTypeIndex;
             LogicMode = (LogicMode)modeIndex;
@@ -479,12 +484,15 @@ namespace MMRando.Models.Settings
             GossipHintStyle = (GossipHintStyle)gossipHintsIndex;
             BlastMaskCooldown = (BlastMaskCooldown)blastmaskCooldown;
             Music = (Music)music;
+            KeyPlacement = (DungeonItemAlgorithm)keyPlacement;
+            BossKeyPlacement = (DungeonItemAlgorithm)bossKeyPlacement;
+            RandomRemains = randomRemains;
         }
 
 
         private int[] BuildSettingsBytes()
         {
-            int[] parts = new int[5];
+            int[] parts = new int[6];
 
             if (UseCustomItemList)
             {
@@ -545,6 +553,10 @@ namespace MMRando.Models.Settings
             if (SpeedupDampe) { parts[4] += (1 << 1); }
             if (SpeedupDogRace) { parts[4] += (1 << 2); }
             if (SpeedupLabFish) { parts[4] += (1 << 3); }
+
+            parts[5] = (byte)KeyPlacement
+                | ((byte)BossKeyPlacement << 8)
+                | ((byte)RandomRemains << 16);
 
             return parts;
         }
