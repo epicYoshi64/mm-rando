@@ -15,7 +15,7 @@ namespace MMRando.Utils
         public static void CreateSpoilerLog(RandomizedResult randomized, SettingsObject settings)
         {
             var itemList = randomized.ItemList
-                .Where(io => !io.Item.IsFake())
+                .Where(io => !io.Item.IsFake() && !ItemUtils.IsRemain(io.Item))
                 .Select(u => new SpoilerItem(u));
             var settingsString = settings.ToString();
 
