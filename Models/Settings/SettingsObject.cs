@@ -165,8 +165,19 @@ namespace MMRando.Models.Settings
         /// </summary>
         public bool AddStrayFairies { get; set; }
 
+        /// <summary>
+        /// Place between a certain number of fairies within their vanilla dungeon
+        /// </summary>
+        public byte VanillaFairyCount { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public DungeonItemAlgorithm KeyPlacement { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DungeonItemAlgorithm BossKeyPlacement { get; set; }
 
         /// <summary>
@@ -471,6 +482,7 @@ namespace MMRando.Models.Settings
             var keyPlacement = (byte)(part6 & 0xFF);
             var bossKeyPlacement = (byte)((part6 & 0xFF00) >> 8);
             var randomRemains = (byte)((part6 & 0xFF0000) >> 16);
+            var fairyCount = (byte)((part6 & 0xFF000000) >> 24);
 
             DamageMode = (DamageMode)damageMultiplierIndex;
             DamageEffect = (DamageEffect)damageTypeIndex;
@@ -487,6 +499,7 @@ namespace MMRando.Models.Settings
             KeyPlacement = (DungeonItemAlgorithm)keyPlacement;
             BossKeyPlacement = (DungeonItemAlgorithm)bossKeyPlacement;
             RandomRemains = randomRemains;
+            VanillaFairyCount = fairyCount;
         }
 
 
@@ -556,7 +569,8 @@ namespace MMRando.Models.Settings
 
             parts[5] = (byte)KeyPlacement
                 | ((byte)BossKeyPlacement << 8)
-                | ((byte)RandomRemains << 16);
+                | ((byte)RandomRemains << 16)
+                | ((byte)VanillaFairyCount << 24);
 
             return parts;
         }

@@ -487,6 +487,11 @@ namespace MMRando
             UpdateSingleSetting(() => _settings.RandomRemains = (int)nRandomRemains.Value);
         }
 
+        private void nFairyCount_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.VanillaFairyCount = (byte)nFairyCount.Value);
+        }
+
         private void cSFX_CheckedChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.RandomizeSounds = cSFX.Checked);
@@ -978,6 +983,7 @@ namespace MMRando
             cKeyShuffle.SelectedIndex = 1;
             cBossKeyShuffle.SelectedIndex = 0;
             nRandomRemains.Value = 1;
+            nFairyCount.Value = 10;
             cSpoiler.Checked = true;
             cSoS.Checked = true;
             cNoDowngrades.Checked = true;

@@ -1122,17 +1122,14 @@ namespace MMRando
                 {
                     int fairyCount = ItemList.Count(io => ItemUtils.IsStrayFairy(io.Item) && i.Region().Equals(io.Item.Region()) &&
                         i.Region().Equals(io.NewLocation?.Region()));
-                    if (!ItemUtils.IsStrayFairy(i) || fairyCount >= 5)
+                    if (!ItemUtils.IsStrayFairy(i) || fairyCount >= _settings.VanillaFairyCount)
                     {
                         remainingItems.Add(i);
                         continue;
                     }
                 }
                 dungeonItemPool = itemPool.Where(item => 
-                    i.Region().Equals(item.Region()) &&
-                    // exclude heart containers as a location for the keys to end up
-                    !(item >= Item.HeartContainerWoodfall && item <= Item.HeartContainerStoneTower)        
-                ).ToList();
+                    i.Region().Equals(item.Region()) && CheckMatch(i, item)).ToList();
                 // TODO make a setting for mixing stone tower chests together
                 // this segregates the sides of stone tower
                 // any chest requiring access to both sides is treated the same as an STT chest
@@ -1161,7 +1158,20 @@ namespace MMRando
             }
             foreach( Item i in remainingItems)
             {
-                PlaceItem(i, itemPool);
+                if (ItemUtils.IsStrayFairy(i))
+                {
+                    dungeonItemPool = itemPool.Where(item => !i.Region().Equals(item.Region())).ToList();
+                    PlaceItem(i, dungeonItemPool);
+                    var itemLocation = ItemList[(int)i].NewLocation;
+                    if (itemLocation is Item)
+                    {
+                        itemPool.Remove((Item)itemLocation);
+                    }
+                }
+                else
+                {
+                    PlaceItem(i, itemPool);
+                }
             }
         }
 
@@ -1257,11 +1267,11 @@ namespace MMRando
 
         private void PlaceFreeRemains()
         {
-            List<(string name, byte mask, string templeName, Item logicTempleAccess, Item logicTempleClear, Item logicRemain)> remains = new List<(string, byte, string, Item, Item, Item)>() {
-                ("Odolwa",      0x01,   "Woodfall Temple",      Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear,   Item.RemainOdolwa),
-                ("Goht",        0x02,   "Snowhead Temple",      Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear,   Item.RemainGoht),
-                ("Gyorg",       0x04,   "Great Bay Temple",     Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
-                ("Twinmold",    0x08,   "Stone Tower Temple",   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
+            List<(string name, byte mask, Region templeName, Item logicTempleAccess, Item logicTempleClear, Item logicRemain)> remains = new List<(string, byte, Region, Item, Item, Item)>() {
+                ("Odolwa",      0x01,   Region.WoodfallTemple,      Item.AreaWoodFallTempleAccess,              Item.AreaWoodFallTempleClear,   Item.RemainOdolwa),
+                ("Goht",        0x02,   Region.SnowheadTemple,      Item.AreaSnowheadTempleAccess,              Item.AreaSnowheadTempleClear,   Item.RemainGoht),
+                ("Gyorg",       0x04,   Region.GreatBayTemple,     Item.AreaGreatBayTempleAccess,              Item.AreaGreatBayTempleClear,   Item.RemainGyorg),
+                ("Twinmold",    0x08,   Region.StoneTowerTemple,   Item.AreaInvertedStoneTowerTempleAccess,    Item.AreaStoneTowerClear,       Item.RemainTwinmold)
             };
             {
                 byte startingRemains = 0;
@@ -1283,7 +1293,7 @@ namespace MMRando
                     remains.RemoveAt(j);
                     startingRemains |= mask;
                     itemsInRemainDungeon = ItemUtils.AllLocations().Where(item => templeName.Equals(item.Region())).ToList();
-                    if( templeName.Equals("Woodfall Temple") || templeName.Equals("Great Bay Temple"))
+                    if( templeName.Equals(Region.WoodfallTemple) || templeName.Equals(Region.GreatBayTemple))
                     {
                         itemsInRemainDungeon.Add(Item.HeartPieceChoir);
                     }
