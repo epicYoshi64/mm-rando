@@ -3301,19 +3301,19 @@ namespace MMRando.GameObjects
 
         //[GetItemIndex(0x1A1)]
 
-        [ItemName("Odolwa's Remains"), LocationName("Woodfall Boss Remains"), RegionName("Woodfall Temple")]
+        [ItemName("Odolwa's Remains"), LocationName("Woodfall Boss Remains"), Region(Region.WoodfallTemple)]
         [StartingItem(0xC5CE73, 0x1)]
         RemainOdolwa,
 
-        [ItemName("Goht's Remains"), LocationName("Snowhead Boss Remains"), RegionName("Snowhead Temple")]
+        [ItemName("Goht's Remains"), LocationName("Snowhead Boss Remains"), Region(Region.SnowheadTemple)]
         [StartingItem(0xC5CE73, 0x2)]
         RemainGoht,
 
-        [ItemName("Gyorg's Remains"), LocationName("Great Bay Boss Remains"), RegionName("Great Bay Temple")]
+        [ItemName("Gyorg's Remains"), LocationName("Great Bay Boss Remains"), Region(Region.GreatBayTemple)]
         [StartingItem(0xC5CE73, 0x4)]
         RemainGyorg,
 
-        [ItemName("Twinmold's Remains"), LocationName("Stone Tower Boss Remains"), RegionName("Stone Tower Temple")]
+        [ItemName("Twinmold's Remains"), LocationName("Stone Tower Boss Remains"), Region(Region.StoneTowerTemple)]
         [StartingItem(0xC5CE73, 0x8)]
         RemainTwinmold
     }
