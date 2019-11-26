@@ -12,6 +12,7 @@ namespace MMRando.Templates
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
+    using MMRando.Extensions;
     using System;
     
     /// <summary>
@@ -28,110 +29,225 @@ namespace MMRando.Templates
             this.Write(@"<html>
 <head>
 <style>
-	th{ text-align:left }
-	.spoiler{ background-color:black }
-	.spoiler:hover { background-color: white;  }
-	[data-content]:before { content: attr(data-content); }
+    body.dark-mode {
+      background-color: #111;
+      color: #ccc;
+    }
+    body.dark-mode a {
+      color: #111;
+    }
+    body.dark-mode button {
+      background-color: #ddd;
+      color: #111;
+    }
 
-	.show-highlight .unavailable .itemname { background-color: #FFDDDD; }
-	.show-highlight .acquired .itemname { background-color: #DDFFDD; }
-	.show-highlight .available .itemname { background-color: #DDDDFF; }
+    body.light-mode {
+      background-color: #eee;
+      color: #111;
+    }
+    body.light-mode a {
+      color: #111;
+    }
+    body.light-mode button {
+      background-color: #111;
+      color: #ccc;
+    }
+
+    th{ text-align:left }
+    .region { text-align: center; font-weight: bold; }
+    [data-content]:before { content: attr(data-content); }
+
+	.dark-mode .spoiler{ background-color:#ccc }
+	.dark-mode .spoiler:hover { background-color: #111;  }
+	.dark-mode .show-highlight .unavailable .newlocation { background-color: #500705; }
+	.dark-mode .show-highlight .acquired .newlocation { background-color: #69591f; }
+	.dark-mode .show-highlight .available .newlocation { background-color: #313776; }
+
+	.light-mode .spoiler{ background-color:#111 }
+	.light-mode .spoiler:hover { background-color: #ccc;  }
+	.light-mode .show-highlight .unavailable .newlocation { background-color: #FF9999; }
+	.light-mode .show-highlight .acquired .newlocation { background-color: #99FF99; }
+	.light-mode .show-highlight .available .newlocation { background-color: #9999FF; }
+
+
+    #spoilerLogState { width: 560px; }
 </style>
 </head>
-<label><b>Version:</b></label><span>");
+<body class=""light-mode"">
+<label><b>Version: </b></label><span>");
             this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.Version));
-            this.Write("</span><br/>\r\n<label><b>Settings String:</b></label><span>");
+            this.Write("</span><br/>\r\n<label><b>Settings String: </b></label><span>");
             this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.SettingsString));
-            this.Write("</span><br/>\r\n<label><b>Seed:</b></label><span>");
+            this.Write("</span><br/>\r\n<label><b>Seed: </b></label><span>");
             this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.Seed));
-            this.Write("<span><br/><br/>\r\n");
+            this.Write("</span><br/>\r\n");
+ if (spoiler.CustomItemListString != null) { 
+            this.Write("<label><b>Custom Item List: </b></label><span>");
+            this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.CustomItemListString));
+            this.Write("</span><br/>\r\n");
+ } 
+ if (spoiler.CustomStartingItemListString != null) { 
+            this.Write("<label><b>Custom Starting Item List: </b></label><span>");
+            this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.CustomStartingItemListString));
+            this.Write("</span><br/>\r\n");
+ } 
+ if (spoiler.CustomJunkLocationsString != null) { 
+            this.Write("<label><b>Enforce Junk Locations List: </b></label><span>");
+            this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.CustomJunkLocationsString));
+            this.Write("</span><br/>\r\n");
+ } 
+            this.Write("<br/>\r\n<button type=\"button\" onclick=\"toggleDarkLight()\" title=\"Toggle dark/light" +
+                    " mode\">Toggle Dark Theme</button>\r\n<br/>\r\n<br/>\r\n<label><b>Spoiler Log State: </" +
+                    "b></label><input id=\"spoilerLogState\" type=\"text\"/><br/>\r\n");
  if (spoiler.RandomizeDungeonEntrances) { 
 
-            this.Write("<h2>Dungeon Entrance Replacements</h2>\r\n<table border=\"1\">\r\n\t<tr>\r\n\t\t<th>Entrance" +
-                    "</th>\r\n\t\t<th>New Destination</th>\r\n\t</tr>\r\n");
-		 for (int i = 0; i < 4; i++) { 
-			int newEntranceIndex = spoiler.NewDestinationIndices[i]; 
-			string destination = spoiler.Destinations[i];
-			string newDestination = spoiler.Destinations[newEntranceIndex];
-            this.Write("\t<tr>\r\n\t\t<td>");
-            this.Write(this.ToStringHelper.ToStringWithCulture(destination));
-            this.Write("</td>\r\n\t\t<td class=\"spoiler\"><span data-content=\"");
-            this.Write(this.ToStringHelper.ToStringWithCulture(newDestination));
+            this.Write("<h2>Dungeon Entrance Replacements</h2>\r\n<table border=\"1\" class=\"item-replacement" +
+                    "s\">\r\n\t<tr>\r\n\t\t<th>Entrance</th>\r\n\t    <th></th>\r\n\t\t<th>New Destination</th>\r\n\t</" +
+                    "tr>\r\n");
+		 for (int i = 0; i < 4; i++) {
+            var entrance = spoiler.Entrances[i];
+            var destination = spoiler.Entrances[spoiler.NewDestinationIndices[i]];
+            this.Write("\t<tr data-id=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture((int)destination));
+            this.Write("\" data-newlocationid=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture((int)destination));
+            this.Write("\" class=\"unavailable\">\r\n\t\t<td class=\"newlocation\">");
+            this.Write(this.ToStringHelper.ToStringWithCulture(entrance.Entrance()));
+            this.Write("</td>\r\n\t    <td><input type=\"checkbox\"/></td>\r\n\t\t<td class=\"spoiler itemname\"><sp" +
+                    "an data-content=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture(destination.Entrance()));
             this.Write("\"></span></td>\r\n\t</tr>\r\n");
  } 
             this.Write("</table>\r\n");
  } 
-            this.Write(@"<h2>Item Replacements</h2>
-<input type=""checkbox"" id=""highlight-checks""/> Highlight available checks
-<table border=""1"" id=""item-replacements"">
- <tr>
-     <th>Replaced By</th>
-	 <th></th>
-     <th>Item</th>
-	 <th></th>
-     <th>New Location</th>
- </tr>
-");
- foreach (var item in spoiler.ItemList) {
+            this.Write("<h2>Item Replacements</h2>\r\n<input type=\"checkbox\" id=\"highlight-checks\"/> Highli" +
+                    "ght available checks\r\n<table border=\"1\" class=\"item-replacements\">\r\n <tr>\r\n     " +
+                    "<th>Location</th>\r\n\t <th></th>\r\n     <th></th>\r\n </tr>\r\n");
+ foreach (var region in spoiler.ItemList.GroupBy(item => item.Region).OrderBy(g => g.Key)) {
+
+            this.Write(" <tr class=\"region\"><td colspan=\"3\">");
+            this.Write(this.ToStringHelper.ToStringWithCulture(region.Key.Name()));
+            this.Write("</td></tr>\r\n ");
+ foreach (var item in region.OrderBy(item => item.NewLocationName)) { 
+            this.Write(" <tr data-id=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Id));
+            this.Write("\" data-newlocationid=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.NewLocationId));
+            this.Write("\" class=\"unavailable\">\r\n\t<td class=\"newlocation\">");
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.NewLocationName));
+            this.Write("</td>\r\n\t<td><input type=\"checkbox\"/></td>\r\n\t<td class=\"spoiler itemname\"> <span d" +
+                    "ata-content=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.Name));
+            this.Write("\"></span></td>\r\n </tr>\r\n ");
+ } 
+ } 
+            this.Write("</table>\r\n<h2>Item Locations</h2>\r\n<table border=\"1\" id=\"item-locations\">\r\n <tr>\r" +
+                    "\n     <th>Item</th>\r\n\t <th></th>\r\n     <th>Location</th>\r\n </tr>\r\n");
+ foreach (var item in spoiler.ItemList.Where(item => !item.IsJunk)) {
 
             this.Write(" <tr data-id=\"");
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Id));
-            this.Write("\" data-replacedbyid=\"");
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.ReplacedById));
             this.Write("\" data-newlocationid=\"");
             this.Write(this.ToStringHelper.ToStringWithCulture(item.NewLocationId));
-            this.Write("\" class=\"unavailable\">\r\n\t<td class=\"spoiler replacedby\"> <span data-content=\"");
-            this.Write(this.ToStringHelper.ToStringWithCulture(item.ReplacedByName));
-            this.Write("\"></span></td>\r\n\t<td><input type=\"checkbox\"/></td>\r\n\t<td class=\"itemname\">");
+            this.Write("\">\r\n\t<td>");
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Name));
             this.Write("</td>\r\n\t<td><input type=\"checkbox\"/></td>\r\n\t<td class=\"spoiler newlocation\"> <spa" +
                     "n data-content=\"");
             this.Write(this.ToStringHelper.ToStringWithCulture(item.NewLocationName));
             this.Write("\"></span></td>\r\n </tr>\r\n");
  } 
-            this.Write("</table>\r\n<script>\r\n\tvar logic = ");
+            this.Write("</table>\r\n");
+ if (spoiler.GossipHints != null && spoiler.GossipHints.Any()) { 
+
+            this.Write("<h2>Gossip Stone Hints</h2>\r\n<table border=\"1\">\r\n\t<tr>\r\n\t\t<th>Gossip Stone</th>\r\n" +
+                    "\t\t<th>Message</th>\r\n\t</tr>\r\n");
+	foreach (var hint in spoiler.GossipHints.OrderBy(h => h.Key.ToString())) { 
+
+            this.Write("\t<tr>\r\n\t\t<td>");
+            this.Write(this.ToStringHelper.ToStringWithCulture(hint.Key));
+            this.Write("</td>\r\n\t\t<td class=\"spoiler\"><span data-content=\"");
+            this.Write(this.ToStringHelper.ToStringWithCulture(hint.Value));
+            this.Write("\"></span></td>\r\n\t</tr>\r\n");
+ } 
+            this.Write("</table>\r\n");
+ } 
+            this.Write("<script>\r\n\tfunction all(list, predicate) {\r\n\t\tfor (var i = 0; i < list.length; i+" +
+                    "+) {\r\n\t\t\tif (!predicate(list[i])) {\r\n\t\t\t\treturn false;\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn true" +
+                    ";\r\n\t}\r\n\r\n\tfunction any(list, predicate) {\r\n\t\tfor (var i = 0; i < list.length; i+" +
+                    "+) {\r\n\t\t\tif (predicate(list[i])) {\r\n\t\t\t\treturn true;\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn false;" +
+                    "\r\n\t}\r\n    \r\n    var segmentSize = 16;\r\n    function saveItems() {\r\n        var s" +
+                    "egments = [];\r\n        for (var i = 0; i < logic.length; i++) {\r\n            var" +
+                    " segmentIndex = parseInt(i / segmentSize);\r\n            segments[segmentIndex] =" +
+                    " segments[segmentIndex] || 0;\r\n            if (logic[i].Checked) {\r\n            " +
+                    "    segments[parseInt(i / segmentSize)] += (1 << (i%segmentSize));\r\n            " +
+                    "}\r\n        }\r\n        var saveString = segments.map(function(s) {\r\n            r" +
+                    "eturn s.toString(16);\r\n        }).join(\"-\");\r\n        var saveInput = document.q" +
+                    "uerySelector(\"#spoilerLogState\");\r\n        saveInput.value = saveString;\r\n    }\r" +
+                    "\n\r\n    function loadItems() {\r\n        var saveInput = document.querySelector(\"#" +
+                    "spoilerLogState\");\r\n        var segments = saveInput.value.split(\"-\");\r\n        " +
+                    "if (Math.ceil((logic.length - 1) / segmentSize) !== segments.length) {\r\n        " +
+                    "    alert(\"Invalid Spoiler Log state\");\r\n            return;\r\n        }\r\n       " +
+                    " segments = segments.map(function(segment) {\r\n            return parseInt(segmen" +
+                    "t, 16);\r\n        });\r\n        for (var i = 0; i < segments.length; i++) {\r\n     " +
+                    "       var segment = segments[i];\r\n            for (var j = 0; j < segmentSize; " +
+                    "j++) {\r\n                var itemIndex = segmentSize * i + j;\r\n                if" +
+                    " (itemIndex < logic.length) {\r\n                    var mark = ((segment >> j) % " +
+                    "2 == 1);\r\n                    logic[itemIndex].Checked = mark;\r\n                " +
+                    "    var itemRow = document.querySelector(\"tr[data-newlocationid=\'\" + itemIndex +" +
+                    " \"\']\");\r\n                    if (itemRow) {\r\n\t                    logic[itemRow." +
+                    "dataset.id].Acquired = mark;\r\n                    } else {\r\n\t                   " +
+                    " logic[itemIndex].Acquired = mark;\r\n                    }\r\n                }\r\n  " +
+                    "          }\r\n        }\r\n\t\trecalculateItems();\r\n    }\r\n\r\n    document.querySelect" +
+                    "or(\"#spoilerLogState\").addEventListener(\"keypress\", function(event) {\r\n        i" +
+                    "f (event.keyCode === 13) {\r\n            loadItems();\r\n        }\r\n    });\r\n\r\n\tfun" +
+                    "ction recalculateItems() {\r\n\t\tvar recalculate = false;\r\n\t\tfor (var i = 0; i < lo" +
+                    "gic.length; i++) {\r\n\t\t\tvar item = logic[i];\r\n\t\t\titem.IsAvailable = \r\n\t\t\t\t(item.R" +
+                    "equiredItemIds === null || all(item.RequiredItemIds, function(id) { return logic" +
+                    "[id].Acquired; }))\r\n\t\t\t\t&& \r\n\t\t\t\t(item.ConditionalItemIds === null || any(item.C" +
+                    "onditionalItemIds, function(conditionals) { return all(conditionals, function(id" +
+                    ") { return logic[id].Acquired; }); }));\r\n            \r\n\t\t\tif (!item.Acquired && " +
+                    "item.IsFakeItem && item.IsAvailable) {\r\n\t\t\t\titem.Acquired = true;\r\n\t\t\t\trecalcula" +
+                    "te = true;\r\n\t\t\t}\r\n\t\t\tif (item.Acquired && item.IsFakeItem && !item.IsAvailable) " +
+                    "{\r\n\t\t\t\titem.Acquired = false;\r\n\t\t\t\trecalculate = true;\r\n\t\t\t}\r\n        \r\n\t\t\tvar l" +
+                    "ocationRow = document.querySelector(\".item-replacements tr[data-newlocationid=\'\"" +
+                    " + i + \"\']\");\r\n\t\t\tif (locationRow) {\r\n\t\t\t\tlocationRow.className = \"\";\r\n\t\t\t\tlocat" +
+                    "ionRow.classList.add(item.IsAvailable ? \"available\" : \"unavailable\");\r\n\t\t\t\tvar i" +
+                    "temName = locationRow.querySelector(\".itemname\");\r\n                var checkbox " +
+                    "= locationRow.querySelector(\"input\");\r\n                checkbox.checked = item.C" +
+                    "hecked;\r\n\t\t\t\tif (item.Checked) {\r\n\t\t\t\t\titemName.classList.remove(\"spoiler\");\r\n\t\t" +
+                    "\t\t} else {\r\n\t\t\t\t\titemName.classList.add(\"spoiler\");\r\n\t\t\t\t}\r\n\t\t\t}\r\n        \r\n\t\t\tv" +
+                    "ar itemRow = document.querySelector(\"#item-locations tr[data-id=\'\" + i + \"\']\");\r" +
+                    "\n\t\t\tif (itemRow) {\r\n\t\t\t\tvar itemName = itemRow.querySelector(\".newlocation\");\r\n " +
+                    "               var checkbox = itemRow.querySelector(\"input\");\r\n                c" +
+                    "heckbox.checked = item.Acquired;\r\n\t\t\t\tif (item.Acquired) {\r\n\t\t\t\t\titemName.classL" +
+                    "ist.remove(\"spoiler\");\r\n\t\t\t\t} else {\r\n\t\t\t\t\titemName.classList.add(\"spoiler\");\r\n\t" +
+                    "\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\tif (recalculate) {\r\n\t\t\trecalculateItems();\r\n\t\t} else {\r\n     " +
+                    "       saveItems();\r\n        }\r\n\t}\r\n\r\n    var logic = ");
             this.Write(this.ToStringHelper.ToStringWithCulture(spoiler.LogicJson));
-            this.Write("\r\n\r\n\tfunction all(list, predicate) {\r\n\t\tfor (var i = 0; i < list.length; i++) {\r\n" +
-                    "\t\t\tif (!predicate(list[i])) {\r\n\t\t\t\treturn false;\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn true;\r\n\t}\r" +
-                    "\n\r\n\tfunction any(list, predicate) {\r\n\t\tfor (var i = 0; i < list.length; i++) {\r\n" +
-                    "\t\t\tif (predicate(list[i])) {\r\n\t\t\t\treturn true;\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn false;\r\n\t}\r\n" +
-                    "\r\n\tfunction recalculateItems() {\r\n\t\tvar recalculate = false;\r\n\t\tfor (var i = 0; " +
-                    "i < logic.length; i++) {\r\n\t\t\tvar item = logic[i];\r\n\t\t\tvar rowItem = document.que" +
-                    "rySelector(\"tr[data-id=\'\" + item.ItemId + \"\']\");\r\n\t\t\titem.IsAvailable = \r\n\t\t\t\t(i" +
-                    "tem.RequiredItemIds === null || all(item.RequiredItemIds, function(id) { return " +
-                    "logic[id].Acquired; }))\r\n\t\t\t\t&& \r\n\t\t\t\t(item.ConditionalItemIds === null || any(i" +
-                    "tem.ConditionalItemIds, function(conditionals) { return all(conditionals, functi" +
-                    "on(id) { return logic[id].Acquired; }); }));\r\n            \r\n\t\t\tif (!item.Acquire" +
-                    "d && item.IsFakeItem && item.IsAvailable) {\r\n\t\t\t\titem.Acquired = true;\r\n\t\t\t\treca" +
-                    "lculate = true;\r\n\t\t\t}\r\n\t\t\tif (item.Acquired && item.IsFakeItem && !item.IsAvaila" +
-                    "ble) {\r\n\t\t\t\titem.Acquired = false;\r\n\t\t\t\trecalculate = true;\r\n\t\t\t}\r\n        \r\n\t\t\t" +
-                    "if (rowItem) {\r\n\t\t\t\trowItem.className = \"\";\r\n\t\t\t\trowItem.classList.add(item.IsAv" +
-                    "ailable ? \"available\" : \"unavailable\");\r\n\t\t\t\tvar replacedBy = rowItem.querySelec" +
-                    "tor(\".replacedby\");\r\n\t\t\t\tvar newLocation = rowItem.querySelector(\".newlocation\")" +
-                    ";\r\n\t\t\t\tvar checkboxes = rowItem.querySelectorAll(\"input\");\r\n\t\t\t\tcheckboxes[0].ch" +
-                    "ecked = item.Checked;\r\n\t\t\t\tcheckboxes[1].checked = item.Acquired;\r\n\t\t\t\tif (item." +
-                    "Checked) {\r\n\t\t\t\t\treplacedBy.classList.remove(\"spoiler\");\r\n\t\t\t\t} else {\r\n\t\t\t\t\trep" +
-                    "lacedBy.classList.add(\"spoiler\");\r\n\t\t\t\t}\r\n\t\t\t\tif (item.Acquired) {\r\n\t\t\t\t\tnewLoca" +
-                    "tion.classList.remove(\"spoiler\");\r\n\t\t\t\t} else {\r\n\t\t\t\t\tnewLocation.classList.add(" +
-                    "\"spoiler\");\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\tif (recalculate) {\r\n\t\t\trecalculateItems();\r\n\t\t}" +
-                    "\r\n\t}\r\n\r\n\tlogic[0].Checked = true;\r\n\tlogic[document.querySelector(\"tr[data-id=\'0\'" +
-                    "]\").dataset.replacedbyid].Acquired = true;\r\n\tdocument.querySelector(\"tr[data-id=" +
-                    "\'0\'] input\").checked = true;\r\n\trecalculateItems();\r\n\r\n\tvar rows = document.query" +
+            this.Write(";\r\n\r\n    for (var i = 0; i < logic.length; i++) {\r\n        var item = logic[i];\r\n" +
+                    "        if (item.Acquired) {\r\n            item.Checked = true;\r\n\t        documen" +
+                    "t.querySelector(\"tr[data-newlocationid=\'\" + i + \"\'] input\").checked = true;\r\n   " +
+                    "     }\r\n    }\r\n\r\n    var startingLocations = [0, 94, 274, 275, 276, 277];\r\n    f" +
+                    "or (var id of startingLocations) {\r\n\t    logic[id].Checked = true;\r\n\t    logic[d" +
+                    "ocument.querySelector(\"tr[data-newlocationid=\'\" + id + \"\']\").dataset.id].Acquire" +
+                    "d = true;\r\n\t    document.querySelector(\"tr[data-newlocationid=\'\" + id + \"\'] inpu" +
+                    "t\").checked = true;\r\n    }\r\n\r\n\trecalculateItems();\r\n\r\n\tvar rows = document.query" +
                     "SelectorAll(\"tr\");\r\n\tfor (var i = 1; i < rows.length; i++) {\r\n\t\tvar row = rows[i" +
-                    "];\r\n\t\tvar checkboxes = row.querySelectorAll(\"input\");\r\n\t\tif (checkboxes.length >" +
-                    " 0) {\r\n\t\t\tcheckboxes[0].addEventListener(\"click\", function(e) {\r\n\t\t\t\tvar row = e" +
-                    ".target.closest(\"tr\");\r\n\t\t\t\tvar rowId = parseInt(row.dataset.id);\r\n\t\t\t\tvar repla" +
-                    "cedById = parseInt(row.dataset.replacedbyid);\r\n\t\t\t\tvar newLocationId = parseInt(" +
-                    "row.dataset.newlocationid);\r\n\t\t\t\tlogic[rowId].Checked = e.target.checked;\r\n\t\t\t\tl" +
-                    "ogic[replacedById].Acquired = e.target.checked;\r\n\t\t\t\trecalculateItems();\r\n\t\t\t});" +
-                    "\r\n\t\t\tcheckboxes[1].addEventListener(\"click\", function(e) {\r\n\t\t\t\tvar row = e.targ" +
-                    "et.closest(\"tr\");\r\n\t\t\t\tvar rowId = parseInt(row.dataset.id);\r\n\t\t\t\tvar replacedBy" +
-                    "Id = parseInt(row.dataset.replacedbyid);\r\n\t\t\t\tvar newLocationId = parseInt(row.d" +
-                    "ataset.newlocationid);\r\n\t\t\t\tlogic[newLocationId].Checked = e.target.checked;\r\n\t\t" +
-                    "\t\tlogic[rowId].Acquired = e.target.checked;\r\n\t\t\t\trecalculateItems();\r\n\t\t\t});\r\n\t\t" +
-                    "}\r\n\t}\r\n\r\n\tdocument.querySelector(\"#highlight-checks\").addEventListener(\"click\", " +
-                    "function(e) {\r\n\t\tdocument.querySelector(\"table#item-replacements\").className = e" +
-                    ".target.checked ? \"show-highlight\" : \"\";\r\n\t});\r\n</script>\r\n</html>");
+                    "];\r\n\t\tvar checkbox = row.querySelector(\"input\");\r\n\t\tif (checkbox) {\r\n\t\t\tcheckbox" +
+                    ".addEventListener(\"click\", function(e) {\r\n\t\t\t\tvar row = e.target.closest(\"tr\");\r" +
+                    "\n                var rowId = parseInt(row.dataset.id);\r\n\t\t\t\tvar newLocationId = " +
+                    "parseInt(row.dataset.newlocationid);\r\n\t\t\t\tlogic[newLocationId].Checked = e.targe" +
+                    "t.checked;\r\n                logic[rowId].Acquired = e.target.checked;\r\n\t\t\t\trecal" +
+                    "culateItems();\r\n\t\t\t});\r\n\t\t}\r\n\t}\r\n\r\n\tdocument.querySelector(\"#highlight-checks\")." +
+                    "addEventListener(\"click\", function(e) {\r\n        var tables = document.querySele" +
+                    "ctorAll(\"table.item-replacements\");\r\n        for (var i = 0; i < tables.length; " +
+                    "i++) {\r\n            if (e.target.checked) {\r\n                tables[i].classList" +
+                    ".add(\"show-highlight\");\r\n            } else {\r\n                tables[i].classLi" +
+                    "st.remove(\"show-highlight\");\r\n            }\r\n        }\r\n\t});\r\n\r\n    function tog" +
+                    "gleDarkLight() {\r\n\t    var body = document.getElementsByTagName(\'body\')[0];\r\n\t  " +
+                    "  var currentClassBody = body.className;\r\n\t    body.className = currentClassBody" +
+                    " === \"dark-mode\" ? \"light-mode\" : \"dark-mode\";\r\n    }\r\n</script>\r\n</body>\r\n</htm" +
+                    "l>");
             return this.GenerationEnvironment.ToString();
         }
     }

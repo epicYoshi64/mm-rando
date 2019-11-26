@@ -65,9 +65,78 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Asm\DPad.cs" />
+    <Compile Include="Asm\Patcher.cs" />
+    <Compile Include="Asm\Symbols.cs" />
+    <Compile Include="Attributes\ChestAttribute.cs" />
+    <Compile Include="Attributes\ChestTypeAttribute.cs" />
+    <Compile Include="Attributes\CycleRepeatableAttribute.cs" />
+    <Compile Include="Attributes\EntranceNameAttribute.cs" />
+    <Compile Include="Attributes\GetBottleItemIndicesAttribute.cs" />
+    <Compile Include="Attributes\GetItemIndexAttribute.cs" />
+    <Compile Include="Attributes\GossipCompetitiveHintAttribute.cs" />
+    <Compile Include="Attributes\GossipItemHintAttribute.cs" />
+    <Compile Include="Attributes\GossipLocationHintAttribute.cs" />
+    <Compile Include="Attributes\OverwritableAttribute.cs" />
+    <Compile Include="Attributes\RegionAttribute.cs" />
+    <Compile Include="Attributes\RupeeRepeatableAttribute.cs" />
+    <Compile Include="Attributes\ShopRoomAttribute.cs" />
+    <Compile Include="Attributes\ShopTextAttribute.cs" />
+    <Compile Include="Attributes\ShopInventoryAttribute.cs" />
+    <Compile Include="Attributes\TemporaryAttribute.cs" />
+    <Compile Include="Attributes\RegionNameAttribute.cs" />
+    <Compile Include="Attributes\LocationNameAttribute.cs" />
+    <Compile Include="Attributes\ItemNameAttribute.cs" />
+    <Compile Include="Attributes\RepeatableAttribute.cs" />
+    <Compile Include="Attributes\DowngradableAttribute.cs" />
+    <Compile Include="Attributes\GossipRestrictAttribute.cs" />
+    <Compile Include="Attributes\StartingItemAttribute.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\RegionExtensions.cs" />
+    <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Extensions\KeyEqualityComparer.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Forms\JunkLocationEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\JunkLocationEditForm.Designer.cs">
+      <DependentUpon>JunkLocationEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DPadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DPadForm.Designer.cs">
+      <DependentUpon>DPadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\StartingItemEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartingItemEditForm.Designer.cs">
+      <DependentUpon>StartingItemEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Tooltips\TooltipBuilder.cs" />
+    <Compile Include="GameObjects\GossipQuote.cs" />
+    <Compile Include="GameObjects\Item.cs" />
+    <Compile Include="GameObjects\MessageShopText.cs" />
+    <Compile Include="GameObjects\Region.cs" />
+    <Compile Include="GameObjects\TextCommands.cs" />
     <Compile Include="Models\RandomizedResult.cs" />
+    <Compile Include="Models\Rom\MessageTable.cs" />
     <Compile Include="Models\Rom\Enemy.cs" />
+    <Compile Include="Models\Settings\BlastMaskCooldown.cs" />
+    <Compile Include="Models\Settings\Music.cs" />
+    <Compile Include="Models\SoundEffects\EffectAttribute.cs" />
+    <Compile Include="Models\SoundEffects\ReplacableAttribute.cs" />
+    <Compile Include="Models\SoundEffects\ReplacableByTagsAttribute.cs" />
+    <Compile Include="Models\SoundEffects\ReplacableInMessageAttribute.cs" />
+    <Compile Include="Models\SoundEffects\SoundEffects.cs" />
+    <Compile Include="Models\SoundEffects\SoundEffectTag.cs" />
+    <Compile Include="Models\SoundEffects\SoundEffectExtensions.cs" />
+    <Compile Include="Models\SoundEffects\SoundEffect.cs" />
+    <Compile Include="Models\Settings\GossipHintStyle.cs" />
+    <Compile Include="Models\Settings\ClockSpeedMode.cs" />
+    <Compile Include="Models\Settings\SettingsObject.cs" />
+    <Compile Include="Models\SoundEffects\TagsAttribute.cs" />
     <Compile Include="Models\SpoilerItem.cs" />
     <Compile Include="Models\ItemLogic.cs" />
     <Compile Include="Constants\Addresses.cs" />
@@ -85,6 +154,11 @@
     <Compile Include="Models\Rom\SequenceInfo.cs" />
     <Compile Include="Models\Vectors\vecf32.cs" />
     <Compile Include="Models\Vectors\vec16.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Base36Utils.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="Constants\Values.cs" />
@@ -119,7 +193,6 @@
     <Compile Include="Models\Settings\FloorType.cs" />
     <Compile Include="Models\Settings\LogicMode.cs" />
     <Compile Include="Models\Settings\MovementMode.cs" />
-    <Compile Include="Models\Settings\Settings.cs" />
     <Compile Include="Models\Settings\TatlColorSchema.cs" />
     <Compile Include="Forms\NewItemForm.cs">
       <SubType>Form</SubType>
@@ -138,6 +211,7 @@
     <Compile Include="Utils\Mzxrules\Align.cs" />
     <Compile Include="Utils\Mzxrules\Endian.cs" />
     <Compile Include="Utils\Mzxrules\Vectors.cs" />
+    <Compile Include="Utils\PatchUtil.cs" />
     <Compile Include="Utils\SceneUtils.cs" />
     <Compile Include="Enemies.cs" />
     <Compile Include="Utils\EntranceUtils.cs" />
@@ -176,6 +250,9 @@
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DPadForm.resx">
+      <DependentUpon>DPadForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemEditForm.resx">
       <DependentUpon>ItemEditForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -194,17 +271,17 @@
     <EmbeddedResource Include="Forms\NewItemForm.resx">
       <DependentUpon>NewItemForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\JunkLocationEditForm.resx">
+      <DependentUpon>JunkLocationEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartingItemEditForm.resx">
+      <DependentUpon>StartingItemEditForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <None Include=".editorconfig" />
     <None Include="Resources\addresses\d-check">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -292,6 +369,39 @@
     <None Include="Resources\mods\fierce-deity-anywhere">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Resources\mods\fix-deku-princess">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-fd-mask-reset">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-fisherman">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-cow-bottle-check">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-fairies">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-skulltula-tokens">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-sword-song-of-time">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-epona">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-downgrades">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-clock-speed">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\fix-song-of-healing">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\mods\file-select">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -374,6 +484,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\mods\short-cutscenes">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\speedup-beavers">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\speedup-dampe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\speedup-dograce">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\mods\speedup-labfish">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\mods\standing-hearts">
@@ -787,18 +909,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitattributes" />
     <Content Include="200px_majoramask_rtw_icon.ico" />
     <Content Include="Templates\HtmlSpoiler.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>HtmlSpoiler.cs</LastGenOutput>
     </Content>
-    <None Include="Resources\ITEM_INDICES.txt" />
+    <None Include="Resources\asm\rom_patch.txt" />
+    <None Include="Resources\asm\symbols.json" />
     <None Include="Resources\ENEMIES.txt" />
-    <None Include="Resources\GOSSIP.txt" />
     <None Include="Resources\SEQS.txt" />
     <None Include="Resources\REQ_CASUAL.txt" />
-    <EmbeddedResource Include="Resources\REQ_GLITCH.txt" />
+    <None Include="Resources\REQ_GLITCH.txt" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
