@@ -20,6 +20,9 @@ namespace MMRando.Utils
             string[] lines = Properties.Resources.SEQS
                 .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
+            // TODO add path field to sequence info so that sequences can be sorted by game
+            string[] musicFiles = Directory.GetFiles(Values.MusicDirectory, "*", SearchOption.TopDirectoryOnly).Select(m=>m.Split(Path.DirectorySeparatorChar).Last()).ToArray();
+
             int i = 0;
             while (i < lines.Length)
             {
@@ -62,7 +65,7 @@ namespace MMRando.Utils
                     i += 3;
                 };
 
-                if (sourceSequence.MM_seq != 0x18)
+                if (sourceSequence.MM_seq != 0x18 && musicFiles.Contains(sourceName))
                 {
                     RomData.SequenceList.Add(sourceSequence);
                 };

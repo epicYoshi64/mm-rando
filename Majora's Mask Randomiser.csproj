@@ -507,375 +507,129 @@
     <None Include="Resources\mods\update-chests">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\music\botw-hyrulecastle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\botw-kass">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-battle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-bb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-bc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-ceremony">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-ceremony-loss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-cm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-dkjp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-fs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-kb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-kd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-lr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-menu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-mmf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-rr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-star">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mk64-tt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mmr-f-sot">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mmr-jazz">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\mmr-theme">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-boss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-c-goddess">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-castlecollapse">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-castlecourtyard">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-chamberofsages">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-dekutree">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-dinosaur">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-dodongocavern">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-f-ganondorf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-f-medallion">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-f-opendot">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-f-stone">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-f-timetravel">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-firetemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-foresttemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-ganon">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-ganoncastle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-ganondorf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-ganondorfbattle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-gerudovalley">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-icecavern">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-insidedekutree">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-jabu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-kakariko1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-kakariko2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-kokiriforest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-market">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-miniboss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-navi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-shadowtemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-sheik">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-spirittemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-templeoftime">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\oot-watertemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\pa-ikanacastle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\pm-field">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-aquas">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-area6">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-bolse">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-boss1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-boss2">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-boss3">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-corneria">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-fichina">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-katarina">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-meteo">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-sectorx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-sectory">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-starwolf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-titania">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-venom">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sf64-zoness">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-battlefield">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-bbh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-bitdw">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-boss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-castle">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-ccm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-bitsclear">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-bowser">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-bowserclear">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-intro">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-lakitu">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-peach">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-race">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-savepeach">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-solved">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-star">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-starget">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-toad">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-f-unlock">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-fileselect">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-finalbowser">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-hmc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-jrb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-lll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-lullaby">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-mgr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-slide">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\sm64-steps">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\smg2-skystation">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\ss-groose">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-boss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-dekuforest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-dekutree">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-dream">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-dungeon">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-field">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-fileselect">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-foresttemple">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-gerudobay">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-goronvillage">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-miniboss">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-minigame">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-mountain">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-navi">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-predungeon">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-snowfield">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-snowfieldold">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-village">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-zelda">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\music\uc-zora">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\music\botw-hyrulecastle" />
+    <None Include="Resources\music\botw-kass" />
+    <None Include="Resources\music\mk64-battle" />
+    <None Include="Resources\music\mk64-bb" />
+    <None Include="Resources\music\mk64-bc" />
+    <None Include="Resources\music\mk64-ceremony" />
+    <None Include="Resources\music\mk64-ceremony-loss" />
+    <None Include="Resources\music\mk64-cm" />
+    <None Include="Resources\music\mk64-dkjp" />
+    <None Include="Resources\music\mk64-fs" />
+    <None Include="Resources\music\mk64-kb" />
+    <None Include="Resources\music\mk64-kd" />
+    <None Include="Resources\music\mk64-lr" />
+    <None Include="Resources\music\mk64-menu" />
+    <None Include="Resources\music\mk64-mmf" />
+    <None Include="Resources\music\mk64-rr" />
+    <None Include="Resources\music\mk64-star" />
+    <None Include="Resources\music\mk64-tt" />
+    <None Include="Resources\music\mmr-f-sot" />
+    <None Include="Resources\music\mmr-jazz" />
+    <None Include="Resources\music\mmr-theme" />
+    <None Include="Resources\music\oot-boss" />
+    <None Include="Resources\music\oot-c-goddess" />
+    <None Include="Resources\music\oot-castlecollapse" />
+    <None Include="Resources\music\oot-castlecourtyard" />
+    <None Include="Resources\music\oot-chamberofsages" />
+    <None Include="Resources\music\oot-dekutree" />
+    <None Include="Resources\music\oot-dinosaur" />
+    <None Include="Resources\music\oot-dodongocavern" />
+    <None Include="Resources\music\oot-f-ganondorf" />
+    <None Include="Resources\music\oot-f-medallion" />
+    <None Include="Resources\music\oot-f-opendot" />
+    <None Include="Resources\music\oot-f-stone" />
+    <None Include="Resources\music\oot-f-timetravel" />
+    <None Include="Resources\music\oot-firetemple" />
+    <None Include="Resources\music\oot-foresttemple" />
+    <None Include="Resources\music\oot-ganon" />
+    <None Include="Resources\music\oot-ganoncastle" />
+    <None Include="Resources\music\oot-ganondorf" />
+    <None Include="Resources\music\oot-ganondorfbattle" />
+    <None Include="Resources\music\oot-gerudovalley" />
+    <None Include="Resources\music\oot-icecavern" />
+    <None Include="Resources\music\oot-insidedekutree" />
+    <None Include="Resources\music\oot-jabu" />
+    <None Include="Resources\music\oot-kakariko1" />
+    <None Include="Resources\music\oot-kakariko2" />
+    <None Include="Resources\music\oot-kokiriforest" />
+    <None Include="Resources\music\oot-market" />
+    <None Include="Resources\music\oot-miniboss" />
+    <None Include="Resources\music\oot-navi" />
+    <None Include="Resources\music\oot-shadowtemple" />
+    <None Include="Resources\music\oot-sheik" />
+    <None Include="Resources\music\oot-spirittemple" />
+    <None Include="Resources\music\oot-templeoftime" />
+    <None Include="Resources\music\oot-watertemple" />
+    <None Include="Resources\music\pa-ikanacastle" />
+    <None Include="Resources\music\pm-field" />
+    <None Include="Resources\music\sf64-aquas" />
+    <None Include="Resources\music\sf64-area6" />
+    <None Include="Resources\music\sf64-bolse" />
+    <None Include="Resources\music\sf64-boss1" />
+    <None Include="Resources\music\sf64-boss2" />
+    <None Include="Resources\music\sf64-boss3" />
+    <None Include="Resources\music\sf64-corneria" />
+    <None Include="Resources\music\sf64-fichina" />
+    <None Include="Resources\music\sf64-katarina" />
+    <None Include="Resources\music\sf64-meteo" />
+    <None Include="Resources\music\sf64-sectorx" />
+    <None Include="Resources\music\sf64-sectory" />
+    <None Include="Resources\music\sf64-starwolf" />
+    <None Include="Resources\music\sf64-titania" />
+    <None Include="Resources\music\sf64-venom" />
+    <None Include="Resources\music\sf64-zoness" />
+    <None Include="Resources\music\sm64-battlefield" />
+    <None Include="Resources\music\sm64-bbh" />
+    <None Include="Resources\music\sm64-bitdw" />
+    <None Include="Resources\music\sm64-boss" />
+    <None Include="Resources\music\sm64-castle" />
+    <None Include="Resources\music\sm64-ccm" />
+    <None Include="Resources\music\sm64-f-bitsclear" />
+    <None Include="Resources\music\sm64-f-bowser" />
+    <None Include="Resources\music\sm64-f-bowserclear" />
+    <None Include="Resources\music\sm64-f-intro" />
+    <None Include="Resources\music\sm64-f-lakitu" />
+    <None Include="Resources\music\sm64-f-peach" />
+    <None Include="Resources\music\sm64-f-race" />
+    <None Include="Resources\music\sm64-f-savepeach" />
+    <None Include="Resources\music\sm64-f-solved" />
+    <None Include="Resources\music\sm64-f-star" />
+    <None Include="Resources\music\sm64-f-starget" />
+    <None Include="Resources\music\sm64-f-toad" />
+    <None Include="Resources\music\sm64-f-unlock" />
+    <None Include="Resources\music\sm64-fileselect" />
+    <None Include="Resources\music\sm64-finalbowser" />
+    <None Include="Resources\music\sm64-hmc" />
+    <None Include="Resources\music\sm64-jrb" />
+    <None Include="Resources\music\sm64-lll" />
+    <None Include="Resources\music\sm64-lullaby" />
+    <None Include="Resources\music\sm64-mgr" />
+    <None Include="Resources\music\sm64-slide" />
+    <None Include="Resources\music\sm64-steps" />
+    <None Include="Resources\music\smg2-skystation" />
+    <None Include="Resources\music\ss-groose" />
+    <None Include="Resources\music\uc-boss" />
+    <None Include="Resources\music\uc-dekuforest" />
+    <None Include="Resources\music\uc-dekutree" />
+    <None Include="Resources\music\uc-dream" />
+    <None Include="Resources\music\uc-dungeon" />
+    <None Include="Resources\music\uc-field" />
+    <None Include="Resources\music\uc-fileselect" />
+    <None Include="Resources\music\uc-foresttemple" />
+    <None Include="Resources\music\uc-gerudobay" />
+    <None Include="Resources\music\uc-goronvillage" />
+    <None Include="Resources\music\uc-miniboss" />
+    <None Include="Resources\music\uc-minigame" />
+    <None Include="Resources\music\uc-mountain" />
+    <None Include="Resources\music\uc-navi" />
+    <None Include="Resources\music\uc-predungeon" />
+    <None Include="Resources\music\uc-snowfield" />
+    <None Include="Resources\music\uc-snowfieldold" />
+    <None Include="Resources\music\uc-village" />
+    <None Include="Resources\music\uc-zelda" />
+    <None Include="Resources\music\uc-zora" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
