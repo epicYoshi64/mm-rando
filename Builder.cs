@@ -46,6 +46,10 @@ namespace MMRando
                     int n = random.Next(Unassigned.Count);
                     SequenceInfo source = Unassigned[n];
                     source.Replaces = target.Replaces;
+                    if (source.Instrument == -1)
+                    {
+                        source.Instrument = target.Instrument;
+                    }
                     Debug.WriteLine($"{target.Name}: {source.Name}");
                 }
                 else
@@ -61,7 +65,7 @@ namespace MMRando
 
         private void WriteAudioSeq(Random random)
         {
-            if (_settings.Music != Music.Random)
+            if (_settings.Music != Music.Random && _settings.Music != Music.ActorSounds)
             {
                 return;
             }
@@ -77,6 +81,10 @@ namespace MMRando
             ResourceUtils.ApplyHack(Values.ModsDirectory + "fix-music");
             ResourceUtils.ApplyHack(Values.ModsDirectory + "inst24-swap-guitar");
             SequenceUtils.RebuildAudioSeq(RomData.SequenceList);
+            if (_settings.Music == Music.ActorSounds)
+            {
+                SequenceUtils.SetAllSequenceIntruments(9);
+            }
         }
 
         private void WriteMuteMusic()

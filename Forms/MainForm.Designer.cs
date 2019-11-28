@@ -1152,7 +1152,8 @@ namespace MMRando
             this.cMusic.Items.AddRange(new object[] {
             "Default",
             "Random",
-            "None (Risky)"});
+            "None (Risky)",
+            "AcToR sOuNdS"});
             this.cMusic.Location = new System.Drawing.Point(128, 248);
             this.cMusic.Name = "cMusic";
             this.cMusic.Size = new System.Drawing.Size(167, 21);

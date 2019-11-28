@@ -65,11 +65,20 @@ namespace MMRando.Utils
                     i += 3;
                 };
 
-                if (sourceSequence.MM_seq != 0x18 && musicFiles.Contains(sourceName))
+                if (sourceSequence.MM_seq != 0x18 && (musicFiles.Contains(sourceName) || sourceSequence.MM_seq != -1))
                 {
                     RomData.SequenceList.Add(sourceSequence);
                 };
             };
+            foreach( string seqName in musicFiles.Where(s => RomData.SequenceList.Find(seq=>s.Equals(seq.Name)) == null))
+            {
+                RomData.SequenceList.Add(new SequenceInfo
+                {
+                    Name = seqName,
+                    Type = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+                    Instrument = -1
+                });
+            }
         }
 
         public static void RebuildAudioSeq(List<SequenceInfo> SequenceList)
@@ -222,7 +231,18 @@ namespace MMRando.Utils
                 {
                     RomData.MMFileList[f].Data[paddr] = (byte)SequenceList[j].Instrument;
                 }
+            }
+        }
 
+        public static void SetAllSequenceIntruments(byte instrument)
+        {
+            //update inst sets
+            int f = RomUtils.GetFileIndexForWriting(Addresses.InstSetMap);
+            int basea = RomData.MMFileList[f].Addr;
+            for (int i = 1; i < 128; i++)
+            {
+                int paddr = (Addresses.InstSetMap - basea) + (i * 2) + 2;
+                RomData.MMFileList[f].Data[paddr] = instrument;
             }
         }
 
