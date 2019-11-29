@@ -239,7 +239,7 @@ namespace MMRando.Utils
             //update inst sets
             int f = RomUtils.GetFileIndexForWriting(Addresses.InstSetMap);
             int basea = RomData.MMFileList[f].Addr;
-            for (int i = 1; i < 128; i++)
+            for (int i = 0; i < 128; i++)
             {
                 int paddr = (Addresses.InstSetMap - basea) + (i * 2) + 2;
                 RomData.MMFileList[f].Data[paddr] = instrument;

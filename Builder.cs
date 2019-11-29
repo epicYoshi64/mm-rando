@@ -72,6 +72,7 @@ namespace MMRando
 
             SequenceUtils.ReadSequenceInfo();
             BGMShuffle(random);
+            //EntranceUtils.SetAllEntranceMusicContinue();
 
             foreach (SequenceInfo s in RomData.SequenceList)
             {
@@ -83,7 +84,7 @@ namespace MMRando
             SequenceUtils.RebuildAudioSeq(RomData.SequenceList);
             if (_settings.Music == Music.ActorSounds)
             {
-                SequenceUtils.SetAllSequenceIntruments(9);
+                SequenceUtils.SetAllSequenceIntruments(1);
             }
         }
 
