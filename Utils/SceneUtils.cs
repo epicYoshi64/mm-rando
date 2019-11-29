@@ -1,4 +1,5 @@
 ﻿using MMRando.Models.Rom;
+using System;
 using System.Collections.Generic;
 
 namespace MMRando.Utils
@@ -85,6 +86,12 @@ namespace MMRando.Utils
                         break;
                     }
                     j += 8;
+                }
+                List<int> headers = new List<int>();
+                FindSceneHeaders(i, 0, headers);
+                foreach( int header in headers)
+                {
+                    ReadSequenceInfo(i, header);
                 }
             }
         }
@@ -249,7 +256,90 @@ namespace MMRando.Utils
                 }
             }
         }
+        private static void AddExits(int sceneNumber, int headeraddr, List<int> exits)
+        {
+            int f = RomData.SceneList[sceneNumber].File;
+            int j = headeraddr;
+            while (true)
+            {
+                byte cmd = RomData.MMFileList[f].Data[j];
+                if (cmd == 0x13)
+                {
+                    exits.Add((int)ReadWriteUtils.Arr_ReadU32(RomData.MMFileList[f].Data, j + 4) & 0xFFFFFF);
+                }
+                else if (cmd == 0x14)
+                {
+                    break;
+                }
+                j += 8;
+            }
+        }
 
+        private static void ReadSequenceInfo(int sceneIndex, int headeraddr)
+        {
+            int f = RomData.SceneList[sceneIndex].File;
+            int sceneNumber = RomData.SceneList[sceneIndex].Number;
+            int j = headeraddr;
+            while (true)
+            {
+                byte cmd = RomData.MMFileList[f].Data[j];
+                if (cmd == 0x15)
+                {
+                    // write final hours to everywhere
+                    //ReadWriteUtils.Arr_WriteU32(RomData.MMFileList[f].Data, j+4, 0x1357);
+                }
+                if (cmd == 0x14)
+                {
+                    break;
+                }
+                j += 8;
+            }
+        }
+
+        private static void FindSceneHeaders(int sceneNumber, int headeraddr, List<int> headers)
+        {
+            int f = RomData.SceneList[sceneNumber].File;
+            int j = headeraddr;
+            headers.Add(headeraddr);
+            int setupsaddr = -1;
+            int nextlowest = -1;
+            byte s;
+            while (true)
+            {
+                byte cmd = RomData.MMFileList[f].Data[j];
+                if (cmd == 0x18)
+                {
+                    setupsaddr = (int)ReadWriteUtils.Arr_ReadU32(RomData.MMFileList[f].Data, j + 4) & 0xFFFFFF;
+                }
+                else if (cmd == 0x14)
+                {
+                    break;
+                }
+                else
+                {
+                    if (RomData.MMFileList[f].Data[j + 4] == 0x02)
+                    {
+                        int p = (int)ReadWriteUtils.Arr_ReadU32(RomData.MMFileList[f].Data, j + 4) & 0xFFFFFF;
+                        if (((p < nextlowest) || (nextlowest == -1)) && ((p > setupsaddr) && (setupsaddr != -1)))
+                        {
+                            nextlowest = p;
+                        }
+                    }
+                }
+                j += 8;
+            }
+            if ((setupsaddr != -1) && nextlowest != -1)
+            {
+                j = setupsaddr;
+                s = RomData.MMFileList[f].Data[j];
+                while (s == 0x02)
+                {
+                    int p = (int)ReadWriteUtils.Arr_ReadU32(RomData.MMFileList[f].Data, j) & 0xFFFFFF;
+                    FindSceneHeaders(sceneNumber, p, headers);
+                    j += 4;
+                    s = RomData.MMFileList[f].Data[j];
+                }
+            }
+        }
     }
-
 }

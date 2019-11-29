@@ -116,8 +116,10 @@
     </Compile>
     <Compile Include="Forms\Tooltips\TooltipBuilder.cs" />
     <Compile Include="GameObjects\GossipQuote.cs" />
+    <Compile Include="GameObjects\InstrumentSet.cs" />
     <Compile Include="GameObjects\Item.cs" />
     <Compile Include="GameObjects\MessageShopText.cs" />
+    <Compile Include="GameObjects\MusicSequence.cs" />
     <Compile Include="GameObjects\Region.cs" />
     <Compile Include="GameObjects\TextCommands.cs" />
     <Compile Include="Models\RandomizedResult.cs" />
