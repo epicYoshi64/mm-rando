@@ -152,13 +152,13 @@ namespace MMRando
             }
         }
 
-        private void WriteTunicColor()
+        private void WriteTunicColor(Random random)
         {
             Color t = _settings.TunicColor;
             byte[] color = { t.R, t.G, t.B };
 
             var otherTunics = ResourceUtils.GetAddresses(Values.AddrsDirectory + "tunic-forms");
-            TunicUtils.UpdateFormTunics(otherTunics, _settings.TunicColor);
+            TunicUtils.UpdateFormTunics(otherTunics, ColorUtils.RandomFormColors(random));
 
             var playerModel = DeterminePlayerModel();
             var characterIndex = (int)playerModel;
@@ -1136,7 +1136,7 @@ namespace MMRando
 
             worker.ReportProgress(72, "Writing cosmetics...");
             WriteTatlColour();
-            WriteTunicColor();
+            WriteTunicColor(new Random(BitConverter.ToInt32(hash, 0)));
 
             worker.ReportProgress(73, "Writing music...");
             WriteAudioSeq(new Random(BitConverter.ToInt32(hash, 0)));

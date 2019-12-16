@@ -246,8 +246,9 @@ namespace MMRando.Utils
             }
         }
 
-        public static void UpdateFormTunics(List<int[]> addresses, Color target)
+        public static void UpdateFormTunics(List<int[]> addresses, Color[] targets)
         {
+            Color[] t = new Color[] { targets[0], targets[1], targets[2], targets[2], targets[3] };
             for (int i = 0; i < addresses.Count; i++)
             {
                 for (int j = 0; j < addresses[i].Length; j++)
@@ -255,7 +256,7 @@ namespace MMRando.Utils
                     int f = RomUtils.GetFileIndexForWriting(addresses[i][j]);
                     int a = addresses[i][j] - RomData.MMFileList[f].Addr;
                     Color[] c = ReadColours(f, a, sizes[i]);
-                    c = ShiftHue(c, target, sizes[i], zora[i], grad[i], fd[i]);
+                    c = ShiftHue(c, t[i], sizes[i], zora[i], grad[i], fd[i]);
                     WriteColours(f, a, sizes[i], c);
                 }
             }

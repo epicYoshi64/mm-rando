@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace MMRando.Utils
@@ -95,6 +96,19 @@ namespace MMRando.Utils
             }
         }
 
-    }
+        public static Color[] RandomFormColors(Random random)
+        {
+            List<Color> forms = new List<Color>();
+            for( int i = 0; i < 4; i++)
+            {
+                forms.Add(RandomColor(random));
+            }
+            return forms.ToArray();
+        }
 
+        public static Color RandomColor(Random random)
+        {
+            return FromAHSB(random.Next(256), random.Next(360), (float)random.NextDouble(), (float)random.NextDouble());
+        }
+    }
 }
