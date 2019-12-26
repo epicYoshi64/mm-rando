@@ -99,13 +99,8 @@ namespace MMRando.Utils
                 var nonRequiredHints = new List<string>();
                 foreach (var kvp in itemsInRegions)
                 {
-                    var numberOfRequiredItems = kvp.Value.Count(io => !io.Item.Name().Contains("Heart")
-                        && (randomizedResult.Settings.AddSongs || !ItemUtils.IsSong(io.Item))
-                        && (randomizedResult.Settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere || !ItemUtils.IsBossKey(io.Item))
-                        && !ItemUtils.IsStrayFairy(io.Item)
-                        && !ItemUtils.IsSkulltulaToken(io.Item)
-                        && randomizedResult.ItemsRequiredForMoonAccess.Contains(io.Item));
-                    var numberOfImportantItems = kvp.Value.Count(io => !io.Item.Name().Contains("Heart") && randomizedResult.ImportantItems.Contains(io.Item));
+                    var numberOfRequiredItems = kvp.Value.Count(io => ItemUtils.IsRequired(io.Item, randomizedResult));
+                    var numberOfImportantItems = kvp.Value.Count(io => ItemUtils.IsImportant(io.Item, randomizedResult));
 
                     if (numberOfRequiredItems == 0 && numberOfImportantItems > 0)
                     {
@@ -137,11 +132,11 @@ namespace MMRando.Utils
                     //list.Add($"\x1E{sfx}{start} \x01{locationMessage}\x00 {mid} \x06{itemMessage}\x00...\xBF".Wrap(35, "\x11"));
 
                     var mid = "has";
-                    list.Add($"\x1E{sfx}{start} {TextCommands.ColorRed}{locationMessage}{TextCommands.ColorWhite} {mid} {color}{NumberToWords(numberOfImportantItems)} important item{(numberOfRequiredItems == 1 ? "" : "s")}{TextCommands.ColorWhite}...\xBF".Wrap(35, "\x11"));
+                    list.Add($"\x1E{sfx}{start} {TextCommands.ColorRed}{locationMessage}{TextCommands.ColorWhite} {mid} {color}{NumberToWords(numberOfImportantItems)} important item{(numberOfImportantItems == 1 ? "" : "s")}{TextCommands.ColorWhite}...\xBF".Wrap(35, "\x11"));
                 }
 
-                var numberOfRequiredHints = 3;
-                var numberOfNonRequiredHints = 2;
+                var numberOfRequiredHints = 2;
+                var numberOfNonRequiredHints = 3;
 
                 for (var i = 0; i < numberOfRequiredHints; i++)
                 {
