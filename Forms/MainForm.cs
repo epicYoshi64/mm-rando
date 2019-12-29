@@ -1030,6 +1030,7 @@ namespace MMRando
             _settings.NoStartingItems = true;
             _settings.TunicColor = bTunic.BackColor;
             _settings.Seed = Math.Abs(Environment.TickCount);
+            _settings.Music = Music.Random;
 
             tSeed.Text = _settings.Seed.ToString();
 
