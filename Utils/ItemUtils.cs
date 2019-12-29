@@ -7,6 +7,7 @@ using MMRando.Extensions;
 using MMRando.Attributes;
 using System.Collections.ObjectModel;
 using MMRando.Models;
+using MMRando.Models.Settings;
 
 namespace MMRando.Utils
 {
@@ -59,6 +60,38 @@ namespace MMRando.Utils
                 || item == Item.ItemSnowheadBossKey
                 || item == Item.ItemGreatBayBossKey
                 || item == Item.ItemStoneTowerBossKey;
+        }
+
+        public static bool IsDungeonMapCompass(Item item)
+        {
+            return item == Item.ItemWoodfallMap
+                || item == Item.ItemWoodfallCompass
+                || item == Item.ItemSnowheadMap
+                || item == Item.ItemSnowheadCompass
+                || item == Item.ItemGreatBayMap
+                || item == Item.ItemGreatBayCompass
+                || item == Item.ItemStoneTowerMap
+                || item == Item.ItemStoneTowerCompass;
+        }
+
+        public static bool IsDungeonItemMatchesAlgorithm(Item item, DungeonItemAlgorithm algo, SettingsObject settings)
+        {
+            if( IsDungeonMapCompass(item))
+            {
+                return settings.MapCompassPlacement == algo;
+            }
+            else if ( IsKey(item) )
+            {
+                return settings.KeyPlacement == algo;
+            }
+            else if ( IsBossKey(item))
+            {
+                return settings.BossKeyPlacement == algo;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static bool IsInvertedST(Item item)

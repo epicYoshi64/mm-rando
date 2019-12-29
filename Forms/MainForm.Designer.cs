@@ -83,6 +83,9 @@ namespace MMRando
             this.lMode = new System.Windows.Forms.Label();
             this.cMode = new System.Windows.Forms.ComboBox();
             this.tabGimmick = new System.Windows.Forms.TabPage();
+            this.lFairyCount = new System.Windows.Forms.Label();
+            this.nFairyCount = new System.Windows.Forms.NumericUpDown();
+            this.lRandomRemains = new System.Windows.Forms.Label();
             this.nRandomRemains = new System.Windows.Forms.NumericUpDown();
             this.lBossKeyShuffle = new System.Windows.Forms.Label();
             this.lKeyShuffle = new System.Windows.Forms.Label();
@@ -160,9 +163,8 @@ namespace MMRando
             this.tpPatchSettings = new System.Windows.Forms.TabPage();
             this.tPatch = new System.Windows.Forms.TextBox();
             this.bLoadPatch = new System.Windows.Forms.Button();
-            this.lRandomRemains = new System.Windows.Forms.Label();
-            this.nFairyCount = new System.Windows.Forms.NumericUpDown();
-            this.lFairyCount = new System.Windows.Forms.Label();
+            this.lMapPlacement = new System.Windows.Forms.Label();
+            this.cMapPlacement = new System.Windows.Forms.ComboBox();
             this.tSettings.SuspendLayout();
             this.tabROMSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -173,6 +175,7 @@ namespace MMRando
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabGimmick.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nFairyCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).BeginInit();
             this.tabComfort.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -180,7 +183,6 @@ namespace MMRando
             this.ttOutput.SuspendLayout();
             this.tpOutputSettings.SuspendLayout();
             this.tpPatchSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nFairyCount)).BeginInit();
             this.SuspendLayout();
             // 
             // bopen
@@ -838,6 +840,8 @@ namespace MMRando
             // 
             // tabGimmick
             // 
+            this.tabGimmick.Controls.Add(this.lMapPlacement);
+            this.tabGimmick.Controls.Add(this.cMapPlacement);
             this.tabGimmick.Controls.Add(this.lFairyCount);
             this.tabGimmick.Controls.Add(this.nFairyCount);
             this.tabGimmick.Controls.Add(this.lRandomRemains);
@@ -868,9 +872,40 @@ namespace MMRando
             this.tabGimmick.Text = "Gimmicks";
             this.tabGimmick.UseVisualStyleBackColor = true;
             // 
+            // lFairyCount
+            // 
+            this.lFairyCount.AutoSize = true;
+            this.lFairyCount.Location = new System.Drawing.Point(58, 404);
+            this.lFairyCount.Name = "lFairyCount";
+            this.lFairyCount.Size = new System.Drawing.Size(63, 13);
+            this.lFairyCount.TabIndex = 28;
+            this.lFairyCount.Text = "Fairy Count:";
+            // 
+            // nFairyCount
+            // 
+            this.nFairyCount.Location = new System.Drawing.Point(127, 402);
+            this.nFairyCount.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nFairyCount.Name = "nFairyCount";
+            this.nFairyCount.Size = new System.Drawing.Size(158, 20);
+            this.nFairyCount.TabIndex = 27;
+            this.nFairyCount.ValueChanged += new System.EventHandler(this.nFairyCount_ValueChanged);
+            // 
+            // lRandomRemains
+            // 
+            this.lRandomRemains.AutoSize = true;
+            this.lRandomRemains.Location = new System.Drawing.Point(27, 378);
+            this.lRandomRemains.Name = "lRandomRemains";
+            this.lRandomRemains.Size = new System.Drawing.Size(94, 13);
+            this.lRandomRemains.TabIndex = 26;
+            this.lRandomRemains.Text = "Random Remains:";
+            // 
             // nRandomRemains
             // 
-            this.nRandomRemains.Location = new System.Drawing.Point(127, 353);
+            this.nRandomRemains.Location = new System.Drawing.Point(127, 376);
             this.nRandomRemains.Maximum = new decimal(new int[] {
             4,
             0,
@@ -884,7 +919,7 @@ namespace MMRando
             // lBossKeyShuffle
             // 
             this.lBossKeyShuffle.AutoSize = true;
-            this.lBossKeyShuffle.Location = new System.Drawing.Point(34, 329);
+            this.lBossKeyShuffle.Location = new System.Drawing.Point(34, 352);
             this.lBossKeyShuffle.Name = "lBossKeyShuffle";
             this.lBossKeyShuffle.Size = new System.Drawing.Size(87, 13);
             this.lBossKeyShuffle.TabIndex = 24;
@@ -893,7 +928,7 @@ namespace MMRando
             // lKeyShuffle
             // 
             this.lKeyShuffle.AutoSize = true;
-            this.lKeyShuffle.Location = new System.Drawing.Point(32, 302);
+            this.lKeyShuffle.Location = new System.Drawing.Point(32, 325);
             this.lKeyShuffle.Name = "lKeyShuffle";
             this.lKeyShuffle.Size = new System.Drawing.Size(89, 13);
             this.lKeyShuffle.TabIndex = 23;
@@ -907,7 +942,7 @@ namespace MMRando
             "Shuffled",
             "Include Fairies",
             "Anywhere"});
-            this.cBossKeyShuffle.Location = new System.Drawing.Point(127, 326);
+            this.cBossKeyShuffle.Location = new System.Drawing.Point(127, 349);
             this.cBossKeyShuffle.Name = "cBossKeyShuffle";
             this.cBossKeyShuffle.Size = new System.Drawing.Size(158, 21);
             this.cBossKeyShuffle.TabIndex = 22;
@@ -921,7 +956,7 @@ namespace MMRando
             "Shuffled",
             "Include Fairies",
             "Anywhere"});
-            this.cKeyShuffle.Location = new System.Drawing.Point(127, 299);
+            this.cKeyShuffle.Location = new System.Drawing.Point(127, 322);
             this.cKeyShuffle.Name = "cKeyShuffle";
             this.cKeyShuffle.Size = new System.Drawing.Size(158, 21);
             this.cKeyShuffle.TabIndex = 21;
@@ -1761,36 +1796,28 @@ namespace MMRando
             this.bLoadPatch.UseVisualStyleBackColor = true;
             this.bLoadPatch.Click += new System.EventHandler(this.BLoadPatch_Click);
             // 
-            // lRandomRemains
+            // lMapPlacement
             // 
-            this.lRandomRemains.AutoSize = true;
-            this.lRandomRemains.Location = new System.Drawing.Point(27, 355);
-            this.lRandomRemains.Name = "lRandomRemains";
-            this.lRandomRemains.Size = new System.Drawing.Size(94, 13);
-            this.lRandomRemains.TabIndex = 26;
-            this.lRandomRemains.Text = "Random Remains:";
+            this.lMapPlacement.AutoSize = true;
+            this.lMapPlacement.Location = new System.Drawing.Point(8, 297);
+            this.lMapPlacement.Name = "lMapPlacement";
+            this.lMapPlacement.Size = new System.Drawing.Size(112, 13);
+            this.lMapPlacement.TabIndex = 30;
+            this.lMapPlacement.Text = "Map/Compass Shuffle";
             // 
-            // nFairyCount
+            // cMapPlacement
             // 
-            this.nFairyCount.Location = new System.Drawing.Point(127, 379);
-            this.nFairyCount.Maximum = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.nFairyCount.Name = "nFairyCount";
-            this.nFairyCount.Size = new System.Drawing.Size(158, 20);
-            this.nFairyCount.TabIndex = 27;
-            this.nFairyCount.ValueChanged += new System.EventHandler(this.nFairyCount_ValueChanged);
-            // 
-            // lFairyCount
-            // 
-            this.lFairyCount.AutoSize = true;
-            this.lFairyCount.Location = new System.Drawing.Point(58, 381);
-            this.lFairyCount.Name = "lFairyCount";
-            this.lFairyCount.Size = new System.Drawing.Size(63, 13);
-            this.lFairyCount.TabIndex = 28;
-            this.lFairyCount.Text = "Fairy Count:";
+            this.cMapPlacement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cMapPlacement.FormattingEnabled = true;
+            this.cMapPlacement.Items.AddRange(new object[] {
+            "Shuffled",
+            "Include Fairies",
+            "Anywhere"});
+            this.cMapPlacement.Location = new System.Drawing.Point(127, 294);
+            this.cMapPlacement.Name = "cMapPlacement";
+            this.cMapPlacement.Size = new System.Drawing.Size(158, 21);
+            this.cMapPlacement.TabIndex = 29;
+            this.cMapPlacement.SelectedIndexChanged += new System.EventHandler(this.cMapPlacement_SelectedIndexChanged);
             // 
             // MainForm
             // 
@@ -1832,6 +1859,7 @@ namespace MMRando
             this.groupBox2.PerformLayout();
             this.tabGimmick.ResumeLayout(false);
             this.tabGimmick.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nFairyCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).EndInit();
             this.tabComfort.ResumeLayout(false);
             this.tabComfort.PerformLayout();
@@ -1844,7 +1872,6 @@ namespace MMRando
             this.tpOutputSettings.PerformLayout();
             this.tpPatchSettings.ResumeLayout(false);
             this.tpPatchSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nFairyCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1983,6 +2010,8 @@ namespace MMRando
         private System.Windows.Forms.NumericUpDown nFairyCount;
         private System.Windows.Forms.Label lRandomRemains;
         private System.Windows.Forms.Label lFairyCount;
+        private System.Windows.Forms.Label lMapPlacement;
+        private System.Windows.Forms.ComboBox cMapPlacement;
     }
 }
 

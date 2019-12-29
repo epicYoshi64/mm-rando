@@ -1185,9 +1185,8 @@ namespace MMRando
                 (i>=Item.ItemWoodfallMap&&i<=Item.ItemStoneTowerKey4) || (ItemUtils.IsStrayFairy(i) && i != Item.CollectibleStrayFairyClockTown));
             foreach (var i in dungeonItems)
             {
-                if ( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i)) ||
-                    (ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Anywhere) ||
-                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Anywhere) ||
+                if ( !(ItemUtils.IsKey(i) || ItemUtils.IsBossKey(i) || ItemUtils.IsDungeonMapCompass(i)) ||
+                    ItemUtils.IsDungeonItemMatchesAlgorithm(i, DungeonItemAlgorithm.Anywhere, _settings) ||
                     _settings.CustomJunkLocations.Contains(i))
                 {
                     int fairyCount = ItemList.Count(io => ItemUtils.IsStrayFairy(io.Item) && i.Region().Equals(io.Item.Region()) &&
@@ -1208,8 +1207,7 @@ namespace MMRando
                 {
                     dungeonItemPool = dungeonItemPool.Where(item => ItemUtils.IsInvertedST(i) == ItemUtils.IsInvertedST(item)).ToList();
                 }
-                if ((ItemUtils.IsKey(i) && _settings.KeyPlacement == DungeonItemAlgorithm.Shuffled) ||
-                    (ItemUtils.IsBossKey(i) && _settings.BossKeyPlacement == DungeonItemAlgorithm.Shuffled))
+                if (ItemUtils.IsDungeonItemMatchesAlgorithm(i, DungeonItemAlgorithm.Shuffled, _settings))
                 {
                     dungeonItemPool = dungeonItemPool.Where(item => !ItemUtils.IsStrayFairy(item)).ToList();
                 }

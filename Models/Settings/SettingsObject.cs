@@ -173,6 +173,11 @@ namespace MMRando.Models.Settings
         /// <summary>
         /// 
         /// </summary>
+        public DungeonItemAlgorithm MapCompassPlacement { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public DungeonItemAlgorithm KeyPlacement { get; set; }
 
         /// <summary>
@@ -479,8 +484,10 @@ namespace MMRando.Models.Settings
             SpeedupDogRace = (part5 & (1 << 2)) > 0;
             SpeedupLabFish = (part5 & (1 << 3)) > 0;
 
-            var keyPlacement = (byte)(part6 & 0xFF);
-            var bossKeyPlacement = (byte)((part6 & 0xFF00) >> 8);
+            var mapPlacement = (byte)(part6 & 0xFF);
+            // I hope that we won't ever exceed 7 possible algorithms so we can lump the keys together so share the byte
+            var keyPlacement = (byte)((part6 & 0xF00) >> 8);
+            var bossKeyPlacement = (byte)((part6 & 0xF000) >> 12);
             var randomRemains = (byte)((part6 & 0xFF0000) >> 16);
             var fairyCount = (byte)((part6 & 0xFF000000) >> 24);
 
@@ -496,6 +503,7 @@ namespace MMRando.Models.Settings
             GossipHintStyle = (GossipHintStyle)gossipHintsIndex;
             BlastMaskCooldown = (BlastMaskCooldown)blastmaskCooldown;
             Music = (Music)music;
+            MapCompassPlacement = (DungeonItemAlgorithm)mapPlacement;
             KeyPlacement = (DungeonItemAlgorithm)keyPlacement;
             BossKeyPlacement = (DungeonItemAlgorithm)bossKeyPlacement;
             RandomRemains = randomRemains;
@@ -567,8 +575,9 @@ namespace MMRando.Models.Settings
             if (SpeedupDogRace) { parts[4] += (1 << 2); }
             if (SpeedupLabFish) { parts[4] += (1 << 3); }
 
-            parts[5] = (byte)KeyPlacement
-                | ((byte)BossKeyPlacement << 8)
+            parts[5] = (byte) MapCompassPlacement
+                | (((byte)KeyPlacement & 0xF) << 8)
+                | (((byte)BossKeyPlacement & 0xF) << 12)
                 | ((byte)RandomRemains << 16)
                 | ((byte)VanillaFairyCount << 24);
 

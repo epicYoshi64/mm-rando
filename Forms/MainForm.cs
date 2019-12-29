@@ -488,6 +488,11 @@ namespace MMRando
             UpdateSingleSetting(() => _settings.KeyPlacement = (DungeonItemAlgorithm)cKeyShuffle.SelectedIndex);
         }
 
+        private void cMapPlacement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.MapCompassPlacement = (DungeonItemAlgorithm)cMapPlacement.SelectedIndex);
+        }
+
         private void cBossKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.BossKeyPlacement = (DungeonItemAlgorithm)cBossKeyShuffle.SelectedIndex);
@@ -994,6 +999,7 @@ namespace MMRando
             cClockSpeed.SelectedIndex = 0;
             cBlastCooldown.SelectedIndex = 0;
             cMusic.SelectedIndex = 0;
+            cMapPlacement.SelectedIndex = 1;
             cKeyShuffle.SelectedIndex = 1;
             cBossKeyShuffle.SelectedIndex = 0;
             nRandomRemains.Value = 1;
