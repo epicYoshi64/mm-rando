@@ -83,6 +83,8 @@ namespace MMRando
             this.lMode = new System.Windows.Forms.Label();
             this.cMode = new System.Windows.Forms.ComboBox();
             this.tabGimmick = new System.Windows.Forms.TabPage();
+            this.lMapPlacement = new System.Windows.Forms.Label();
+            this.cMapPlacement = new System.Windows.Forms.ComboBox();
             this.lFairyCount = new System.Windows.Forms.Label();
             this.nFairyCount = new System.Windows.Forms.NumericUpDown();
             this.lRandomRemains = new System.Windows.Forms.Label();
@@ -163,8 +165,8 @@ namespace MMRando
             this.tpPatchSettings = new System.Windows.Forms.TabPage();
             this.tPatch = new System.Windows.Forms.TextBox();
             this.bLoadPatch = new System.Windows.Forms.Button();
-            this.lMapPlacement = new System.Windows.Forms.Label();
-            this.cMapPlacement = new System.Windows.Forms.ComboBox();
+            this.cFairyPlacement = new System.Windows.Forms.ComboBox();
+            this.lFairyPlacement = new System.Windows.Forms.Label();
             this.tSettings.SuspendLayout();
             this.tabROMSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -840,6 +842,8 @@ namespace MMRando
             // 
             // tabGimmick
             // 
+            this.tabGimmick.Controls.Add(this.lFairyPlacement);
+            this.tabGimmick.Controls.Add(this.cFairyPlacement);
             this.tabGimmick.Controls.Add(this.lMapPlacement);
             this.tabGimmick.Controls.Add(this.cMapPlacement);
             this.tabGimmick.Controls.Add(this.lFairyCount);
@@ -871,6 +875,29 @@ namespace MMRando
             this.tabGimmick.TabIndex = 2;
             this.tabGimmick.Text = "Gimmicks";
             this.tabGimmick.UseVisualStyleBackColor = true;
+            // 
+            // lMapPlacement
+            // 
+            this.lMapPlacement.AutoSize = true;
+            this.lMapPlacement.Location = new System.Drawing.Point(8, 297);
+            this.lMapPlacement.Name = "lMapPlacement";
+            this.lMapPlacement.Size = new System.Drawing.Size(112, 13);
+            this.lMapPlacement.TabIndex = 30;
+            this.lMapPlacement.Text = "Map/Compass Shuffle";
+            // 
+            // cMapPlacement
+            // 
+            this.cMapPlacement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cMapPlacement.FormattingEnabled = true;
+            this.cMapPlacement.Items.AddRange(new object[] {
+            "Shuffled",
+            "Include Fairies",
+            "Anywhere"});
+            this.cMapPlacement.Location = new System.Drawing.Point(127, 294);
+            this.cMapPlacement.Name = "cMapPlacement";
+            this.cMapPlacement.Size = new System.Drawing.Size(158, 21);
+            this.cMapPlacement.TabIndex = 29;
+            this.cMapPlacement.SelectedIndexChanged += new System.EventHandler(this.cMapPlacement_SelectedIndexChanged);
             // 
             // lFairyCount
             // 
@@ -1796,28 +1823,28 @@ namespace MMRando
             this.bLoadPatch.UseVisualStyleBackColor = true;
             this.bLoadPatch.Click += new System.EventHandler(this.BLoadPatch_Click);
             // 
-            // lMapPlacement
+            // cFairyPlacement
             // 
-            this.lMapPlacement.AutoSize = true;
-            this.lMapPlacement.Location = new System.Drawing.Point(8, 297);
-            this.lMapPlacement.Name = "lMapPlacement";
-            this.lMapPlacement.Size = new System.Drawing.Size(112, 13);
-            this.lMapPlacement.TabIndex = 30;
-            this.lMapPlacement.Text = "Map/Compass Shuffle";
-            // 
-            // cMapPlacement
-            // 
-            this.cMapPlacement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cMapPlacement.FormattingEnabled = true;
-            this.cMapPlacement.Items.AddRange(new object[] {
+            this.cFairyPlacement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cFairyPlacement.FormattingEnabled = true;
+            this.cFairyPlacement.Items.AddRange(new object[] {
             "Shuffled",
             "Include Fairies",
             "Anywhere"});
-            this.cMapPlacement.Location = new System.Drawing.Point(127, 294);
-            this.cMapPlacement.Name = "cMapPlacement";
-            this.cMapPlacement.Size = new System.Drawing.Size(158, 21);
-            this.cMapPlacement.TabIndex = 29;
-            this.cMapPlacement.SelectedIndexChanged += new System.EventHandler(this.cMapPlacement_SelectedIndexChanged);
+            this.cFairyPlacement.Location = new System.Drawing.Point(127, 428);
+            this.cFairyPlacement.Name = "cFairyPlacement";
+            this.cFairyPlacement.Size = new System.Drawing.Size(158, 21);
+            this.cFairyPlacement.TabIndex = 31;
+            this.cFairyPlacement.SelectedIndexChanged += new System.EventHandler(this.cFairyPlacement_SelectedIndexChanged);
+            // 
+            // lFairyPlacement
+            // 
+            this.lFairyPlacement.AutoSize = true;
+            this.lFairyPlacement.Location = new System.Drawing.Point(34, 431);
+            this.lFairyPlacement.Name = "lFairyPlacement";
+            this.lFairyPlacement.Size = new System.Drawing.Size(85, 13);
+            this.lFairyPlacement.TabIndex = 32;
+            this.lFairyPlacement.Text = "Fairy Placement:";
             // 
             // MainForm
             // 
@@ -2012,6 +2039,8 @@ namespace MMRando
         private System.Windows.Forms.Label lFairyCount;
         private System.Windows.Forms.Label lMapPlacement;
         private System.Windows.Forms.ComboBox cMapPlacement;
+        private System.Windows.Forms.Label lFairyPlacement;
+        private System.Windows.Forms.ComboBox cFairyPlacement;
     }
 }
 

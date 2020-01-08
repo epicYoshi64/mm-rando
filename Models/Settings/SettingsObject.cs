@@ -186,6 +186,11 @@ namespace MMRando.Models.Settings
         public DungeonItemAlgorithm BossKeyPlacement { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public DungeonItemAlgorithm FairyPlacement { get; set; }
+
+        /// <summary>
         /// Add mundane rewards to the randomization pool
         /// </summary>
         public bool AddMundaneRewards { get; set; }
@@ -484,8 +489,9 @@ namespace MMRando.Models.Settings
             SpeedupDogRace = (part5 & (1 << 2)) > 0;
             SpeedupLabFish = (part5 & (1 << 3)) > 0;
 
-            var mapPlacement = (byte)(part6 & 0xFF);
             // I hope that we won't ever exceed 7 possible algorithms so we can lump the keys together so share the byte
+            var mapPlacement = (byte)(part6 & 0xF);
+            var fairyPlacement = (byte)((part6 & 0xF0)>> 4);
             var keyPlacement = (byte)((part6 & 0xF00) >> 8);
             var bossKeyPlacement = (byte)((part6 & 0xF000) >> 12);
             var randomRemains = (byte)((part6 & 0xFF0000) >> 16);
@@ -575,7 +581,8 @@ namespace MMRando.Models.Settings
             if (SpeedupDogRace) { parts[4] += (1 << 2); }
             if (SpeedupLabFish) { parts[4] += (1 << 3); }
 
-            parts[5] = (byte) MapCompassPlacement
+            parts[5] = ((byte)MapCompassPlacement & 0xF)
+                | (((byte)FairyPlacement & 0xF) << 4)
                 | (((byte)KeyPlacement & 0xF) << 8)
                 | (((byte)BossKeyPlacement & 0xF) << 12)
                 | ((byte)RandomRemains << 16)

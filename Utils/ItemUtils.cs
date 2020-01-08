@@ -88,6 +88,10 @@ namespace MMRando.Utils
             {
                 return settings.BossKeyPlacement == algo;
             }
+            else if ( IsStrayFairy(item) )
+            {
+                return settings.FairyPlacement == algo;
+            }
             else
             {
                 return false;

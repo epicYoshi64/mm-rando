@@ -483,19 +483,24 @@ namespace MMRando
             UpdateSingleSetting(() => _settings.AddStrayFairies = cStrayFairies.Checked);
         }
 
-        private void cKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateSingleSetting(() => _settings.KeyPlacement = (DungeonItemAlgorithm)cKeyShuffle.SelectedIndex);
-        }
-
         private void cMapPlacement_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.MapCompassPlacement = (DungeonItemAlgorithm)cMapPlacement.SelectedIndex);
         }
 
+        private void cKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.KeyPlacement = (DungeonItemAlgorithm)cKeyShuffle.SelectedIndex);
+        }
+
         private void cBossKeyShuffle_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateSingleSetting(() => _settings.BossKeyPlacement = (DungeonItemAlgorithm)cBossKeyShuffle.SelectedIndex);
+        }
+
+        private void cFairyPlacement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _settings.FairyPlacement = (DungeonItemAlgorithm)cFairyPlacement.SelectedIndex);
         }
 
         private void nRandomRemains_ValueChanged(object sender, EventArgs e)
@@ -1002,6 +1007,7 @@ namespace MMRando
             cMapPlacement.SelectedIndex = 1;
             cKeyShuffle.SelectedIndex = 1;
             cBossKeyShuffle.SelectedIndex = 0;
+            cFairyPlacement.SelectedIndex = 0;
             nRandomRemains.Value = 1;
             nFairyCount.Value = 10;
             cSpoiler.Checked = true;
