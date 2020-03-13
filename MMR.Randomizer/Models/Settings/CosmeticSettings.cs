@@ -35,6 +35,51 @@ namespace MMR.Randomizer.Models.Settings
         public Color TunicColor { get; set; } = Color.FromArgb(0x1E, 0x69, 0x1B);
 
         /// <summary>
+        /// The color of Deku Link's tunic
+        /// </summary>
+        public Color DekuTunicColor { get; set; } = Color.FromArgb(0x1E, 0x69, 0x1B);
+
+        /// <summary>
+        /// The color of Goron Link's tunic
+        /// </summary>
+        public Color GoronTunicColor { get; set; } = Color.FromArgb(0x1E, 0x69, 0x1B);
+
+        /// <summary>
+        /// The color of Zora Link's tunic
+        /// </summary>
+        public Color ZoraTunicColor { get; set; } = Color.FromArgb(0x1E, 0x69, 0x1B);
+
+        /// <summary>
+        /// The color of Fierce Deity Link's tunic
+        /// </summary>
+        public Color DeityTunicColor { get; set; } = Color.FromArgb(0x1E, 0x69, 0x1B);
+
+        /// <summary>
+        /// Whether Link's tunic is a random color
+        /// </summary>
+        public bool ignoreTunicColor { get; set; } = false;
+
+        /// <summary>
+        /// Whether Deku Link's tunic is a random color
+        /// </summary>
+        public bool ignoreDekuTunicColor { get; set; } = false;
+
+        /// <summary>
+        /// Whether Goron Link's tunic is a random color
+        /// </summary>
+        public bool ignoreGoronTunicColor { get; set; } = false;
+
+        /// <summary>
+        /// The color of Zora Link's tunic is a random color
+        /// </summary>
+        public bool ignoreZoraTunicColor { get; set; } = false;
+
+        /// <summary>
+        /// Whether Fierce Deity Link's tunic is a random color
+        /// </summary>
+        public bool ignoreDeityTunicColor { get; set; } = false;
+
+        /// <summary>
         /// Replaces Tatl's colors
         /// </summary>
         public TatlColorSchema TatlColorSchema { get; set; }

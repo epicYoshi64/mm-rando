@@ -103,6 +103,25 @@ namespace MMR.UI.Forms
             this.cDMult = new System.Windows.Forms.ComboBox();
             this.cGravity = new System.Windows.Forms.ComboBox();
             this.tabComfort = new System.Windows.Forms.TabPage();
+            this.bTunicRandom = new System.Windows.Forms.Button();
+            this.bDeityTunicRandom = new System.Windows.Forms.Button();
+            this.bZoraTunicRandom = new System.Windows.Forms.Button();
+            this.bGoronTunicRandom = new System.Windows.Forms.Button();
+            this.bDekuTunicRandom = new System.Windows.Forms.Button();
+            this.cLinkTunic = new System.Windows.Forms.CheckBox();
+            this.cDeityTunic = new System.Windows.Forms.CheckBox();
+            this.cZoraTunic = new System.Windows.Forms.CheckBox();
+            this.cGoronTunic = new System.Windows.Forms.CheckBox();
+            this.cDekuTunic = new System.Windows.Forms.CheckBox();
+            this.bDeityTunic = new System.Windows.Forms.Button();
+            this.bZoraTunic = new System.Windows.Forms.Button();
+            this.bGoronTunic = new System.Windows.Forms.Button();
+            this.lDekuTunicColor = new System.Windows.Forms.Label();
+            this.lGoronTunic = new System.Windows.Forms.Label();
+            this.lZoraTunic = new System.Windows.Forms.Label();
+            this.lDeityColor = new System.Windows.Forms.Label();
+            this.bDekuTunic = new System.Windows.Forms.Button();
+            this.cTargettingStyle = new System.Windows.Forms.CheckBox();
             this.cHUDGroupBox = new System.Windows.Forms.GroupBox();
             this.cHUDTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.btn_hud = new System.Windows.Forms.Button();
@@ -172,7 +191,6 @@ namespace MMR.UI.Forms
             this.tpPatchSettings = new System.Windows.Forms.TabPage();
             this.tPatch = new System.Windows.Forms.TextBox();
             this.bLoadPatch = new System.Windows.Forms.Button();
-            this.cTargettingStyle = new System.Windows.Forms.CheckBox();
             this.tSettings.SuspendLayout();
             this.tabROMSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1094,6 +1112,24 @@ namespace MMR.UI.Forms
             // 
             // tabComfort
             // 
+            this.tabComfort.Controls.Add(this.bTunicRandom);
+            this.tabComfort.Controls.Add(this.bDeityTunicRandom);
+            this.tabComfort.Controls.Add(this.bZoraTunicRandom);
+            this.tabComfort.Controls.Add(this.bGoronTunicRandom);
+            this.tabComfort.Controls.Add(this.bDekuTunicRandom);
+            this.tabComfort.Controls.Add(this.cLinkTunic);
+            this.tabComfort.Controls.Add(this.cDeityTunic);
+            this.tabComfort.Controls.Add(this.cZoraTunic);
+            this.tabComfort.Controls.Add(this.cGoronTunic);
+            this.tabComfort.Controls.Add(this.cDekuTunic);
+            this.tabComfort.Controls.Add(this.bDeityTunic);
+            this.tabComfort.Controls.Add(this.bZoraTunic);
+            this.tabComfort.Controls.Add(this.bGoronTunic);
+            this.tabComfort.Controls.Add(this.lDekuTunicColor);
+            this.tabComfort.Controls.Add(this.lGoronTunic);
+            this.tabComfort.Controls.Add(this.lZoraTunic);
+            this.tabComfort.Controls.Add(this.lDeityColor);
+            this.tabComfort.Controls.Add(this.bDekuTunic);
             this.tabComfort.Controls.Add(this.cTargettingStyle);
             this.tabComfort.Controls.Add(this.cHUDGroupBox);
             this.tabComfort.Controls.Add(this.cQuestItemStorage);
@@ -1126,6 +1162,241 @@ namespace MMR.UI.Forms
             this.tabComfort.TabIndex = 1;
             this.tabComfort.Text = "Comfort/Cosmetics";
             this.tabComfort.UseVisualStyleBackColor = true;
+            // 
+            // bTunicRandom
+            // 
+            this.bTunicRandom.BackColor = System.Drawing.Color.Maroon;
+            this.bTunicRandom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bTunicRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bTunicRandom.Location = new System.Drawing.Point(151, 171);
+            this.bTunicRandom.Margin = new System.Windows.Forms.Padding(0);
+            this.bTunicRandom.Name = "bTunicRandom";
+            this.bTunicRandom.Size = new System.Drawing.Size(15, 14);
+            this.bTunicRandom.TabIndex = 58;
+            this.bTunicRandom.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.bTunicRandom.UseVisualStyleBackColor = false;
+            this.bTunicRandom.Click += new System.EventHandler(this.bTunicRandom_Click);
+            // 
+            // bDeityTunicRandom
+            // 
+            this.bDeityTunicRandom.BackColor = System.Drawing.Color.Maroon;
+            this.bDeityTunicRandom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bDeityTunicRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bDeityTunicRandom.Location = new System.Drawing.Point(315, 202);
+            this.bDeityTunicRandom.Margin = new System.Windows.Forms.Padding(0);
+            this.bDeityTunicRandom.Name = "bDeityTunicRandom";
+            this.bDeityTunicRandom.Size = new System.Drawing.Size(15, 14);
+            this.bDeityTunicRandom.TabIndex = 57;
+            this.bDeityTunicRandom.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.bDeityTunicRandom.UseVisualStyleBackColor = false;
+            this.bDeityTunicRandom.Click += new System.EventHandler(this.bDeityTunicRandom_Click);
+            // 
+            // bZoraTunicRandom
+            // 
+            this.bZoraTunicRandom.BackColor = System.Drawing.Color.Maroon;
+            this.bZoraTunicRandom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bZoraTunicRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bZoraTunicRandom.Location = new System.Drawing.Point(241, 202);
+            this.bZoraTunicRandom.Margin = new System.Windows.Forms.Padding(0);
+            this.bZoraTunicRandom.Name = "bZoraTunicRandom";
+            this.bZoraTunicRandom.Size = new System.Drawing.Size(15, 14);
+            this.bZoraTunicRandom.TabIndex = 56;
+            this.bZoraTunicRandom.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.bZoraTunicRandom.UseVisualStyleBackColor = false;
+            this.bZoraTunicRandom.Click += new System.EventHandler(this.bZoraTunicRandom_Click);
+            // 
+            // bGoronTunicRandom
+            // 
+            this.bGoronTunicRandom.BackColor = System.Drawing.Color.Maroon;
+            this.bGoronTunicRandom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bGoronTunicRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bGoronTunicRandom.Location = new System.Drawing.Point(151, 202);
+            this.bGoronTunicRandom.Margin = new System.Windows.Forms.Padding(0);
+            this.bGoronTunicRandom.Name = "bGoronTunicRandom";
+            this.bGoronTunicRandom.Size = new System.Drawing.Size(15, 14);
+            this.bGoronTunicRandom.TabIndex = 55;
+            this.bGoronTunicRandom.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.bGoronTunicRandom.UseVisualStyleBackColor = false;
+            this.bGoronTunicRandom.Click += new System.EventHandler(this.bGoronTunicRandom_Click);
+            // 
+            // bDekuTunicRandom
+            // 
+            this.bDekuTunicRandom.BackColor = System.Drawing.Color.Maroon;
+            this.bDekuTunicRandom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bDekuTunicRandom.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bDekuTunicRandom.Location = new System.Drawing.Point(61, 202);
+            this.bDekuTunicRandom.Margin = new System.Windows.Forms.Padding(0);
+            this.bDekuTunicRandom.Name = "bDekuTunicRandom";
+            this.bDekuTunicRandom.Size = new System.Drawing.Size(15, 14);
+            this.bDekuTunicRandom.TabIndex = 54;
+            this.bDekuTunicRandom.TextImageRelation = System.Windows.Forms.TextImageRelation.TextAboveImage;
+            this.bDekuTunicRandom.UseVisualStyleBackColor = false;
+            this.bDekuTunicRandom.Click += new System.EventHandler(this.bDekuTunicRandom_Click);
+            // 
+            // cLinkTunic
+            // 
+            this.cLinkTunic.AutoSize = true;
+            this.cLinkTunic.BackColor = System.Drawing.Color.Transparent;
+            this.cLinkTunic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cLinkTunic.Location = new System.Drawing.Point(151, 157);
+            this.cLinkTunic.Name = "cLinkTunic";
+            this.cLinkTunic.Size = new System.Drawing.Size(15, 14);
+            this.cLinkTunic.TabIndex = 52;
+            this.cLinkTunic.UseVisualStyleBackColor = false;
+            this.cLinkTunic.Click += new System.EventHandler(this.cLinkTunic_Click);
+            // 
+            // cDeityTunic
+            // 
+            this.cDeityTunic.AutoSize = true;
+            this.cDeityTunic.BackColor = System.Drawing.Color.Transparent;
+            this.cDeityTunic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cDeityTunic.Location = new System.Drawing.Point(315, 189);
+            this.cDeityTunic.Name = "cDeityTunic";
+            this.cDeityTunic.Size = new System.Drawing.Size(15, 14);
+            this.cDeityTunic.TabIndex = 50;
+            this.cDeityTunic.UseVisualStyleBackColor = false;
+            this.cDeityTunic.Click += new System.EventHandler(this.cDeityTunic_Click);
+            // 
+            // cZoraTunic
+            // 
+            this.cZoraTunic.AutoSize = true;
+            this.cZoraTunic.BackColor = System.Drawing.Color.Transparent;
+            this.cZoraTunic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cZoraTunic.Location = new System.Drawing.Point(241, 189);
+            this.cZoraTunic.Name = "cZoraTunic";
+            this.cZoraTunic.Size = new System.Drawing.Size(15, 14);
+            this.cZoraTunic.TabIndex = 48;
+            this.cZoraTunic.UseVisualStyleBackColor = false;
+            this.cZoraTunic.Click += new System.EventHandler(this.cZoraTunic_Click);
+            // 
+            // cGoronTunic
+            // 
+            this.cGoronTunic.AutoSize = true;
+            this.cGoronTunic.BackColor = System.Drawing.Color.Transparent;
+            this.cGoronTunic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cGoronTunic.Location = new System.Drawing.Point(151, 189);
+            this.cGoronTunic.Name = "cGoronTunic";
+            this.cGoronTunic.Size = new System.Drawing.Size(15, 14);
+            this.cGoronTunic.TabIndex = 46;
+            this.cGoronTunic.UseVisualStyleBackColor = false;
+            this.cGoronTunic.Click += new System.EventHandler(this.cGoronTunic_Click);
+            // 
+            // cDekuTunic
+            // 
+            this.cDekuTunic.AutoSize = true;
+            this.cDekuTunic.BackColor = System.Drawing.Color.Transparent;
+            this.cDekuTunic.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cDekuTunic.Location = new System.Drawing.Point(61, 189);
+            this.cDekuTunic.Name = "cDekuTunic";
+            this.cDekuTunic.Size = new System.Drawing.Size(15, 14);
+            this.cDekuTunic.TabIndex = 44;
+            this.cDekuTunic.UseVisualStyleBackColor = false;
+            this.cDekuTunic.Click += new System.EventHandler(this.cDekuTunic_Click);
+            // 
+            // bDeityTunic
+            // 
+            this.bDeityTunic.BackColor = System.Drawing.Color.White;
+            this.bDeityTunic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bDeityTunic.Location = new System.Drawing.Point(286, 193);
+            this.bDeityTunic.Name = "bDeityTunic";
+            this.bDeityTunic.Size = new System.Drawing.Size(23, 23);
+            this.bDeityTunic.TabIndex = 42;
+            this.bDeityTunic.UseVisualStyleBackColor = false;
+            this.bDeityTunic.Click += new System.EventHandler(this.bDeityTunic_Click);
+            // 
+            // bZoraTunic
+            // 
+            this.bZoraTunic.BackColor = System.Drawing.Color.White;
+            this.bZoraTunic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bZoraTunic.Location = new System.Drawing.Point(212, 193);
+            this.bZoraTunic.Name = "bZoraTunic";
+            this.bZoraTunic.Size = new System.Drawing.Size(23, 23);
+            this.bZoraTunic.TabIndex = 41;
+            this.bZoraTunic.UseVisualStyleBackColor = false;
+            this.bZoraTunic.Click += new System.EventHandler(this.bZoraTunic_Click);
+            // 
+            // bGoronTunic
+            // 
+            this.bGoronTunic.BackColor = System.Drawing.Color.White;
+            this.bGoronTunic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bGoronTunic.Location = new System.Drawing.Point(122, 193);
+            this.bGoronTunic.Name = "bGoronTunic";
+            this.bGoronTunic.Size = new System.Drawing.Size(23, 23);
+            this.bGoronTunic.TabIndex = 40;
+            this.bGoronTunic.UseVisualStyleBackColor = false;
+            this.bGoronTunic.Click += new System.EventHandler(this.bGoronTunic_Click);
+            // 
+            // lDekuTunicColor
+            // 
+            this.lDekuTunicColor.AutoSize = true;
+            this.lDekuTunicColor.BackColor = System.Drawing.Color.Transparent;
+            this.lDekuTunicColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lDekuTunicColor.ForeColor = System.Drawing.Color.Black;
+            this.lDekuTunicColor.Location = new System.Drawing.Point(3, 198);
+            this.lDekuTunicColor.Name = "lDekuTunicColor";
+            this.lDekuTunicColor.Size = new System.Drawing.Size(33, 13);
+            this.lDekuTunicColor.TabIndex = 39;
+            this.lDekuTunicColor.Text = "Deku";
+            // 
+            // lGoronTunic
+            // 
+            this.lGoronTunic.AutoSize = true;
+            this.lGoronTunic.BackColor = System.Drawing.Color.Transparent;
+            this.lGoronTunic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lGoronTunic.ForeColor = System.Drawing.Color.Black;
+            this.lGoronTunic.Location = new System.Drawing.Point(86, 198);
+            this.lGoronTunic.Name = "lGoronTunic";
+            this.lGoronTunic.Size = new System.Drawing.Size(36, 13);
+            this.lGoronTunic.TabIndex = 38;
+            this.lGoronTunic.Text = "Goron";
+            // 
+            // lZoraTunic
+            // 
+            this.lZoraTunic.AutoSize = true;
+            this.lZoraTunic.BackColor = System.Drawing.Color.Transparent;
+            this.lZoraTunic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lZoraTunic.ForeColor = System.Drawing.Color.Black;
+            this.lZoraTunic.Location = new System.Drawing.Point(181, 198);
+            this.lZoraTunic.Name = "lZoraTunic";
+            this.lZoraTunic.Size = new System.Drawing.Size(29, 13);
+            this.lZoraTunic.TabIndex = 37;
+            this.lZoraTunic.Text = "Zora";
+            // 
+            // lDeityColor
+            // 
+            this.lDeityColor.AutoSize = true;
+            this.lDeityColor.BackColor = System.Drawing.Color.Transparent;
+            this.lDeityColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lDeityColor.ForeColor = System.Drawing.Color.Black;
+            this.lDeityColor.Location = new System.Drawing.Point(269, 198);
+            this.lDeityColor.Name = "lDeityColor";
+            this.lDeityColor.Size = new System.Drawing.Size(21, 13);
+            this.lDeityColor.TabIndex = 35;
+            this.lDeityColor.Text = "FD";
+            // 
+            // bDekuTunic
+            // 
+            this.bDekuTunic.BackColor = System.Drawing.Color.White;
+            this.bDekuTunic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bDekuTunic.Location = new System.Drawing.Point(36, 193);
+            this.bDekuTunic.Name = "bDekuTunic";
+            this.bDekuTunic.Size = new System.Drawing.Size(23, 23);
+            this.bDekuTunic.TabIndex = 34;
+            this.bDekuTunic.UseVisualStyleBackColor = false;
+            this.bDekuTunic.Click += new System.EventHandler(this.bDekuTunic_Click);
+            // 
+            // cTargettingStyle
+            // 
+            this.cTargettingStyle.AutoSize = true;
+            this.cTargettingStyle.BackColor = System.Drawing.Color.Transparent;
+            this.cTargettingStyle.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cTargettingStyle.Location = new System.Drawing.Point(166, 162);
+            this.cTargettingStyle.Name = "cTargettingStyle";
+            this.cTargettingStyle.Size = new System.Drawing.Size(129, 17);
+            this.cTargettingStyle.TabIndex = 33;
+            this.cTargettingStyle.Text = "Default Hold Z-Target";
+            this.cTargettingStyle.UseVisualStyleBackColor = false;
+            this.cTargettingStyle.CheckedChanged += new System.EventHandler(this.cTargettingStyle_CheckedChanged);
             // 
             // cHUDGroupBox
             // 
@@ -1259,9 +1530,9 @@ namespace MMR.UI.Forms
             this.groupBox5.Controls.Add(this.cFasterLabFish);
             this.groupBox5.Controls.Add(this.cGoodDampeRNG);
             this.groupBox5.Controls.Add(this.cSkipBeaver);
-            this.groupBox5.Location = new System.Drawing.Point(7, 299);
+            this.groupBox5.Location = new System.Drawing.Point(7, 338);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(334, 127);
+            this.groupBox5.Size = new System.Drawing.Size(334, 88);
             this.groupBox5.TabIndex = 27;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Speed Ups";
@@ -1270,7 +1541,7 @@ namespace MMR.UI.Forms
             // 
             this.cFastPush.AutoSize = true;
             this.cFastPush.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cFastPush.Location = new System.Drawing.Point(187, 20);
+            this.cFastPush.Location = new System.Drawing.Point(187, 43);
             this.cFastPush.Name = "cFastPush";
             this.cFastPush.Size = new System.Drawing.Size(125, 17);
             this.cFastPush.TabIndex = 31;
@@ -1294,7 +1565,7 @@ namespace MMR.UI.Forms
             // 
             this.cFasterLabFish.AutoSize = true;
             this.cFasterLabFish.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cFasterLabFish.Location = new System.Drawing.Point(47, 89);
+            this.cFasterLabFish.Location = new System.Drawing.Point(214, 20);
             this.cFasterLabFish.Name = "cFasterLabFish";
             this.cFasterLabFish.Size = new System.Drawing.Size(98, 17);
             this.cFasterLabFish.TabIndex = 2;
@@ -1332,7 +1603,7 @@ namespace MMR.UI.Forms
             this.lMusic.BackColor = System.Drawing.Color.Transparent;
             this.lMusic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lMusic.ForeColor = System.Drawing.Color.Black;
-            this.lMusic.Location = new System.Drawing.Point(84, 194);
+            this.lMusic.Location = new System.Drawing.Point(84, 229);
             this.lMusic.Name = "lMusic";
             this.lMusic.Size = new System.Drawing.Size(38, 13);
             this.lMusic.TabIndex = 26;
@@ -1346,7 +1617,7 @@ namespace MMR.UI.Forms
             "Default",
             "Random",
             "None (Risky)"});
-            this.cMusic.Location = new System.Drawing.Point(128, 191);
+            this.cMusic.Location = new System.Drawing.Point(128, 226);
             this.cMusic.Name = "cMusic";
             this.cMusic.Size = new System.Drawing.Size(167, 21);
             this.cMusic.TabIndex = 25;
@@ -1418,7 +1689,7 @@ namespace MMR.UI.Forms
             this.lGossip.BackColor = System.Drawing.Color.Transparent;
             this.lGossip.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lGossip.ForeColor = System.Drawing.Color.Black;
-            this.lGossip.Location = new System.Drawing.Point(24, 248);
+            this.lGossip.Location = new System.Drawing.Point(24, 283);
             this.lGossip.Name = "lGossip";
             this.lGossip.Size = new System.Drawing.Size(98, 13);
             this.lGossip.TabIndex = 20;
@@ -1448,7 +1719,7 @@ namespace MMR.UI.Forms
             "Random",
             "Relevant",
             "Competitive"});
-            this.cGossipHints.Location = new System.Drawing.Point(128, 245);
+            this.cGossipHints.Location = new System.Drawing.Point(128, 280);
             this.cGossipHints.Name = "cGossipHints";
             this.cGossipHints.Size = new System.Drawing.Size(167, 21);
             this.cGossipHints.TabIndex = 19;
@@ -1520,7 +1791,7 @@ namespace MMR.UI.Forms
             this.lTunic.BackColor = System.Drawing.Color.Transparent;
             this.lTunic.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lTunic.ForeColor = System.Drawing.Color.Black;
-            this.lTunic.Location = new System.Drawing.Point(59, 167);
+            this.lTunic.Location = new System.Drawing.Point(54, 167);
             this.lTunic.Name = "lTunic";
             this.lTunic.Size = new System.Drawing.Size(63, 13);
             this.lTunic.TabIndex = 7;
@@ -1537,7 +1808,7 @@ namespace MMR.UI.Forms
             "Cool",
             "Random",
             "Rainbow (cycle)"});
-            this.cTatl.Location = new System.Drawing.Point(128, 218);
+            this.cTatl.Location = new System.Drawing.Point(128, 253);
             this.cTatl.Name = "cTatl";
             this.cTatl.Size = new System.Drawing.Size(167, 21);
             this.cTatl.TabIndex = 12;
@@ -1552,7 +1823,7 @@ namespace MMR.UI.Forms
             "Link (OoT)",
             "Adult Link (Risky!)",
             "Kafei"});
-            this.cLink.Location = new System.Drawing.Point(128, 272);
+            this.cLink.Location = new System.Drawing.Point(128, 307);
             this.cLink.Name = "cLink";
             this.cLink.Size = new System.Drawing.Size(167, 21);
             this.cLink.TabIndex = 10;
@@ -1562,7 +1833,7 @@ namespace MMR.UI.Forms
             // 
             this.bTunic.BackColor = System.Drawing.Color.White;
             this.bTunic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.bTunic.Location = new System.Drawing.Point(128, 162);
+            this.bTunic.Location = new System.Drawing.Point(123, 162);
             this.bTunic.Name = "bTunic";
             this.bTunic.Size = new System.Drawing.Size(23, 23);
             this.bTunic.TabIndex = 8;
@@ -1575,7 +1846,7 @@ namespace MMR.UI.Forms
             this.lTatl.BackColor = System.Drawing.Color.Transparent;
             this.lTatl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lTatl.ForeColor = System.Drawing.Color.Black;
-            this.lTatl.Location = new System.Drawing.Point(28, 221);
+            this.lTatl.Location = new System.Drawing.Point(28, 256);
             this.lTatl.Name = "lTatl";
             this.lTatl.Size = new System.Drawing.Size(94, 13);
             this.lTatl.TabIndex = 11;
@@ -1587,7 +1858,7 @@ namespace MMR.UI.Forms
             this.lLink.BackColor = System.Drawing.Color.Transparent;
             this.lLink.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lLink.ForeColor = System.Drawing.Color.Black;
-            this.lLink.Location = new System.Drawing.Point(52, 275);
+            this.lLink.Location = new System.Drawing.Point(52, 310);
             this.lLink.Name = "lLink";
             this.lLink.Size = new System.Drawing.Size(70, 13);
             this.lLink.TabIndex = 9;
@@ -1893,19 +2164,6 @@ namespace MMR.UI.Forms
             this.bLoadPatch.UseVisualStyleBackColor = true;
             this.bLoadPatch.Click += new System.EventHandler(this.BLoadPatch_Click);
             // 
-            // cTargettingStyle
-            // 
-            this.cTargettingStyle.AutoSize = true;
-            this.cTargettingStyle.BackColor = System.Drawing.Color.Transparent;
-            this.cTargettingStyle.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cTargettingStyle.Location = new System.Drawing.Point(166, 162);
-            this.cTargettingStyle.Name = "cTargettingStyle";
-            this.cTargettingStyle.Size = new System.Drawing.Size(129, 17);
-            this.cTargettingStyle.TabIndex = 33;
-            this.cTargettingStyle.Text = "Default Hold Z-Target";
-            this.cTargettingStyle.UseVisualStyleBackColor = false;
-            this.cTargettingStyle.CheckedChanged += new System.EventHandler(this.cTargettingStyle_CheckedChanged);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2108,6 +2366,24 @@ namespace MMR.UI.Forms
         private System.Windows.Forms.Label cMagicLabel;
         private System.Windows.Forms.ComboBox cHUDMagicComboBox;
         private System.Windows.Forms.CheckBox cTargettingStyle;
+        private System.Windows.Forms.Button bDekuTunic;
+        private System.Windows.Forms.Label lDekuTunicColor;
+        private System.Windows.Forms.Label lGoronTunic;
+        private System.Windows.Forms.Label lZoraTunic;
+        private System.Windows.Forms.Label lDeityColor;
+        private System.Windows.Forms.Button bGoronTunic;
+        private System.Windows.Forms.Button bDeityTunic;
+        private System.Windows.Forms.Button bZoraTunic;
+        private System.Windows.Forms.CheckBox cLinkTunic;
+        private System.Windows.Forms.CheckBox cDeityTunic;
+        private System.Windows.Forms.CheckBox cZoraTunic;
+        private System.Windows.Forms.CheckBox cGoronTunic;
+        private System.Windows.Forms.CheckBox cDekuTunic;
+        private System.Windows.Forms.Button bTunicRandom;
+        private System.Windows.Forms.Button bDeityTunicRandom;
+        private System.Windows.Forms.Button bZoraTunicRandom;
+        private System.Windows.Forms.Button bGoronTunicRandom;
+        private System.Windows.Forms.Button bDekuTunicRandom;
     }
 }
 

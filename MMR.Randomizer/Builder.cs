@@ -330,7 +330,14 @@ namespace MMR.Randomizer
             byte[] color = { t.R, t.G, t.B };
 
             var otherTunics = ResourceUtils.GetAddresses(Values.AddrsDirectory, "tunic-forms");
-            TunicUtils.UpdateFormTunics(otherTunics, _cosmeticSettings.TunicColor);
+            TunicUtils.UpdateFormTunics(otherTunics,  new Color[] {
+                    _cosmeticSettings.DekuTunicColor, _cosmeticSettings.GoronTunicColor, 
+                    _cosmeticSettings.ZoraTunicColor, _cosmeticSettings.DeityTunicColor,
+                }, new bool[] { 
+                    _cosmeticSettings.ignoreDekuTunicColor, _cosmeticSettings.ignoreGoronTunicColor, 
+                    _cosmeticSettings.ignoreZoraTunicColor, _cosmeticSettings.ignoreDeityTunicColor 
+                }
+            );
 
             var playerModel = DeterminePlayerModel();
             var characterIndex = (int)playerModel;
@@ -338,15 +345,21 @@ namespace MMR.Randomizer
             var isKafei = playerModel == Character.Kafei;
             var objectIndex = isKafei ? 0x1C : 0x11;
             var objectData = ObjUtils.GetObjectData(objectIndex);
-            for (int j = 0; j < locations.Count; j++)
+            if (!_cosmeticSettings.ignoreTunicColor)
             {
-                ReadWriteUtils.WriteFileAddr(locations[j], color, objectData);
+                for (int j = 0; j < locations.Count; j++)
+                {
+                    ReadWriteUtils.WriteFileAddr(locations[j], color, objectData);
+                }
             }
             ObjUtils.InsertObj(objectData, objectIndex);
             if (isKafei)
             {
                 objectData = ObjUtils.GetObjectData(0x11);
-                TunicUtils.UpdateKafeiTunic(ref objectData, t);
+                if (!_cosmeticSettings.ignoreTunicColor)
+                {
+                    TunicUtils.UpdateKafeiTunic(ref objectData, t);
+                }
                 ObjUtils.InsertObj(objectData, 0x11);
             };
         }

@@ -294,17 +294,33 @@ namespace MMR.Randomizer.Utils
             }
         }
 
-        public static void UpdateFormTunics(List<int[]> addresses, Color target)
+        public static void UpdateFormTunics(List<int[]> addresses, Color[] formColors, bool[] ignoreTunicChange)
         {
+            List<Color> targets = new List<Color>();
+            List<bool> ignoreTarget = new List<bool>();
+            for( int i = 0; i < formColors.Length; i++)
+            {
+                targets.Add(formColors[i]);
+                ignoreTarget.Add(ignoreTunicChange[i]);
+                if( i == 2)
+                {
+                    targets.Add(formColors[i]);
+                    ignoreTarget.Add(ignoreTunicChange[i]);
+                }
+            }
             for (int i = 0; i < addresses.Count; i++)
             {
-                for (int j = 0; j < addresses[i].Length; j++)
+                if (!ignoreTarget[i])
                 {
-                    int f = RomUtils.GetFileIndexForWriting(addresses[i][j]);
-                    int a = addresses[i][j] - RomData.MMFileList[f].Addr;
-                    Color[] c = ReadColours(f, a, sizes[i]);
-                    c = ShiftHue(c, target, sizes[i], zora[i], grad[i], fd[i]);
-                    WriteColours(f, a, sizes[i], c);
+
+                    for (int j = 0; j < addresses[i].Length; j++)
+                    {
+                        int f = RomUtils.GetFileIndexForWriting(addresses[i][j]);
+                        int a = addresses[i][j] - RomData.MMFileList[f].Addr;
+                        Color[] c = ReadColours(f, a, sizes[i]);
+                        c = ShiftHue(c, targets[i], sizes[i], zora[i], grad[i], fd[i]);
+                        WriteColours(f, a, sizes[i], c);
+                    }
                 }
             }
         }
