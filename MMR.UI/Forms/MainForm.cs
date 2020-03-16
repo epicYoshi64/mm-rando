@@ -250,13 +250,18 @@ namespace MMR.UI.Forms
             _isUpdating = false;
         }
 
+        private Color randomizeTunicButtonColour(Random random, Button button)
+        {
+            Color color = RandomUtils.GetRandomColor(random);
+            button.BackColor = color;
+            return color;
+        }
+
         private void bTunicRandom_Click(object sender, EventArgs e)
         {
             _isUpdating = true;
 
-            Color color = RandomUtils.GetRandomColor(new Random());
-            _configuration.CosmeticSettings.TunicColor = color;
-            bTunic.BackColor = color;
+            _configuration.CosmeticSettings.TunicColor = randomizeTunicButtonColour(new Random(),  bTunic);
 
             _isUpdating = false;
         }
@@ -265,9 +270,7 @@ namespace MMR.UI.Forms
         {
             _isUpdating = true;
 
-            Color color = RandomUtils.GetRandomColor(new Random());
-            _configuration.CosmeticSettings.DekuTunicColor = color;
-            bDekuTunic.BackColor = color;
+            _configuration.CosmeticSettings.DekuTunicColor = randomizeTunicButtonColour(new Random(), bDekuTunic);
 
             _isUpdating = false;
         }
@@ -276,9 +279,7 @@ namespace MMR.UI.Forms
         {
             _isUpdating = true;
 
-            Color color = RandomUtils.GetRandomColor(new Random());
-            _configuration.CosmeticSettings.GoronTunicColor = color;
-            bGoronTunic.BackColor = color;
+            _configuration.CosmeticSettings.GoronTunicColor = randomizeTunicButtonColour(new Random(), bGoronTunic);
 
             _isUpdating = false;
         }
@@ -287,9 +288,7 @@ namespace MMR.UI.Forms
         {
             _isUpdating = true;
 
-            Color color = RandomUtils.GetRandomColor(new Random());
-            _configuration.CosmeticSettings.ZoraTunicColor = color;
-            bZoraTunic.BackColor = color;
+            _configuration.CosmeticSettings.ZoraTunicColor = randomizeTunicButtonColour(new Random(), bZoraTunic);
 
             _isUpdating = false;
         }
@@ -298,36 +297,32 @@ namespace MMR.UI.Forms
         {
             _isUpdating = true;
 
-            Color color = RandomUtils.GetRandomColor(new Random());
-            _configuration.CosmeticSettings.DeityTunicColor = color;
-            bDeityTunic.BackColor = color;
+            _configuration.CosmeticSettings.DeityTunicColor = randomizeTunicButtonColour(new Random(), bDeityTunic);
 
             _isUpdating = false;
         }
 
-        private void cLinkTunic_Click(object sender, EventArgs e)
+        private void bRandomTunic_Click(object sender, EventArgs e)
         {
-            _configuration.CosmeticSettings.ignoreTunicColor = cLinkTunic.Checked;
+            _isUpdating = true;
+
+            Random random = new Random();
+            _configuration.CosmeticSettings.TunicColor = randomizeTunicButtonColour(random, bTunic);
+            _configuration.CosmeticSettings.DekuTunicColor = randomizeTunicButtonColour(random, bDekuTunic);
+            _configuration.CosmeticSettings.GoronTunicColor = randomizeTunicButtonColour(random, bGoronTunic);
+            _configuration.CosmeticSettings.ZoraTunicColor = randomizeTunicButtonColour(random, bZoraTunic);
+            _configuration.CosmeticSettings.DeityTunicColor = randomizeTunicButtonColour(random, bDeityTunic);
+
+            _isUpdating = false;
         }
 
-        private void cDekuTunic_Click(object sender, EventArgs e)
+        private void cIgnoreTunicRando_Click(object sender, EventArgs e)
         {
-            _configuration.CosmeticSettings.ignoreDekuTunicColor = cDekuTunic.Checked;
-        }
-
-        private void cGoronTunic_Click(object sender, EventArgs e)
-        {
-            _configuration.CosmeticSettings.ignoreGoronTunicColor = cGoronTunic.Checked;
-        }
-
-        private void cZoraTunic_Click(object sender, EventArgs e)
-        {
-            _configuration.CosmeticSettings.ignoreZoraTunicColor = cZoraTunic.Checked;
-        }
-
-        private void cDeityTunic_Click(object sender, EventArgs e)
-        {
-            _configuration.CosmeticSettings.ignoreDeityTunicColor = cDeityTunic.Checked;
+            _configuration.CosmeticSettings.ignoreTunicColor = cIgnoreTunicRando.Checked;
+            _configuration.CosmeticSettings.ignoreDekuTunicColor = cIgnoreTunicRando.Checked;
+            _configuration.CosmeticSettings.ignoreGoronTunicColor = cIgnoreTunicRando.Checked;
+            _configuration.CosmeticSettings.ignoreZoraTunicColor = cIgnoreTunicRando.Checked;
+            _configuration.CosmeticSettings.ignoreDeityTunicColor = cIgnoreTunicRando.Checked;
         }
 
         private void bopen_Click(object sender, EventArgs e)
@@ -522,11 +517,6 @@ namespace MMR.UI.Forms
             bGoronTunic.BackColor = _configuration.CosmeticSettings.GoronTunicColor;
             bZoraTunic.BackColor = _configuration.CosmeticSettings.ZoraTunicColor;
             bDeityTunic.BackColor = _configuration.CosmeticSettings.DeityTunicColor;
-            cLinkTunic.Checked = _configuration.CosmeticSettings.ignoreTunicColor;
-            cDekuTunic.Checked = _configuration.CosmeticSettings.ignoreDekuTunicColor;
-            cGoronTunic.Checked = _configuration.CosmeticSettings.ignoreGoronTunicColor;
-            cZoraTunic.Checked = _configuration.CosmeticSettings.ignoreZoraTunicColor;
-            cDeityTunic.Checked = _configuration.CosmeticSettings.ignoreDeityTunicColor;
             cTargettingStyle.Checked = _configuration.CosmeticSettings.EnableHoldZTargeting;
 
             // Misc config options
@@ -537,8 +527,19 @@ namespace MMR.UI.Forms
             cUnderwaterOcarina.Checked = _configuration.GameplaySettings.OcarinaUnderwater;
 
             // HUD config options
-            cHUDHeartsComboBox.SelectedIndex = Array.FindIndex(ColorSelectionManager.Hearts.GetItems(), csi => csi.Name == _configuration.CosmeticSettings.HeartsSelection);
-            cHUDMagicComboBox.SelectedIndex = Array.FindIndex(ColorSelectionManager.MagicMeter.GetItems(), csi => csi.Name == _configuration.CosmeticSettings.MagicSelection);
+            var heartItems = ColorSelectionManager.Hearts.GetItems();
+            var heartSelection = heartItems.FirstOrDefault(csi => csi.Name == _configuration.CosmeticSettings.HeartsSelection);
+            if (heartSelection != null)
+            {
+                cHUDHeartsComboBox.SelectedIndex = Array.IndexOf(heartItems, heartSelection);
+            }
+
+            var magicItems = ColorSelectionManager.MagicMeter.GetItems();
+            var magicSelection = magicItems.FirstOrDefault(csi => csi.Name == _configuration.CosmeticSettings.MagicSelection);
+            if (magicSelection != null)
+            {
+                cHUDMagicComboBox.SelectedIndex = Array.IndexOf(magicItems, magicSelection);
+            }
         }
 
         private void tSeed_KeyDown(object sender, KeyEventArgs e)
@@ -1444,6 +1445,5 @@ namespace MMR.UI.Forms
             var selected = (ColorSelectionItem)combobox.SelectedItem;
             _configuration.CosmeticSettings.MagicSelection = selected.Name;
         }
-
     }
 }
