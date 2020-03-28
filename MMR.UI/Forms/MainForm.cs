@@ -495,6 +495,7 @@ namespace MMR.UI.Forms
             cMundaneRewards.Checked = _configuration.GameplaySettings.AddMundaneRewards;
             cStrayFairies.Checked = _configuration.GameplaySettings.AddStrayFairies;
             cNoStartingItems.Checked = _configuration.GameplaySettings.NoStartingItems;
+            cIgnoreTunicRando.Checked = _configuration.CosmeticSettings.useTunicColorRandomization;
             cEponaSword.Checked = _configuration.GameplaySettings.FixEponaSword;
             cUpdateChests.Checked = _configuration.GameplaySettings.UpdateChests;
             cSkipBeaver.Checked = _configuration.GameplaySettings.SpeedupBeavers;
@@ -1071,6 +1072,41 @@ namespace MMR.UI.Forms
             {
                 cClearHints.Enabled = onMainTab;
             }
+
+            if( onMainTab && _configuration.CosmeticSettings.useTunicColorRandomization)
+            {
+                bTunic.Enabled = true;
+                bDekuTunic.Enabled = true;
+                bGoronTunic.Enabled = true;
+                bZoraTunic.Enabled = true;
+                bDeityTunic.Enabled = true;
+                bRandomTunic.Enabled = true;
+                bTunic.BackColor = _configuration.CosmeticSettings.TunicColor;
+                bDekuTunic.BackColor = _configuration.CosmeticSettings.DekuTunicColor;
+                bGoronTunic.BackColor = _configuration.CosmeticSettings.GoronTunicColor;
+                bZoraTunic.BackColor = _configuration.CosmeticSettings.ZoraTunicColor;
+                bDeityTunic.BackColor = _configuration.CosmeticSettings.DeityTunicColor;
+
+            } 
+            else
+            {
+                bTunic.Enabled = false;
+                bDekuTunic.Enabled = false;
+                bGoronTunic.Enabled = false;
+                bZoraTunic.Enabled = false;
+                bDeityTunic.Enabled = false;
+                bRandomTunic.Enabled = false;
+                bTunic.BackColor = SystemColors.Control;
+                bDekuTunic.BackColor = SystemColors.Control;
+                bGoronTunic.BackColor = SystemColors.Control;
+                bZoraTunic.BackColor = SystemColors.Control;
+                bDeityTunic.BackColor = SystemColors.Control;
+                bTunic.UseVisualStyleBackColor = true;
+                bDekuTunic.UseVisualStyleBackColor = true;
+                bGoronTunic.UseVisualStyleBackColor = true;
+                bZoraTunic.UseVisualStyleBackColor = true;
+                bDeityTunic.UseVisualStyleBackColor = true;
+            }
         }
 
         /// <summary>
@@ -1444,6 +1480,13 @@ namespace MMR.UI.Forms
             var combobox = (ComboBox)sender;
             var selected = (ColorSelectionItem)combobox.SelectedItem;
             _configuration.CosmeticSettings.MagicSelection = selected.Name;
+        }
+
+        private void cIgnoreTunicRando_CheckedChanged(object sender, EventArgs e)
+        {
+            _configuration.CosmeticSettings.useTunicColorRandomization = cIgnoreTunicRando.Checked;
+            UpdateCheckboxes();
+            ToggleCheckBoxes();
         }
     }
 }

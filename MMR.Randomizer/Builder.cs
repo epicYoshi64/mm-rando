@@ -347,8 +347,10 @@ namespace MMR.Randomizer
                     _cosmeticSettings.DekuTunicColor, _cosmeticSettings.GoronTunicColor, 
                     _cosmeticSettings.ZoraTunicColor, _cosmeticSettings.DeityTunicColor,
                 }, new bool[] { 
-                    _cosmeticSettings.ignoreDekuTunicColor, _cosmeticSettings.ignoreGoronTunicColor, 
-                    _cosmeticSettings.ignoreZoraTunicColor, _cosmeticSettings.ignoreDeityTunicColor 
+                    _cosmeticSettings.useTunicColorRandomization && !_cosmeticSettings.ignoreDekuTunicColor, 
+                    _cosmeticSettings.useTunicColorRandomization && !_cosmeticSettings.ignoreGoronTunicColor, 
+                    _cosmeticSettings.useTunicColorRandomization && !_cosmeticSettings.ignoreZoraTunicColor, 
+                    _cosmeticSettings.useTunicColorRandomization && !_cosmeticSettings.ignoreDeityTunicColor 
                 }
             );
 
@@ -360,7 +362,7 @@ namespace MMR.Randomizer
                 TunicUtils.UpdateKafeiTunic(ref objectData, t);
                 ObjUtils.InsertObj(objectData, 0x11);
             } else {
-                if (!_cosmeticSettings.ignoreTunicColor)
+                if (_cosmeticSettings.useTunicColorRandomization && !_cosmeticSettings.ignoreTunicColor)
                 {
                     var locations = ResourceUtils.GetAddresses(Values.AddrsDirectory, $"tunic-{characterIndex}");
                     var objectData = ObjUtils.GetObjectData(0x11);

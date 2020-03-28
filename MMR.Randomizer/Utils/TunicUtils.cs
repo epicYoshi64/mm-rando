@@ -175,23 +175,24 @@ namespace MMR.Randomizer.Utils
             }
         }
 
-        public static void UpdateFormTunics(List<int[]> addresses, Color[] formColors, bool[] ignoreTunicChange)
+        public static void UpdateFormTunics(List<int[]> addresses, Color[] formColors, bool[] isTunicChanged)
         {
             List<Color> targets = new List<Color>();
-            List<bool> ignoreTarget = new List<bool>();
+            List<bool> updateTarget = new List<bool>();
+            // the zora form takes up two places for some reason
             for( int i = 0; i < formColors.Length; i++)
             {
                 targets.Add(formColors[i]);
-                ignoreTarget.Add(ignoreTunicChange[i]);
+                updateTarget.Add(isTunicChanged[i]);
                 if( i == 2)
                 {
                     targets.Add(formColors[i]);
-                    ignoreTarget.Add(ignoreTunicChange[i]);
+                    updateTarget.Add(isTunicChanged[i]);
                 }
             }
             for (int i = 0; i < addresses.Count; i++)
             {
-                if (!ignoreTarget[i])
+                if (updateTarget[i])
                 {
                     for (int j = 0; j < addresses[i].Length; j++)
                     {

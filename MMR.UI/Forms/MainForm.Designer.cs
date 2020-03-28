@@ -2011,6 +2011,7 @@ namespace MMR.UI.Forms
             this.cIgnoreTunicRando.TabIndex = 19;
             this.cIgnoreTunicRando.Text = "Enable Tunic Randomization";
             this.cIgnoreTunicRando.UseVisualStyleBackColor = true;
+            this.cIgnoreTunicRando.CheckedChanged += new System.EventHandler(this.cIgnoreTunicRando_CheckedChanged);
             // 
             // MainForm
             // 

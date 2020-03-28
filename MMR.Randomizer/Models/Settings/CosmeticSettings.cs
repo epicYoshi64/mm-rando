@@ -57,6 +57,11 @@ namespace MMR.Randomizer.Models.Settings
         /// <summary>
         /// Whether Link's tunic is a random color
         /// </summary>
+        public bool useTunicColorRandomization { get; set; } = true;
+
+        /// <summary>
+        /// Whether Link's tunic is a random color
+        /// </summary>
         public bool ignoreTunicColor { get; set; } = false;
 
         /// <summary>
