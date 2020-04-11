@@ -405,6 +405,11 @@ namespace MMR.UI.Forms
             cTargettingStyle.Checked = _configuration.CosmeticSettings.EnableHoldZTargeting;
             cEnableNightMusic.Checked = _configuration.CosmeticSettings.EnableNightBGM;
 
+            cBossKeyPlacement.SelectedIndex = (int)_configuration.GameplaySettings.BossKeyPlacement;
+            cSmallKeyPlacement.SelectedIndex = (int)_configuration.GameplaySettings.KeyPlacement;
+            cMapCompassPlacement.SelectedIndex = (int)_configuration.GameplaySettings.MapCompassPlacement;
+            nRandomRemains.Value = _configuration.GameplaySettings.RandomRemains;
+            nStrayFairyCount.Value = _configuration.GameplaySettings.VanillaFairyCount;
 
             // Misc config options
             cDisableCritWiggle.Checked = _configuration.GameplaySettings.CritWiggleDisable;

@@ -398,6 +398,7 @@ namespace MMR.Randomizer.Models.Settings
             int part3 = (int)parts[2];
             int part4 = (int)parts[3];
             int part5 = (int)parts[4];
+            int part6 = (int)parts[5];
 
             UseCustomItemList = (part1 & 8192) > 0;
 
@@ -491,12 +492,21 @@ namespace MMR.Randomizer.Models.Settings
             ClockSpeed = (ClockSpeed)clockSpeedIndex;
             GossipHintStyle = (GossipHintStyle)gossipHintsIndex;
             BlastMaskCooldown = (BlastMaskCooldown)blastmaskCooldown;
+
+            // I hope that we won't ever exceed 7 possible algorithms so we can lump the keys together so share the byte
+            var mapPlacement = (byte)(part6 & 0xF);
+            var fairyPlacement = (byte)((part6 & 0xF0) >> 4);
+            var keyPlacement = (byte)((part6 & 0xF00) >> 8);
+            var bossKeyPlacement = (byte)((part6 & 0xF000) >> 12);
+            var randomRemains = (byte)((part6 & 0xFF0000) >> 16);
+            var fairyCount = (byte)((part6 & 0xFF000000) >> 24);
+
         }
 
 
         private int[] BuildSettingsBytes()
         {
-            int[] parts = new int[5];
+            int[] parts = new int[6];
 
             if (UseCustomItemList)
             {
@@ -569,6 +579,12 @@ namespace MMR.Randomizer.Models.Settings
             if (OcarinaUnderwater) { parts[4] += (1 << 7); }
             if (QuestItemStorage) { parts[4] += (1 << 8); }
 
+            parts[5] = ((byte)MapCompassPlacement & 0xF)
+                | (((byte)FairyPlacement & 0xF) << 4)
+                | (((byte)KeyPlacement & 0xF) << 8)
+                | (((byte)BossKeyPlacement & 0xF) << 12)
+                | ((byte)RandomRemains << 16)
+                | ((byte)VanillaFairyCount << 24);
             return parts;
         }
 
