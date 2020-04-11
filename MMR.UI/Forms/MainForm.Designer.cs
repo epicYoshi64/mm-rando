@@ -79,6 +79,7 @@ namespace MMR.UI.Forms
             this.cMoonItems = new System.Windows.Forms.CheckBox();
             this.tabComfort = new System.Windows.Forms.TabPage();
             this.gSpeedUps = new System.Windows.Forms.GroupBox();
+            this.cFasterBank = new System.Windows.Forms.CheckBox();
             this.cSkipBeaver = new System.Windows.Forms.CheckBox();
             this.cFasterLabFish = new System.Windows.Forms.CheckBox();
             this.cGoodDogRaceRNG = new System.Windows.Forms.CheckBox();
@@ -178,7 +179,17 @@ namespace MMR.UI.Forms
             this.tpPatchSettings = new System.Windows.Forms.TabPage();
             this.tPatch = new System.Windows.Forms.TextBox();
             this.bLoadPatch = new System.Windows.Forms.Button();
-            this.cFasterBank = new System.Windows.Forms.CheckBox();
+            this.groupDungeons = new System.Windows.Forms.GroupBox();
+            this.cMapCompassPlacement = new System.Windows.Forms.ComboBox();
+            this.cSmallKeyPlacement = new System.Windows.Forms.ComboBox();
+            this.cBossKeyPlacement = new System.Windows.Forms.ComboBox();
+            this.nStrayFairyCount = new System.Windows.Forms.NumericUpDown();
+            this.nRandomRemains = new System.Windows.Forms.NumericUpDown();
+            this.lMapCompass = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.tSettings.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -200,6 +211,9 @@ namespace MMR.UI.Forms
             this.ttOutput.SuspendLayout();
             this.tpOutputSettings.SuspendLayout();
             this.tpPatchSettings.SuspendLayout();
+            this.groupDungeons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nStrayFairyCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).BeginInit();
             this.SuspendLayout();
             // 
             // bopen
@@ -253,6 +267,7 @@ namespace MMR.UI.Forms
             // 
             // tabMain
             // 
+            this.tabMain.Controls.Add(this.groupDungeons);
             this.tabMain.Controls.Add(this.panel1);
             this.tabMain.Controls.Add(this.groupBox9);
             this.tabMain.Controls.Add(this.groupBox6);
@@ -757,6 +772,17 @@ namespace MMR.UI.Forms
             this.gSpeedUps.TabIndex = 37;
             this.gSpeedUps.TabStop = false;
             this.gSpeedUps.Text = "Speed Ups";
+            // 
+            // cFasterBank
+            // 
+            this.cFasterBank.AutoSize = true;
+            this.cFasterBank.Location = new System.Drawing.Point(9, 67);
+            this.cFasterBank.Name = "cFasterBank";
+            this.cFasterBank.Size = new System.Drawing.Size(83, 17);
+            this.cFasterBank.TabIndex = 4;
+            this.cFasterBank.Text = "Faster Bank";
+            this.cFasterBank.UseVisualStyleBackColor = true;
+            this.cFasterBank.CheckedChanged += new System.EventHandler(this.cFasterBank_CheckedChanged);
             // 
             // cSkipBeaver
             // 
@@ -1737,7 +1763,7 @@ namespace MMR.UI.Forms
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mLogicEdit});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // mLogicEdit
@@ -1923,16 +1949,134 @@ namespace MMR.UI.Forms
             this.bLoadPatch.UseVisualStyleBackColor = true;
             this.bLoadPatch.Click += new System.EventHandler(this.BLoadPatch_Click);
             // 
-            // cFasterBank
+            // groupDungeons
             // 
-            this.cFasterBank.AutoSize = true;
-            this.cFasterBank.Location = new System.Drawing.Point(9, 67);
-            this.cFasterBank.Name = "cFasterBank";
-            this.cFasterBank.Size = new System.Drawing.Size(83, 17);
-            this.cFasterBank.TabIndex = 4;
-            this.cFasterBank.Text = "Faster Bank";
-            this.cFasterBank.UseVisualStyleBackColor = true;
-            this.cFasterBank.CheckedChanged += new System.EventHandler(this.cFasterBank_CheckedChanged);
+            this.groupDungeons.Controls.Add(this.label7);
+            this.groupDungeons.Controls.Add(this.label5);
+            this.groupDungeons.Controls.Add(this.label3);
+            this.groupDungeons.Controls.Add(this.label2);
+            this.groupDungeons.Controls.Add(this.lMapCompass);
+            this.groupDungeons.Controls.Add(this.nRandomRemains);
+            this.groupDungeons.Controls.Add(this.nStrayFairyCount);
+            this.groupDungeons.Controls.Add(this.cBossKeyPlacement);
+            this.groupDungeons.Controls.Add(this.cSmallKeyPlacement);
+            this.groupDungeons.Controls.Add(this.cMapCompassPlacement);
+            this.groupDungeons.Location = new System.Drawing.Point(6, 251);
+            this.groupDungeons.Name = "groupDungeons";
+            this.groupDungeons.Size = new System.Drawing.Size(325, 54);
+            this.groupDungeons.TabIndex = 31;
+            this.groupDungeons.TabStop = false;
+            this.groupDungeons.Text = "Dungeon Options";
+            // 
+            // cMapCompassPlacement
+            // 
+            this.cMapCompassPlacement.FormattingEnabled = true;
+            this.cMapCompassPlacement.Items.AddRange(new object[] {
+            "In Dungeon",
+            "Include Fairies",
+            "Anywhere"});
+            this.cMapCompassPlacement.Location = new System.Drawing.Point(12, 27);
+            this.cMapCompassPlacement.Name = "cMapCompassPlacement";
+            this.cMapCompassPlacement.Size = new System.Drawing.Size(72, 21);
+            this.cMapCompassPlacement.TabIndex = 0;
+            this.cMapCompassPlacement.SelectedIndexChanged += new System.EventHandler(this.cMapCompassPlacement_SelectedIndexChanged);
+            // 
+            // cSmallKeyPlacement
+            // 
+            this.cSmallKeyPlacement.FormattingEnabled = true;
+            this.cSmallKeyPlacement.Items.AddRange(new object[] {
+            "In Dungeon",
+            "Include Fairies",
+            "Anywhere"});
+            this.cSmallKeyPlacement.Location = new System.Drawing.Point(90, 27);
+            this.cSmallKeyPlacement.Name = "cSmallKeyPlacement";
+            this.cSmallKeyPlacement.Size = new System.Drawing.Size(72, 21);
+            this.cSmallKeyPlacement.TabIndex = 1;
+            this.cSmallKeyPlacement.SelectedIndexChanged += new System.EventHandler(this.cSmallKeyPlacement_SelectedIndexChanged);
+            // 
+            // cBossKeyPlacement
+            // 
+            this.cBossKeyPlacement.FormattingEnabled = true;
+            this.cBossKeyPlacement.Items.AddRange(new object[] {
+            "In Dungeon",
+            "Include Fairies",
+            "Anywhere"});
+            this.cBossKeyPlacement.Location = new System.Drawing.Point(168, 27);
+            this.cBossKeyPlacement.Name = "cBossKeyPlacement";
+            this.cBossKeyPlacement.Size = new System.Drawing.Size(72, 21);
+            this.cBossKeyPlacement.TabIndex = 2;
+            this.cBossKeyPlacement.SelectedIndexChanged += new System.EventHandler(this.cBossKeyPlacement_SelectedIndexChanged);
+            // 
+            // nStrayFairyCount
+            // 
+            this.nStrayFairyCount.Location = new System.Drawing.Point(247, 27);
+            this.nStrayFairyCount.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.nStrayFairyCount.Name = "nStrayFairyCount";
+            this.nStrayFairyCount.Size = new System.Drawing.Size(38, 20);
+            this.nStrayFairyCount.TabIndex = 3;
+            this.nStrayFairyCount.ValueChanged += new System.EventHandler(this.nStrayFairyCount_ValueChanged);
+            // 
+            // nRandomRemains
+            // 
+            this.nRandomRemains.Location = new System.Drawing.Point(289, 27);
+            this.nRandomRemains.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.nRandomRemains.Name = "nRandomRemains";
+            this.nRandomRemains.Size = new System.Drawing.Size(32, 20);
+            this.nRandomRemains.TabIndex = 4;
+            this.nRandomRemains.ValueChanged += new System.EventHandler(this.nRandomRemains_ValueChanged);
+            // 
+            // lMapCompass
+            // 
+            this.lMapCompass.AutoSize = true;
+            this.lMapCompass.Location = new System.Drawing.Point(10, 13);
+            this.lMapCompass.Name = "lMapCompass";
+            this.lMapCompass.Size = new System.Drawing.Size(76, 13);
+            this.lMapCompass.TabIndex = 5;
+            this.lMapCompass.Text = "Map/Compass";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(90, 13);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(58, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Small Keys";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(168, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Boss Keys";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(244, 13);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Fairies";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(280, 13);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(48, 13);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "Remains";
             // 
             // MainForm
             // 
@@ -1994,6 +2138,10 @@ namespace MMR.UI.Forms
             this.tpOutputSettings.PerformLayout();
             this.tpPatchSettings.ResumeLayout(false);
             this.tpPatchSettings.PerformLayout();
+            this.groupDungeons.ResumeLayout(false);
+            this.groupDungeons.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nStrayFairyCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nRandomRemains)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2148,6 +2296,17 @@ namespace MMR.UI.Forms
         private System.Windows.Forms.CheckBox cFDAnywhere;
         private System.Windows.Forms.CheckBox cArrowCycling;
         private System.Windows.Forms.CheckBox cFasterBank;
+        private System.Windows.Forms.GroupBox groupDungeons;
+        private System.Windows.Forms.ComboBox cMapCompassPlacement;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lMapCompass;
+        private System.Windows.Forms.NumericUpDown nRandomRemains;
+        private System.Windows.Forms.NumericUpDown nStrayFairyCount;
+        private System.Windows.Forms.ComboBox cBossKeyPlacement;
+        private System.Windows.Forms.ComboBox cSmallKeyPlacement;
     }
 }
 

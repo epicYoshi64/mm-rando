@@ -1325,7 +1325,7 @@
 0
 0
 - Moon Access
-118,113,108,105,102
+455,454,453,452,102
 
 0
 0
@@ -2257,5 +2257,25 @@
 - Any Wallet
 
 30;31
+0
+0
+- Odolwa Remains
+105
+
+0
+0
+- Goht Remains
+108
+
+0
+0
+- Gyorg Remains
+113
+
+0
+0
+- Twinmold Remains
+118
+
 0
 0

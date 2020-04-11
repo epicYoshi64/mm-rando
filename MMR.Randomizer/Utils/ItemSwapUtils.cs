@@ -106,8 +106,12 @@ namespace MMR.Randomizer.Utils
 
         public static void WriteNewItem(Item location, Item item, List<MessageEntry> newMessages, bool updateShop, bool preventDowngrades, bool updateChest, ChestTypeAttribute.ChestType? overrideChestType, bool isExtraStartingItem)
         {
+            // the remains items I added don't have a get item index, this probably isn't the best workaround
+            if (location.GetItemIndex() == null )
+            {
+                return;
+            }
             System.Diagnostics.Debug.WriteLine($"Writing {item.Name()} --> {location.Location()}");
-
             int f = RomUtils.GetFileIndexForWriting(GET_ITEM_TABLE);
             int baseaddr = GET_ITEM_TABLE - RomData.MMFileList[f].Addr;
             var getItemIndex = location.GetItemIndex().Value;

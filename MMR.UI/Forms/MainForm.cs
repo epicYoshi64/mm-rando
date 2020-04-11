@@ -799,6 +799,32 @@ namespace MMR.UI.Forms
             UpdateSingleSetting(() => _configuration.OutputSettings.OutputVC = cVC.Checked);
         }
 
+        private void cMapCompassPlacement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _configuration.GameplaySettings.MapCompassPlacement = (DungeonItemAlgorithm)cMapCompassPlacement.SelectedIndex);
+        }
+
+        private void cBossKeyPlacement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _configuration.GameplaySettings.BossKeyPlacement = (DungeonItemAlgorithm)cBossKeyPlacement.SelectedIndex);
+        }
+
+        private void cSmallKeyPlacement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _configuration.GameplaySettings.KeyPlacement = (DungeonItemAlgorithm)cSmallKeyPlacement.SelectedIndex);
+        }
+
+        private void nStrayFairyCount_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _configuration.GameplaySettings.VanillaFairyCount = (byte)nStrayFairyCount.Value);
+            UpdateSingleSetting(() => _configuration.GameplaySettings.FairyPlacement = DungeonItemAlgorithm.IncludeFairies);
+        }
+
+        private void nRandomRemains_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateSingleSetting(() => _configuration.GameplaySettings.RandomRemains = (byte)nRandomRemains.Value);
+        }
+
         private void mExit_Click(object sender, EventArgs e)
         {
             SaveAndClose();
